@@ -14,6 +14,15 @@ import javax.swing.event.DocumentListener;
 
 public class DisplayWindow extends JFrame implements KeyListener {
     private Paint draw;
+    private JoueurByGuillaume joueur;
+    
+    public DisplayWindow(JoueurByGuillaume joueur) { //constructeur de la classe DisplayWindow
+        this.joueur = joueur;
+        this.draw=new Paint();  // crée l'attribut draw avec le constructeur de base de la classe Paint
+        addKeyListener(this);   // permet 
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);    
+    }
     
     public DisplayWindow() {
        
@@ -29,6 +38,7 @@ public class DisplayWindow extends JFrame implements KeyListener {
 
     /** Handle the key-pressed event */
     public void keyPressed(KeyEvent e) {
+        joueur.deplacer(e);
         if(e.getKeyCode()== KeyEvent.VK_RIGHT)
             draw.moveRight();
         else if(e.getKeyCode()== KeyEvent.VK_LEFT)
