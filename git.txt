@@ -1,0 +1,17 @@
+Initialization:
+	-git init
+	-git clone "git website"
+	-cd FuckYeah
+	-git config --global user.email "you@exemaple.com"
+	-git config --global user.name "Your name"
+
+Delete everything:
+	-git rm -r * //remove everything
+	-git commit -m "message"
+	-git push
+	-git status
+
+Add file (stages new and modified, without deleted):
+	-git add .
+	-git commit -a -m "message"
+	-git push origin master
