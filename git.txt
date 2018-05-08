@@ -1,4 +1,4 @@
-Initialization:
+﻿Initialization:
 	-git init
 	-git clone "git website"
 	-cd FuckYeah
@@ -15,3 +15,6 @@ Add file (stages new and modified, without deleted):
 	-git add .
 	-git commit -a -m "message"
 	-git push origin master
+
+Recuperer les fichiers:
+	-git pull origin
