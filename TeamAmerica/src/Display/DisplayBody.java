@@ -206,15 +206,14 @@ public class DisplayBody extends JPanel{
     }
     
     public void display() {
-        //remove(goButton);
+        remove(goButton);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//Set the default cursor   
         this.removeAll();
         draw=new Paint(database, timer);
         draw.setBorder(BorderFactory.createLineBorder(Color.black));
+        draw.setSize(draw.getPanelWidth(), draw.getPanelHeight());
+        draw.setLocation((int)(panelWidth-draw.getPanelWidth())/2, (int)(panelHeight-draw.getPanelHeight())/2);
         this.add(draw);
-
-        int marginDraw = 10;
-        draw.setBounds(marginDraw,marginDraw,panelWidth-2*marginDraw,panelHeight-2*marginDraw);
     }
     public Paint getDraw() {
         return draw;
@@ -236,5 +235,13 @@ public class DisplayBody extends JPanel{
 
     public Write_Read getDatabase() {
         return database;
+    }
+
+    public int getPanelHeight() {
+        return panelHeight;
+    }
+
+    public int getPanelWidth() {
+        return panelWidth;
     }
 }

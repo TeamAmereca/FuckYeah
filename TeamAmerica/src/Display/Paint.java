@@ -19,10 +19,15 @@ public class Paint extends JComponent {
     private int blockYNumber = 13;
     private Timer timer;
     
+    private int panelHeight;
+    private int panelWidth;
+    
     public Paint(Write_Read database, Timer timer) {
         // Initialisation
         this.database = database;
         this.timer = timer;
+        this.panelHeight = blockYNumber*blockLength;
+        this.panelWidth = blockXNumber*blockLength;
         paintTimer();
     }
 
@@ -38,20 +43,21 @@ public class Paint extends JComponent {
     }
     
     public void paintMap(Graphics g) {
-        //Draw the map
+        //Paint the map
         g.setColor(Color.BLACK);
-        for(int i=1;i<blockYNumber;i++) {
+        for(int i=0;i<=blockYNumber;i++) {
             //Horizontal lines
             g.drawLine(0, i*blockLength, blockXNumber*blockLength, i*blockLength);
         }
         
-        for(int i=1;i<blockXNumber;i++) {
+        for(int i=0;i<=blockXNumber;i++) {
             //Vertical lines
             g.drawLine(i*blockLength, 0, i*blockLength, blockYNumber*blockLength);
         }
     }
     
     public void paintPlayers(Graphics g) {
+        //Paint every players
         paintPlayer(g,database.getMainPlayer());
         ArrayList<Joueur> players = database.getPlayers();
         for(int i=0;i<players.size();i++){
@@ -59,7 +65,7 @@ public class Paint extends JComponent {
         }
     }
     public void paintPlayer(Graphics g, Joueur joueur) {
-        //Draw the player
+        //Paint the player
         g.setColor(Color.BLACK);
         System.out.println("Player is at: ("+joueur.getOrientation()+","+joueur.getPositionX()+","+joueur.getPositionY()+")");
         g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50);
@@ -80,6 +86,7 @@ public class Paint extends JComponent {
         }
     }
     public void paintBalles(Graphics g) {
+        // Paint every balles
         ArrayList<Integer> ballesX = database.getBallesX();
         ArrayList<Integer>ballesY = database.getBallesY();
         ArrayList<String> ballesO =database.getBallesO();
@@ -88,6 +95,8 @@ public class Paint extends JComponent {
         }
     }
     public void paintBalle(Graphics g, int x, int y, String o) {
+        //Paint the balle
+        System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
         g.setColor(Color.BLACK);
         System.out.println("Balle is at: ("+o+","+x+","+y+")");
         g.drawRect(x*blockLength, y*blockLength, 50, 50);
@@ -96,7 +105,7 @@ public class Paint extends JComponent {
         if(o.equals("Droite")) {
             g.drawRect(x*blockLength+40, y*blockLength+20, 10, 10);
             g.fillRect(x*blockLength+40, y*blockLength+20, 10, 10);
-        } else if(o.equals("Droite")) {
+        } else if(o.equals("Gauche")) {
             g.drawRect(x*blockLength, y*blockLength+20, 10, 10);
             g.fillRect(x*blockLength, y*blockLength+20, 10, 10);
         } else if(o.equals("Haut")) {
@@ -138,4 +147,13 @@ public class Paint extends JComponent {
         database.getMainPlayer().setPositionY(database.getMainPlayer().getPositionY() - increment);
         repaint();
     }
+
+    public int getPanelHeight() {
+        return panelHeight;
+    }
+
+    public int getPanelWidth() {
+        return panelWidth;
+    }
+    
 }

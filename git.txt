@@ -1,4 +1,6 @@
-﻿Initialization:
+﻿To use Git, right click on the folder where you want to have your project
+
+Initialization:
 	-git init
 	-git clone "git website"
 	-cd FuckYeah
@@ -6,15 +8,27 @@
 	-git config --global user.name "Your name"
 
 Delete everything:
-	-git rm -r * //remove everything
+	-git rm -r * #remove everything
 	-git commit -m "message"
 	-git push
 	-git status
 
-Add file (stages new and modified, without deleted):
-	-git add .
+Add file:
+	-choose one of these
+		-git add "file name"
+		-git add . #stages new and modified, without deleted
+		-git add -u #stages modified and deleted, without new
+		-git add -A #stages All
 	-git commit -a -m "message"
 	-git push origin master
 
+Track new file:
+	-git add "file name"
+
 Recuperer les fichiers:
-	-git pull origin
+	-git pull origin #equals to fetch and merge
+	-git fetch origin
+
+	Check settings:-git config --list
+	Get help:-git help "verb"
+	Get status:-git status OR -git status -s OR -git status --short
