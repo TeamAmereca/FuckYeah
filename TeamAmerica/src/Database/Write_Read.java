@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -26,7 +28,15 @@ public class Write_Read {
     private ArrayList<String> ballesO;
     private Map map;
     
-    public Write_Read() {
+    private int blockLength;
+    private int blockXNumber;
+    private int blockYNumber;
+    
+    
+    public Write_Read(int blockLength, int blockXNumber, int blockYNumber) {
+        this.blockLength = blockLength;
+        this.blockXNumber = blockXNumber;
+        this.blockYNumber = blockYNumber;
         try {
             this.connection = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
         } catch (SQLException ex) {
@@ -88,21 +98,18 @@ public class Write_Read {
         mainPlayer = new Joueur(pseudo, nation, connection);
         mainPlayer.creerJoueurSQL();
     }
-    
-    public void createNewMap() {
-        this.map = new Map(0, connection);//create a new map
-    }
-    
-    public void getWaitingPlayers( DefaultTableModel model) {
+ 
+    public void getWaitingPlayers(DefaultTableModel model) {
         try {
             model.setRowCount(0);
-            PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation FROM joueur WHERE status=0");
+            PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation,pv FROM joueur WHERE status=0");
             ResultSet resultat = requete.executeQuery();
 
             while (resultat.next()) {
                 String pseudo = resultat.getString("pseudo");
                 String nation = resultat.getString("nation");
-                model.addRow(new Object[]{pseudo,nation});
+                int pv = resultat.getInt("pv");
+                model.addRow(new Object[]{pseudo,nation,pv});
             }       
             requete.close();
         } catch (SQLException ex) {
@@ -110,24 +117,69 @@ public class Write_Read {
         }
     }
     
-    public void enoughPlayers(DefaultTableModel model,int numberOfPlayers) {
-        try {
-            
-            PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation FROM joueur WHERE status = 0");
+    public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers) {
+        boolean firstWaitingPlayer = false;
+        boolean modelContainsMainPlayer = false;
+        try {            
+            PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation FROM joueur WHERE status = 0 LIMIT ?");
+            requete.setInt(1,numberOfPlayers);
             ResultSet resultat = requete.executeQuery();
-            resultat.last();
-            if(numberOfPlayers<=resultat.getRow()){
-                //not enough people in the waiting room to lauch a game
-                model.setRowCount(0);
-                while (resultat.next()) {
-                    String pseudo = resultat.getString("pseudo");
-                    String nation = resultat.getString("nation");
-                    model.addRow(new Object[]{pseudo,nation});
+            model.setRowCount(0);  
+            while(resultat.next()) {
+                String pseudo = resultat.getString("pseudo");
+                String nation = resultat.getString("nation");
+                model.addRow(new Object[]{pseudo,nation,0});
+                if(this.mainPlayer.getPseudo().equals(pseudo)){
+                    modelContainsMainPlayer = true;
+                    if(resultat.getRow() ==1){
+                        firstWaitingPlayer = true;
+                    }             
                 }
             }
             requete.close();
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(model.getRowCount() == numberOfPlayers && modelContainsMainPlayer){
+            if(firstWaitingPlayer){
+                //there is enought players in the waiting room
+                //the first player in the waiting room creates the game
+                initializePlayers(model,blockXNumber,blockYNumber);//initialize the players positions
+                this.map = new Map(0, connection);//create a new map
+                map.nouvelleMap();//clear the database and send the actual one to the database
+                boolean everyoneReady = false;
+                
+                while(!everyoneReady){
+                    getWaitingPlayers(model);
+                    for(int i=0;i<numberOfPlayers;i++){
+                        if((int)model.getValueAt(i,2) == 100){
+                            everyoneReady=true;
+                        }else{
+                            if(!((String)model.getValueAt(i,0)).equals(this.mainPlayer.getPseudo())){
+                                everyoneReady=false;
+                                break;
+                            }
+                        }
+                    }
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                modifyPlayersStatus();//modify all players' status to true
+                this.mainPlayer.modifierPv(100);
+            }else{
+                //the player is not in the waiting room
+                //it means that this player is going to join the game
+                retrievePlayers(model);//retrieve information about every single players from the database
+                this.map = new Map(0, connection);//create a new map
+                map.miseAJourMap();//download the lastest map from the database                
+            }
+            return true;
+        }else{
+            return false;
         }
     }
     
@@ -137,21 +189,6 @@ public class Write_Read {
             players.get(i).modifierStatus();
         }
         this.mainPlayer.modifierStatus();
-    }
-    
-    public boolean isMainPayerStatusChanged() {
-        boolean  isStatusChanged = false;
-        try {
-            PreparedStatement requete = connection.prepareStatement("SELECT status FROM joueur WHERE pseudo = ?");
-            requete.setString(1,this.mainPlayer.getPseudo());
-            ResultSet resultat = requete.executeQuery();
-            resultat.next();
-            isStatusChanged = resultat.getBoolean("status");
-            requete.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return isStatusChanged;
     }
     
     public Joueur getMainPlayer() {
@@ -166,10 +203,6 @@ public class Write_Read {
         return connection;
     }
 
-    public Map getMap() {
-        return map;
-    }
-
     public void setMainPlayer(Joueur mainPlayer) {
         this.mainPlayer = mainPlayer;
     }
@@ -182,7 +215,7 @@ public class Write_Read {
         //initialize the variable players
         //assign each player to a different place
         this.players = new ArrayList();
-        int variableX, variableY;System.out.println(model.getRowCount());
+        int variableX, variableY;
         for(int i=0;i<model.getRowCount();i++) {
             String pseudo = (String) model.getValueAt(i, 0);
             try {
@@ -216,9 +249,42 @@ public class Write_Read {
                 String nation = resultat.getString("nation");
                 String orientation = resultat.getString("orientation");
                 
-                if(this.mainPlayer.getPseudo() != pseudo){
+                if(!this.mainPlayer.getPseudo().equals(pseudo)){
                     //Add all other players to the array list players
                     this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection));              
+                }
+                requete.close();
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }       
+    }
+
+    public void retrievePlayers(DefaultTableModel model) {
+        //retrieve players information from the database
+        this.players = new ArrayList();
+        for(int i=0;i<model.getRowCount();i++) {
+            String pseudo = (String) model.getValueAt(i, 0);
+            try {                
+                //get the data of this player from the database
+                PreparedStatement requete = connection.prepareStatement("SELECT * FROM joueur WHERE pseudo = ?");
+                requete.setString(1, pseudo);
+                ResultSet resultat = requete.executeQuery();
+                resultat.next();//we are sure that this 'resultat' exists
+                int positionX = resultat.getInt("x");
+                int positionY = resultat.getInt("y");
+                int pv = resultat.getInt("pv");
+                String nation = resultat.getString("nation");
+                String orientation = resultat.getString("orientation");
+                
+                if(!this.mainPlayer.getPseudo().equals(pseudo)){
+                    //Add all other players to the array list players
+                    this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection));              
+                }else{
+                    //this player's pv is set to 100
+                    //meaning that this player gots all the necessary information to create a party
+                    this.mainPlayer.modifierPv(100);
                 }
                 requete.close();
                 

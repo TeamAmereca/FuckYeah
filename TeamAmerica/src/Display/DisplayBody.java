@@ -70,7 +70,7 @@ public class DisplayBody extends JPanel{
         centralPanel.setLayout(null);
         add(centralPanel);
         
-        database = new Write_Read();
+        database = new Write_Read(blockLength, blockXNumber, blockYNumber);
                 
         addButton(); 
     }
@@ -155,6 +155,7 @@ public class DisplayBody extends JPanel{
         model = new DefaultTableModel();
         model.addColumn("pseudo");
         model.addColumn("nation");
+        model.addColumn("pv");
         JTable waitingPlayersTable = new JTable(model);
         waitingPlayersTable.editCellAt​(0,0);
         JScrollPane waitingPlayersScrollPane = new JScrollPane(waitingPlayersTable);
@@ -180,29 +181,12 @@ public class DisplayBody extends JPanel{
         int numberOfPlayers = 2;
         timerTask.cancel();//Kill the old timer
         timerTask = new TimerTask() {
-            boolean firstLoop = true;
             @Override
-            public void run() {                
-                database.enoughPlayers(model, numberOfPlayers);
-                if(model.getRowCount() >= numberOfPlayers || database.isMainPayerStatusChanged()) {
+            public void run() {
+                if(database.enoughPlayers(timer,model, numberOfPlayers)) {
                     timerTask.cancel();
-                    database.initializePlayers(model,blockXNumber,blockYNumber);//initialize the players variable in Write_Read
-                    database.modifyPlayersStatus();//modify all players' status to true
-                    database.createNewMap();                                                       
-                    if(firstLoop) {
-                        //This joueur is the last one to enter the waiting room,
-                        //so he creates a new party for everyone
-                        database.getMap().nouvelleMap();//clear the database and send the actual one to the database
-                    } else {
-                        //This joueur is not the last one to enter the waiting room,
-                        //so he will download the map from the database
-                        //Update the player position
-                        database.getMap().miseAJourMap();
-                    }                    
                     display();
-                } else {
-                    firstLoop = false;   
-                }                    
+                }      
             }
         };
         timer.scheduleAtFixedRate(timerTask,0,1000);

@@ -120,7 +120,7 @@ public class Paint extends JComponent {
         }
     }
     public void paintTimer() {
-        //Here we set a timer a get a copy of the database every 1 sec
+        //Here we set a timer to get a copy of the database every 0.25 sec
         TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {System.out.println("timer for database");

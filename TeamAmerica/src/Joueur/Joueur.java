@@ -29,7 +29,7 @@ public class Joueur {
         this.nation = nation;
         orientation = "Droite";
         arme = "M16";
-        pv = 100;
+        pv = 0;
         vitesse = 1; //joueur se déplace case par case par défaut
         connectePartie = false;
         this.connexion = connexion;
