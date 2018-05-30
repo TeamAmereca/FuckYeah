@@ -14,18 +14,21 @@ public class Paint extends JComponent {
     
     private int increment = 10;
     private Write_Read database;
-    private int blockLength = 50;
-    private int blockXNumber = 20;
-    private int blockYNumber = 13;
+    private int blockLength;
+    private int blockXNumber;
+    private int blockYNumber;
     private Timer timer;
     
     private int panelHeight;
     private int panelWidth;
     
-    public Paint(Write_Read database, Timer timer) {
+    public Paint(Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) {
         // Initialisation
         this.database = database;
         this.timer = timer;
+        this.blockLength = blockLength;
+        this.blockXNumber = blockXNumber;
+        this.blockYNumber = blockYNumber;
         this.panelHeight = blockYNumber*blockLength;
         this.panelWidth = blockXNumber*blockLength;
         paintTimer();

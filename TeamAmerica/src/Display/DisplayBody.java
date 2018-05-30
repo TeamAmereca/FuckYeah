@@ -48,6 +48,10 @@ public class DisplayBody extends JPanel{
     public static final int GIF_HEIGHT = 300;
     public static final int GIF_WIDTH = 300;
     
+    private int blockLength = 50;
+    private int blockXNumber = 20;
+    private int blockYNumber = 13;
+    
     private Write_Read database;
     private Paint draw;
     
@@ -178,17 +182,16 @@ public class DisplayBody extends JPanel{
         timerTask = new TimerTask() {
             boolean firstLoop = true;
             @Override
-            public void run() {
-                
+            public void run() {                
                 database.enoughPlayers(model, numberOfPlayers);
-                if(model.getRowCount() == numberOfPlayers || database.isMainPayerStatusChanged()) {
+                if(model.getRowCount() >= numberOfPlayers || database.isMainPayerStatusChanged()) {
                     timerTask.cancel();
-                    database.initializePlayers(model);//initialize the players variable in Write_Read
+                    database.initializePlayers(model,blockXNumber,blockYNumber);//initialize the players variable in Write_Read
                     database.modifyPlayersStatus();//modify all players' status to true
                     database.createNewMap();                                                       
                     if(firstLoop) {
                         //This joueur is the last one to enter the waiting room,
-                        //so he creates the a new party for everyone
+                        //so he creates a new party for everyone
                         database.getMap().nouvelleMap();//clear the database and send the actual one to the database
                     } else {
                         //This joueur is not the last one to enter the waiting room,
@@ -206,10 +209,11 @@ public class DisplayBody extends JPanel{
     }
     
     public void display() {
-        remove(goButton);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));//Set the default cursor   
         this.removeAll();
-        draw=new Paint(database, timer);
+        this.revalidate();
+        this.repaint();
+        draw=new Paint(database, timer, blockLength, blockXNumber, blockYNumber);
         draw.setBorder(BorderFactory.createLineBorder(Color.black));
         draw.setSize(draw.getPanelWidth(), draw.getPanelHeight());
         draw.setLocation((int)(panelWidth-draw.getPanelWidth())/2, (int)(panelHeight-draw.getPanelHeight())/2);

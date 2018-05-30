@@ -1,9 +1,7 @@
 package Database;
 
-import Balle.Balle;
 import Joueur.Joueur;
 import Map.Map;
-import java.awt.List;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -112,15 +110,20 @@ public class Write_Read {
         }
     }
     
-    public void enoughPlayers(DefaultTableModel model,int number) {
+    public void enoughPlayers(DefaultTableModel model,int numberOfPlayers) {
         try {
-            model.setRowCount(0);
+            
             PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation FROM joueur WHERE status = 0");
             ResultSet resultat = requete.executeQuery();
-            while (resultat.next()) {
-                String pseudo = resultat.getString("pseudo");
-                String nation = resultat.getString("nation");
-                model.addRow(new Object[]{pseudo,nation});
+            resultat.last();
+            if(numberOfPlayers<=resultat.getRow()){
+                //not enough people in the waiting room to lauch a game
+                model.setRowCount(0);
+                while (resultat.next()) {
+                    String pseudo = resultat.getString("pseudo");
+                    String nation = resultat.getString("nation");
+                    model.addRow(new Object[]{pseudo,nation});
+                }
             }
             requete.close();
         } catch (SQLException ex) {
@@ -175,61 +178,54 @@ public class Write_Read {
         this.players = players;
     }
     
-    public void initializePlayers(DefaultTableModel model) {
+    public void initializePlayers(DefaultTableModel model, int blockXNumber, int blockYNumber) {
         //initialize the variable players
         //assign each player to a different place
         this.players = new ArrayList();
+        int variableX, variableY;System.out.println(model.getRowCount());
         for(int i=0;i<model.getRowCount();i++) {
-            String pseudo = (String)model.getValueAt(i, 0);
+            String pseudo = (String) model.getValueAt(i, 0);
             try {
-                if(!pseudo.equals(this.mainPlayer.getPseudo())) {                
-                    //write in data
-                    //Set the initial position for other players
-                    PreparedStatement requeteWrite = connection.prepareStatement("UPDATE joueur SET x = ?, y = ? WHERE pseudo = ?");
-                    requeteWrite.setInt(1,50*20);//improve
-                    requeteWrite.setInt(2,50*13);//improve
-                    requeteWrite.setString(3, pseudo);
-                    requeteWrite.executeUpdate();
-                    requeteWrite.close();
-                    
-                    //get the data
-                    PreparedStatement requete = connection.prepareStatement("SELECT * FROM joueur WHERE pseudo = ?");
-                    requete.setString(1, pseudo);
-                    ResultSet resultat = requete.executeQuery();
-                    resultat.next();//we are sure that this 'resultat' exists
-                    int positionX = resultat.getInt("x");
-                    int positionY = resultat.getInt("y");
-                    int pv = resultat.getInt("pv");
-                    String nation = resultat.getString("nation");
-                    String orientation = resultat.getString("orientation");
-                    this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection));              
-                    requete.close();
+                //write in data
+                //Set the initial position this player
+                PreparedStatement requeteWrite = connection.prepareStatement("UPDATE joueur SET x = ?, y = ? WHERE pseudo = ?");
+                if(i==0 || i==3){
+                    variableX = 0;
+                } else {
+                    variableX = 1;
                 }
+                if(i==0 || i==2){
+                    variableY = 0;
+                } else {
+                    variableY = 1;
+                }
+                requeteWrite.setInt(1,(blockXNumber-1)*variableX);
+                requeteWrite.setInt(2,(blockYNumber-1)*variableY);
+                requeteWrite.setString(3, pseudo);
+                requeteWrite.executeUpdate();
+                requeteWrite.close();   
+
+                //get the data of this player from the database
+                PreparedStatement requete = connection.prepareStatement("SELECT * FROM joueur WHERE pseudo = ?");
+                requete.setString(1, pseudo);
+                ResultSet resultat = requete.executeQuery();
+                resultat.next();//we are sure that this 'resultat' exists
+                int positionX = resultat.getInt("x");
+                int positionY = resultat.getInt("y");
+                int pv = resultat.getInt("pv");
+                String nation = resultat.getString("nation");
+                String orientation = resultat.getString("orientation");
+                
+                if(this.mainPlayer.getPseudo() != pseudo){
+                    //Add all other players to the array list players
+                    this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection));              
+                }
+                requete.close();
+                
             } catch (SQLException ex) {
                 Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-        //get the data of the main player
-        try {
-            PreparedStatement requete = connection.prepareStatement("SELECT x, y, orientation FROM joueur WHERE pseudo = ?");
-            requete.setString(1, this.mainPlayer.getPseudo());
-            ResultSet resultat = requete.executeQuery();
-            resultat.next();//we are sure that this 'resultat' exists
-            int positionX = resultat.getInt("x");
-            int positionY = resultat.getInt("y");
-            String orientation = resultat.getString("orientation");                   
-            if(this.mainPlayer.getPositionX() != positionX && this.mainPlayer.getPositionY() != positionY) {
-                //Update the main player info if not the latest
-                this.mainPlayer.setPositionX(positionX);
-                this.mainPlayer.setPositionY(positionY);
-                this.mainPlayer.setOrientation(orientation);                        
-            }
-            requete.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }       
     }
 
     public void setMap(Map map) {

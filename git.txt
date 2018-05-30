@@ -15,15 +15,15 @@ Delete everything:
 
 Add file:
 	-choose one of these
-		-git add "file name"
+		-git add file name #to tack new file or to stage file
 		-git add . #stages new and modified, without deleted
 		-git add -u #stages modified and deleted, without new
 		-git add -A #stages All
-	-git commit -a -m "message"
+	-git commit -m "message"
 	-git push origin master
-
-Track new file:
-	-git add "file name"
+	
+	OR
+	-git commit -a -m "message"
 
 Recuperer les fichiers:
 	-git pull origin #equals to fetch and merge
