@@ -19,18 +19,13 @@ public class Paint extends JComponent {
     private int blockYNumber;
     private Timer timer;
     
-    private int panelHeight;
-    private int panelWidth;
-    
     public Paint(Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) {
         // Initialisation
         this.database = database;
         this.timer = timer;
         this.blockLength = blockLength;
         this.blockXNumber = blockXNumber;
-        this.blockYNumber = blockYNumber;
-        this.panelHeight = blockYNumber*blockLength;
-        this.panelWidth = blockXNumber*blockLength;
+        this.blockYNumber = blockYNumber;        
         paintTimer();
     }
 
@@ -128,34 +123,5 @@ public class Paint extends JComponent {
                 }
             };
         timer.scheduleAtFixedRate(timerTask,0, 250);
-    }
-
-    public void moveRight() {
-        database.getMainPlayer().setPositionX(database.getMainPlayer().getPositionX() + increment);
-        repaint();
-    }
-
-    public void moveLeft() {
-        database.getMainPlayer().setPositionX(database.getMainPlayer().getPositionX() - increment);
-        repaint();
-    }
-
-    public void moveDown() {
-        database.getMainPlayer().setPositionY(database.getMainPlayer().getPositionY() + increment);
-        repaint();
-    }
-
-    public void moveUp() {
-        database.getMainPlayer().setPositionY(database.getMainPlayer().getPositionY() - increment);
-        repaint();
-    }
-
-    public int getPanelHeight() {
-        return panelHeight;
-    }
-
-    public int getPanelWidth() {
-        return panelWidth;
-    }
-    
+    }    
 }

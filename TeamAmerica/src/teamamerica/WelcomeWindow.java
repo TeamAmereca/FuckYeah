@@ -32,16 +32,12 @@ public class WelcomeWindow extends JFrame implements KeyListener {
         } 
         else if(e.getKeyCode()== KeyEvent.VK_RIGHT)
             CentralPanel.getDatabase().getMainPlayer().deplacer(e);
-//            CentralPanel.getDraw().moveRight();
         else if(e.getKeyCode()== KeyEvent.VK_LEFT)
             CentralPanel.getDatabase().getMainPlayer().deplacer(e);
-//            CentralPanel.getDraw().moveLeft();
         else if(e.getKeyCode()== KeyEvent.VK_UP)
             CentralPanel.getDatabase().getMainPlayer().deplacer(e);
-//            CentralPanel.getDraw().moveDown();
         else if(e.getKeyCode()== KeyEvent.VK_DOWN)
             CentralPanel.getDatabase().getMainPlayer().deplacer(e);
-//            CentralPanel.getDraw().moveUp();
         else if(e.getKeyCode()== KeyEvent.VK_SPACE)
             CentralPanel.getDatabase().getMainPlayer().tir();
     }

@@ -199,16 +199,16 @@ public class DisplayBody extends JPanel{
         this.repaint();
         draw=new Paint(database, timer, blockLength, blockXNumber, blockYNumber);
         draw.setBorder(BorderFactory.createLineBorder(Color.black));
-        draw.setSize(draw.getPanelWidth(), draw.getPanelHeight());
-        draw.setLocation((int)(panelWidth-draw.getPanelWidth())/2, (int)(panelHeight-draw.getPanelHeight())/2);
+        int mapHeight = blockYNumber*blockLength;
+        int mapWidth = blockXNumber*blockLength;
+        draw.setSize(mapWidth, mapHeight);
+        draw.setLocation((int)(panelWidth-mapWidth)/2, (int)(panelHeight-mapHeight)/2);
         this.add(draw);
-    }
-    public Paint getDraw() {
-        return draw;
+        //add here countdown timer
     }
 
-    public Timer getTimer() {
-        return timer;
+    public Write_Read getDatabase() {
+        return database;
     }
     
     public void close() {
@@ -219,17 +219,5 @@ public class DisplayBody extends JPanel{
         } catch (SQLException ex) {
             Logger.getLogger(DisplayBody.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public Write_Read getDatabase() {
-        return database;
-    }
-
-    public int getPanelHeight() {
-        return panelHeight;
-    }
-
-    public int getPanelWidth() {
-        return panelWidth;
     }
 }

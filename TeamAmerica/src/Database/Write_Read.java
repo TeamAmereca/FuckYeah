@@ -149,8 +149,7 @@ public class Write_Read {
                 this.map = new Map(0, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
                 this.mainPlayer.modifierPv(100);//the last player sets his pv to 100, meaning that the map and player's positions have been set
-                boolean everyoneReady = false;
-                
+                boolean everyoneReady = false;              
                 while(!everyoneReady){
                     //if everyone is ready, meaning that all other player has set his pv to 100
                     //else the main player waits so that they can fetch all data of all players
@@ -175,6 +174,17 @@ public class Write_Read {
             }else{
                 //the player is not in the waiting room
                 //it means that this player is going to join the game
+                boolean mapReady = false;              
+                while(!mapReady){
+                    //we wait until the map is created, that is when the last entered player's pv is 100
+                    getWaitingPlayers(model);
+                    mapReady = (int)model.getValueAt(numberOfPlayers-1,2) == 100;                    
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 retrievePlayers(model);//retrieve information about every single players from the database
                 this.map = new Map(0, connection);//create a new map
                 map.miseAJourMap();//download the lastest map from the database                
@@ -218,25 +228,39 @@ public class Write_Read {
         //assign each player to a different place
         this.players = new ArrayList();
         int variableX, variableY;
+        String orientation;
         for(int i=0;i<model.getRowCount();i++) {
             String pseudo = (String) model.getValueAt(i, 0);
             try {
                 //write in data
                 //Set the initial position this player
-                PreparedStatement requeteWrite = connection.prepareStatement("UPDATE joueur SET x = ?, y = ? WHERE pseudo = ?");
-                if(i==0 || i==3){
-                    variableX = 0;
-                } else {
-                    variableX = 1;
-                }
-                if(i==0 || i==2){
-                    variableY = 0;
-                } else {
-                    variableY = 1;
+                PreparedStatement requeteWrite = connection.prepareStatement("UPDATE joueur SET x = ?, y = ?,orientation=? WHERE pseudo = ?");
+                switch (i) {
+                    case 0:
+                        variableX = 0;
+                        variableY = 0;
+                        orientation="Droite";
+                        break;
+                    case 1:
+                        variableX = 1;
+                        variableY = 1;
+                        orientation="Gauche";                        
+                        break;
+                    case 2:
+                        variableX = 1;
+                        variableY = 0;
+                        orientation="Bas";
+                        break;
+                    default:
+                        variableX = 0;
+                        variableY = 1;
+                        orientation="Haut";
+                        break;
                 }
                 requeteWrite.setInt(1,(blockXNumber-1)*variableX);
                 requeteWrite.setInt(2,(blockYNumber-1)*variableY);
-                requeteWrite.setString(3, pseudo);
+                requeteWrite.setString(3, orientation);
+                requeteWrite.setString(4, pseudo);
                 requeteWrite.executeUpdate();
                 requeteWrite.close();   
 
@@ -249,7 +273,7 @@ public class Write_Read {
                 int positionY = resultat.getInt("y");
                 int pv = resultat.getInt("pv");
                 String nation = resultat.getString("nation");
-                String orientation = resultat.getString("orientation");
+                orientation = resultat.getString("orientation");
                 
                 if(!this.mainPlayer.getPseudo().equals(pseudo)){
                     //Add all other players to the array list players
@@ -294,10 +318,6 @@ public class Write_Read {
                 Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
             }
         }       
-    }
-
-    public void setMap(Map map) {
-        this.map = map;
     }
 
     public ArrayList<Integer> getBallesX() {
