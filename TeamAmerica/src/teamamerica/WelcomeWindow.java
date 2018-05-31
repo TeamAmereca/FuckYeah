@@ -31,13 +31,17 @@ public class WelcomeWindow extends JFrame implements KeyListener {
             //System.exit(0);
         } 
         else if(e.getKeyCode()== KeyEvent.VK_RIGHT)
-            CentralPanel.getDraw().moveRight();
+            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+//            CentralPanel.getDraw().moveRight();
         else if(e.getKeyCode()== KeyEvent.VK_LEFT)
-            CentralPanel.getDraw().moveLeft();
-        else if(e.getKeyCode()== KeyEvent.VK_DOWN)
-            CentralPanel.getDraw().moveDown();
+            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+//            CentralPanel.getDraw().moveLeft();
         else if(e.getKeyCode()== KeyEvent.VK_UP)
-            CentralPanel.getDraw().moveUp();
+            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+//            CentralPanel.getDraw().moveDown();
+        else if(e.getKeyCode()== KeyEvent.VK_DOWN)
+            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+//            CentralPanel.getDraw().moveUp();
         else if(e.getKeyCode()== KeyEvent.VK_SPACE)
             CentralPanel.getDatabase().getMainPlayer().tir();
     }
@@ -45,6 +49,7 @@ public class WelcomeWindow extends JFrame implements KeyListener {
     public void keyReleased(KeyEvent e) {
         /** Handle the key-released event */
     }
+    
     @Override
     public void keyTyped(KeyEvent e) {
          /** Handle the key typed event */
