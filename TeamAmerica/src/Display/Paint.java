@@ -101,7 +101,6 @@ public class Paint extends JComponent {
         //Paint the balle
         System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
         g.setColor(Color.BLACK);
-        System.out.println("Balle is at: ("+o+","+x+","+y+")");
         g.drawRect(x*blockLength, y*blockLength, 50, 50);
         g.fillRect(x*blockLength, y*blockLength, 50, 50);
         g.setColor(Color.RED);
@@ -123,7 +122,7 @@ public class Paint extends JComponent {
         //Here we set a timer to get a copy of the database every 0.25 sec
         TimerTask timerTask = new TimerTask() {
                 @Override
-                public void run() {System.out.println("timer for database");
+                public void run() {
                     database.refreshDataBase();
                     repaint();
                 }

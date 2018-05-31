@@ -59,7 +59,7 @@ public class Write_Read {
             resultat.next();
             int positionX = resultat.getInt("x");
             int positionY = resultat.getInt("y");
-            int pv = resultat.getInt("pv");System.out.println("refresh "+joueur.getPseudo()+":"+positionX+";"+positionY+";"+pv);
+            int pv = resultat.getInt("pv");
             String orientation = resultat.getString("orientation");
             joueur.setPositionX(positionX);
             joueur.setPositionY(positionY);
