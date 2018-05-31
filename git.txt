@@ -1,6 +1,6 @@
-﻿To use Git, right click on the folder where you want to have your project
+To use Git, right click on the folder where you want to have your project
 
-Initialization:
+Initialization:test
 	-git init
 	-git clone "git website"
 	-cd FuckYeah
