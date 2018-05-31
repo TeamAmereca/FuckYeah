@@ -32,3 +32,7 @@ Recuperer les fichiers:
 	Check settings:-git config --list
 	Get help:-git help "verb"
 	Get status:-git status OR -git status -s OR -git status --short
+
+
+
+test1test2
