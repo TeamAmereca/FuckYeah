@@ -118,7 +118,7 @@ public class Write_Read {
     }
     
     public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers) {
-        boolean firstWaitingPlayer = false;
+        boolean lastWaitingPlayer = false;
         boolean modelContainsMainPlayer = false;
         try {            
             PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation FROM joueur WHERE status = 0 LIMIT ?");
@@ -131,8 +131,8 @@ public class Write_Read {
                 model.addRow(new Object[]{pseudo,nation,0});
                 if(this.mainPlayer.getPseudo().equals(pseudo)){
                     modelContainsMainPlayer = true;
-                    if(resultat.getRow() ==1){
-                        firstWaitingPlayer = true;
+                    if(resultat.getRow() ==numberOfPlayers){
+                        lastWaitingPlayer = true;
                     }             
                 }
             }
@@ -142,15 +142,18 @@ public class Write_Read {
         }
         
         if(model.getRowCount() == numberOfPlayers && modelContainsMainPlayer){
-            if(firstWaitingPlayer){
-                //there is enought players in the waiting room
-                //the first player in the waiting room creates the game
-                initializePlayers(model,blockXNumber,blockYNumber);//initialize the players positions
+            if(lastWaitingPlayer){
+                //there are enough players in the waiting room
+                //the last player in the waiting room creates the game
+                initializePlayers(model,blockXNumber,blockYNumber);//initialize every player's positions
                 this.map = new Map(0, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
+                this.mainPlayer.modifierPv(100);//the last player sets his pv to 100, meaning that the map and player's positions have been set
                 boolean everyoneReady = false;
                 
                 while(!everyoneReady){
+                    //if everyone is ready, meaning that all other player has set his pv to 100
+                    //else the main player waits so that they can fetch all data of all players
                     getWaitingPlayers(model);
                     for(int i=0;i<numberOfPlayers;i++){
                         if((int)model.getValueAt(i,2) == 100){
@@ -169,7 +172,6 @@ public class Write_Read {
                     }
                 }
                 modifyPlayersStatus();//modify all players' status to true
-                this.mainPlayer.modifierPv(100);
             }else{
                 //the player is not in the waiting room
                 //it means that this player is going to join the game
