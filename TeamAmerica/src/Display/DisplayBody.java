@@ -55,6 +55,7 @@ public class DisplayBody extends JPanel{
     private Write_Read database;
     private Paint draw;
     
+    private boolean keyListener = false;
     
     public DisplayBody(int screenWidth, int screenHeight) {
         //Set the height, the width, the position of this panel
@@ -204,7 +205,9 @@ public class DisplayBody extends JPanel{
         draw.setSize(mapWidth, mapHeight);
         draw.setLocation((int)(panelWidth-mapWidth)/2, (int)(panelHeight-mapHeight)/2);
         this.add(draw);
-        //add here countdown timer
+        CountdownDisplay countdownDisplay = new CountdownDisplay(4); 
+        countdownDisplay.setBounds(0, 0, panelWidth, panelHeight);
+        this.add(countdownDisplay);//adds countdown timer
     }
 
     public Write_Read getDatabase() {
@@ -219,5 +222,9 @@ public class DisplayBody extends JPanel{
         } catch (SQLException ex) {
             Logger.getLogger(DisplayBody.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public boolean getKeyListener() {
+        return keyListener;
     }
 }

@@ -12,7 +12,7 @@ import javax.swing.*;
 public class WelcomeWindow extends JFrame implements KeyListener {
     
     public static final String GAME_NAME = "Team America";
-    private DisplayBody CentralPanel;
+    private DisplayBody centralPanel;
     private DisplayHeader header;
     //////////////////////////////////
     //  get the size of the screen  //
@@ -24,22 +24,23 @@ public class WelcomeWindow extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         /** Handle the key-pressed event */
-        
+        System.out.println(centralPanel.getKeyListener());
         // Click on esc key to close the game
         if(e.getKeyCode() == 27) {
             dispose();
             //System.exit(0);
-        } 
-        else if(e.getKeyCode()== KeyEvent.VK_RIGHT)
-            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+        }else if(centralPanel.getKeyListener()){
+            if(e.getKeyCode()== KeyEvent.VK_RIGHT)
+            centralPanel.getDatabase().getMainPlayer().deplacer(e);
         else if(e.getKeyCode()== KeyEvent.VK_LEFT)
-            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+            centralPanel.getDatabase().getMainPlayer().deplacer(e);
         else if(e.getKeyCode()== KeyEvent.VK_UP)
-            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+            centralPanel.getDatabase().getMainPlayer().deplacer(e);
         else if(e.getKeyCode()== KeyEvent.VK_DOWN)
-            CentralPanel.getDatabase().getMainPlayer().deplacer(e);
+            centralPanel.getDatabase().getMainPlayer().deplacer(e);
         else if(e.getKeyCode()== KeyEvent.VK_SPACE)
-            CentralPanel.getDatabase().getMainPlayer().tir();
+            centralPanel.getDatabase().getMainPlayer().tir();            
+        }
     }
     @Override
     public void keyReleased(KeyEvent e) {
@@ -59,9 +60,9 @@ public class WelcomeWindow extends JFrame implements KeyListener {
         header = new DisplayHeader(screenWidth,screenHeight);
         header.addHeader(GAME_NAME);
         add(header);
-        //Initialize CentralPanel
-        CentralPanel = new DisplayBody(screenWidth, screenHeight);
-        add(CentralPanel);
+        //Initialize centralPanel
+        centralPanel = new DisplayBody(screenWidth, screenHeight);
+        add(centralPanel);
         //
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,7 +78,7 @@ public class WelcomeWindow extends JFrame implements KeyListener {
     @Override
     public void dispose() {
         super.dispose(); //To change body of generated methods, choose Tools | Templates.
-        CentralPanel.close();
+        centralPanel.close();
     }
     
     public static void main(String[] args) throws SQLException {

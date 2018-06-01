@@ -8,7 +8,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -171,6 +173,7 @@ public class Write_Read {
                     }
                 }
                 modifyPlayersStatus();//modify all players' status to true
+                setTimeDatabase();//set the beginning time
             }else{
                 //the player is not in the waiting room
                 //it means that this player is going to join the game
@@ -187,7 +190,8 @@ public class Write_Read {
                 }
                 retrievePlayers(model);//retrieve information about every single players from the database
                 this.map = new Map(0, connection);//create a new map
-                map.miseAJourMap();//download the lastest map from the database                
+                map.miseAJourMap();//download the lastest map from the database
+                getTimeDatabase();
             }
             return true;
         }else{
@@ -319,7 +323,50 @@ public class Write_Read {
             }
         }       
     }
+    
+    public void setTimeDatabase() {
+        //set game beginning time     
+        int delay = 5;
+        try {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp.getTime());
+            cal.add(Calendar.SECOND, delay);
+            Timestamp later = new Timestamp(cal.getTime().getTime());
+            PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
+            requete.setTimestamp(1, later);
+            requete.executeUpdate();
+            requete.close();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            waitMilliSeconds(later.getTime()-now.getTime());
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+    }
+    
+    public void getTimeDatabase() {
+        try {
+            PreparedStatement requete = connection.prepareStatement("SELECT date FROM time WHERE number = 0");
+            ResultSet resultat = requete.executeQuery();
+            resultat.next();//we are sure that this 'resultat' exists
+            Timestamp later = resultat.getTimestamp("date");
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            requete.close();
+            waitMilliSeconds(later.getTime()-now.getTime());
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+    }
 
+    public void waitMilliSeconds(long x){
+        try {
+            x = Math.min(x,0);
+            TimeUnit.MILLISECONDS.sleep(x);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public ArrayList<Integer> getBallesX() {
         return ballesX;
     }
