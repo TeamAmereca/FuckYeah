@@ -9,42 +9,12 @@ import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import javax.swing.*;
 
-public class WelcomeWindow extends JFrame implements KeyListener {
+public class WelcomeWindow extends JFrame{
     
-    public static final String GAME_NAME = "Team America";
-    private DisplayBody centralPanel;
-                
-    @Override
-    public void keyPressed(KeyEvent e) {
-        /** Handle the key-pressed event */
-        System.out.println(centralPanel.getKeyListener());
-        // Click on esc key to close the game
-        if(e.getKeyCode() == 27) {
-            dispose();
-            System.exit(0);
-        }else if(centralPanel.getKeyListener()){
-            if(e.getKeyCode()== KeyEvent.VK_RIGHT)
-            centralPanel.getDatabase().getMainPlayer().deplacer(e);
-        else if(e.getKeyCode()== KeyEvent.VK_LEFT)
-            centralPanel.getDatabase().getMainPlayer().deplacer(e);
-        else if(e.getKeyCode()== KeyEvent.VK_UP)
-            centralPanel.getDatabase().getMainPlayer().deplacer(e);
-        else if(e.getKeyCode()== KeyEvent.VK_DOWN)
-            centralPanel.getDatabase().getMainPlayer().deplacer(e);
-        else if(e.getKeyCode()== KeyEvent.VK_SPACE)
-            centralPanel.getDatabase().getMainPlayer().tir();            
-        }
-    }
-    @Override
-    public void keyReleased(KeyEvent e) {
-        /** Handle the key-released event */
-    }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
-         /** Handle the key typed event */
-    }
-    
+    private final String GAME_NAME = "Team America";
+    private DisplayBody centralPanel;  
+    private FrameKeyListener frameKeyListener = new FrameKeyListener();
+
     WelcomeWindow() {
         setTitle(GAME_NAME);
         
@@ -62,12 +32,14 @@ public class WelcomeWindow extends JFrame implements KeyListener {
         header.addHeader(GAME_NAME);
         add(header);
         //Initialize centralPanel
-        centralPanel = new DisplayBody(screenWidth, screenHeight);
+        centralPanel = new DisplayBody(this,screenWidth, screenHeight);
         add(centralPanel);
         //
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addKeyListener(this);
+        
+        addKeyListener0();//add keylistener
+        
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         setUndecorated(true);
@@ -75,11 +47,51 @@ public class WelcomeWindow extends JFrame implements KeyListener {
         setLayout(null);
         setVisible(true);
     }
+    
+    public void addKeyListener0(){
+        this.addKeyListener(frameKeyListener);
+    }
+    
+    public void removeKeyListener0(){
+        this.removeKeyListener(frameKeyListener);
+    }
 
     @Override
     public void dispose() {
         super.dispose(); //To change body of generated methods, choose Tools | Templates.
         centralPanel.close();
+    }
+    
+    class FrameKeyListener implements KeyListener{
+        @Override
+        public void keyPressed(KeyEvent e) {System.out.println("KeyPressed");
+            /** Handle the key-pressed event */        
+            if(e.getKeyCode() == 27) {
+                // Click on esc key to close the game
+                dispose();
+                System.exit(0);
+            }
+                if(e.getKeyCode()== KeyEvent.VK_RIGHT)
+                centralPanel.getDatabase().getMainPlayer().deplacer(e);
+            else if(e.getKeyCode()== KeyEvent.VK_LEFT)
+                centralPanel.getDatabase().getMainPlayer().deplacer(e);
+            else if(e.getKeyCode()== KeyEvent.VK_UP)
+                centralPanel.getDatabase().getMainPlayer().deplacer(e);
+            else if(e.getKeyCode()== KeyEvent.VK_DOWN)
+                centralPanel.getDatabase().getMainPlayer().deplacer(e);
+            else if(e.getKeyCode()== KeyEvent.VK_SPACE)
+                centralPanel.getDatabase().getMainPlayer().tir();            
+        }        
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            /** Handle the key-released event */
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+             /** Handle the key typed event */
+        }
     }
     
     public static void main(String[] args) throws SQLException {
