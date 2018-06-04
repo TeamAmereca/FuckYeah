@@ -13,14 +13,7 @@ public class WelcomeWindow extends JFrame implements KeyListener {
     
     public static final String GAME_NAME = "Team America";
     private DisplayBody centralPanel;
-    private DisplayHeader header;
-    //////////////////////////////////
-    //  get the size of the screen  //
-    //////////////////////////////////
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final int screenWidth = (int) screenSize.getWidth();
-    private final int screenHeight = (int) screenSize.getHeight();
-        
+                
     @Override
     public void keyPressed(KeyEvent e) {
         /** Handle the key-pressed event */
@@ -28,7 +21,7 @@ public class WelcomeWindow extends JFrame implements KeyListener {
         // Click on esc key to close the game
         if(e.getKeyCode() == 27) {
             dispose();
-            //System.exit(0);
+            System.exit(0);
         }else if(centralPanel.getKeyListener()){
             if(e.getKeyCode()== KeyEvent.VK_RIGHT)
             centralPanel.getDatabase().getMainPlayer().deplacer(e);
@@ -52,12 +45,20 @@ public class WelcomeWindow extends JFrame implements KeyListener {
          /** Handle the key typed event */
     }
     
-    WelcomeWindow() {   
+    WelcomeWindow() {
         setTitle(GAME_NAME);
+        
+        //////////////////////////////////
+        //  get the size of the screen  //
+        //////////////////////////////////
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = (int) screenSize.getWidth();
+        int screenHeight = (int) screenSize.getHeight();
+        
         ///////////////////////////////
         //  adding header on frame  //
         //////////////////////////////
-        header = new DisplayHeader(screenWidth,screenHeight);
+        DisplayHeader header = new DisplayHeader(screenWidth,screenHeight);
         header.addHeader(GAME_NAME);
         add(header);
         //Initialize centralPanel

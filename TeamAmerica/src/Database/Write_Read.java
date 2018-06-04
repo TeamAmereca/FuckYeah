@@ -34,6 +34,7 @@ public class Write_Read {
     private int blockXNumber;
     private int blockYNumber;
     
+    private int delay = 8;
     
     public Write_Read(int blockLength, int blockXNumber, int blockYNumber) {
         this.blockLength = blockLength;
@@ -150,7 +151,7 @@ public class Write_Read {
                 initializePlayers(model,blockXNumber,blockYNumber);//initialize every player's positions
                 this.map = new Map(0, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
-                this.mainPlayer.modifierPv(100);//the last player sets his pv to 100, meaning that the map and player's positions have been set
+                this.mainPlayer.modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
                 boolean everyoneReady = false;              
                 while(!everyoneReady){
                     //if everyone is ready, meaning that all other player has set his pv to 100
@@ -171,32 +172,44 @@ public class Write_Read {
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                modifyPlayersStatus();//modify all players' status to true
+                }                
                 setTimeDatabase();//set the beginning time
+                this.mainPlayer.modifierPv(100);
+                modifyPlayersStatus();//modify all players' status to true
             }else{
                 //the player is not in the waiting room
                 //it means that this player is going to join the game
-                boolean mapReady = false;              
-                while(!mapReady){
-                    //we wait until the map is created, that is when the last entered player's pv is 100
-                    getWaitingPlayers(model);
-                    mapReady = (int)model.getValueAt(numberOfPlayers-1,2) == 100;                    
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                getLastPlayerPV(model, numberOfPlayers, 50);//true if map is ready
                 retrievePlayers(model);//retrieve information about every single players from the database
                 this.map = new Map(0, connection);//create a new map
                 map.miseAJourMap();//download the lastest map from the database
+                getLastPlayerPV(model, numberOfPlayers, 100);//true if the game is going to start
                 getTimeDatabase();
             }
             return true;
         }else{
             return false;
         }
+    }
+    
+    public void getLastPlayerPV(DefaultTableModel model, int numberOfPlayers, int pv){
+        boolean equal = false; 
+        try {
+            while(!equal){
+                //we wait until the map is created, that is when the last entered player's pv is 100
+                getWaitingPlayers(model);
+                if(model.getRowCount()==0){
+                    break;
+                }else{
+                    equal = (int)model.getValueAt(numberOfPlayers-1,2) == pv;
+                    TimeUnit.SECONDS.sleep(1);    
+                }
+                    
+            }                
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public void modifyPlayersStatus() {
@@ -325,14 +338,13 @@ public class Write_Read {
     }
     
     public void setTimeDatabase() {
-        //set game beginning time     
-        int delay = 5;
+        //set game beginning time
         try {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp.getTime());
             cal.add(Calendar.SECOND, delay);
-            Timestamp later = new Timestamp(cal.getTime().getTime());
+            Timestamp later = new Timestamp(cal.getTime().getTime());System.out.println("The game is set to begin at:"+later);
             PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
             requete.setTimestamp(1, later);
             requete.executeUpdate();
@@ -345,23 +357,27 @@ public class Write_Read {
     }
     
     public void getTimeDatabase() {
+        //get game beginning time
         try {
             PreparedStatement requete = connection.prepareStatement("SELECT date FROM time WHERE number = 0");
             ResultSet resultat = requete.executeQuery();
             resultat.next();//we are sure that this 'resultat' exists
             Timestamp later = resultat.getTimestamp("date");
-            Timestamp now = new Timestamp(System.currentTimeMillis());
+            Timestamp now = new Timestamp(System.currentTimeMillis());System.out.println("The game will begin at:"+later);
             requete.close();
-            waitMilliSeconds(later.getTime()-now.getTime());
+            waitMilliSeconds(later.getTime()-now.getTime());//have to convert GMT to UTC+2 local time
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      
+        }      
     }
 
     public void waitMilliSeconds(long x){
         try {
-            x = Math.min(x,0);
+            if(x<0){
+                x=0;
+            }else{
+                x = Math.min(Math.abs(x),delay*1000);
+            }
             TimeUnit.MILLISECONDS.sleep(x);
         } catch (InterruptedException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
@@ -379,4 +395,32 @@ public class Write_Read {
         return ballesO;
     }
 
+    
+    
+    public static void main(String[] args){
+    int delay = 5;
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
+            
+            
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());System.out.println("Now:"+timestamp);
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp.getTime());
+            cal.add(Calendar.SECOND, delay);
+            Timestamp later = new Timestamp(cal.getTime().getTime());System.out.println("What I want:"+later);
+            PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
+            requete.setTimestamp(1, later);
+            requete.executeUpdate();
+            requete.close();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            //waitMilliSeconds(later.getTime()-now.getTime());
+            
+            System.exit(0);
+        connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }      
 }
+}
+
+ 

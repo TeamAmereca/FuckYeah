@@ -37,7 +37,6 @@ public class CountdownDisplay extends JPanel{
             public void run() {
                 if(countdown--==0){
                     timer.cancel();
-                    timer.purge();
                     countdownLabel.setVisible(false);
                 }else{
                     countdownLabel.setText(countdown+"");
