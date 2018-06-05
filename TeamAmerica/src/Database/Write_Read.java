@@ -198,7 +198,7 @@ public class Write_Read {
                 //it means that this player is going to join the game
                 getLastPlayerPV(model, numberOfPlayers, 50);//true if map is ready
                 retrievePlayers(model);//retrieve information about every single players from the database
-                this.map = new Map(0, connection);//create a new map
+                this.map = new Map(1, connection);//create a new map
                 map.miseAJourMap();//download the lastest map from the database
                 getLastPlayerPV(model, numberOfPlayers, 100);//true if the game is going to start
                 getTimeDatabase();
