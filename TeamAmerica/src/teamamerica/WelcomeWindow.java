@@ -63,6 +63,7 @@ public class WelcomeWindow extends JFrame{
     }
     
     class FrameKeyListener implements KeyListener{
+        //Key Listener for the main frame
         @Override
         public void keyPressed(KeyEvent e) {System.out.println("KeyPressed");
             /** Handle the key-pressed event */        
