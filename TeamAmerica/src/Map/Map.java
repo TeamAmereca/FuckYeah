@@ -52,7 +52,7 @@ public class Map {
     public Map(int forme, Connection connexion) {// forme = 0 : carte simple
         this.connexion = connexion;
     	this.nbCase_X = 20;
-    	this.nbCase_Y = 20;
+    	this.nbCase_Y = 13;
     	this.listeBloc = new ArrayList<Bloc>();
         if (forme==0 || forme ==1){ // Carte carré sans objets à l'intérieur = carte simple
             for(int x=0; x<this.nbCase_X; x++) {//on ajoute des cases sur les cotés
@@ -65,8 +65,8 @@ public class Map {
             }
         }
         if (forme==1){ // on rajoute des blocs cassables
-            for(int i = 5; i<10; i++){
-                this.listeBloc.add(new Bloc(16, i, true));
+            for(int i = 1; i<5; i++){
+                this.listeBloc.add(new Bloc(4, i, true));
             }
     	}
     }
