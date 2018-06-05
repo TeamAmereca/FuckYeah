@@ -32,7 +32,7 @@ public class CountdownDisplay extends JPanel{
         countdownLabel.setBackground(new Color(255,255,255,255));
         this.add(countdownLabel);
         countdownNumber();
-        countdownSound();
+        frame.getSoundEffect().play("countdown");
     }
     
     public void countdownNumber(){
@@ -51,13 +51,5 @@ public class CountdownDisplay extends JPanel{
             }
         };
         timer.scheduleAtFixedRate(timerTask,0, 1000);
-    }
-    
-    public void countdownSound(){
-        //Play countdown sound
-        JFXPanel fxPanel = new JFXPanel();
-        String bip = "build\\classes\\sound\\countdown.mp3";
-        MediaPlayer mediaPlayer = new MediaPlayer(new Media(new File(bip).toURI().toString()));
-        mediaPlayer.play();
     }
 }

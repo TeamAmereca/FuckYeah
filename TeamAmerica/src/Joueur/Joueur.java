@@ -280,7 +280,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,2*10); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,250); //empêche de se déplacer pendant 2s
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");
@@ -303,7 +303,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,10); //empêche de se déplacer pendant 1s
+                            timer.schedule(timerTask,100); //empêche de se déplacer pendant 1s
                             
                             System.out.println("Votre joueur est réorienté vers la Droite");
                             System.out.println("Fin du tour");
@@ -350,7 +350,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,2*10); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,250); //empêche de se déplacer pendant 2s
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");
@@ -373,7 +373,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,10); //empêche de se déplacer pendant 1s
+                            timer.schedule(timerTask,100); //empêche de se déplacer pendant 1s
                             
                             System.out.println("Votre joueur est réorienté vers la Gauche");
                             System.out.println("Fin du tour");
@@ -420,7 +420,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,2*10); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,250); //empêche de se déplacer pendant 2s
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");
@@ -443,7 +443,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,10); //empêche de se déplacer pendant 1s
+                            timer.schedule(timerTask,100); //empêche de se déplacer pendant 1s
                             
                             System.out.println("Votre joueur est réorienté vers le Bas");
                             System.out.println("Fin du tour");
@@ -490,7 +490,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,2*10); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,250); //empêche de se déplacer pendant 2s
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");
@@ -513,7 +513,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,10); //empêche de se déplacer pendant 1s
+                            timer.schedule(timerTask,100); //empêche de se déplacer pendant 1s
                             
                             System.out.println("Votre joueur est réorienté vers le Haut");
                             System.out.println("Fin du tour");
