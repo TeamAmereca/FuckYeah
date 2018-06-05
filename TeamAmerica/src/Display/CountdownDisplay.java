@@ -33,6 +33,7 @@ public class CountdownDisplay extends JPanel{
         this.add(countdownLabel);
         countdownNumber();
         frame.getSoundEffect().play("countdown");
+
     }
     
     public void countdownNumber(){
