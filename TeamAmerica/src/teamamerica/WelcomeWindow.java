@@ -8,12 +8,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import javax.swing.*;
+import sound.SoundEffect;
 
 public class WelcomeWindow extends JFrame{
     
     private final String GAME_NAME = "Team America";
     private DisplayBody centralPanel;  
     private FrameKeyListener frameKeyListener = new FrameKeyListener();
+    private SoundEffect soundEffect = new SoundEffect();
 
     WelcomeWindow() {
         setTitle(GAME_NAME);
@@ -92,6 +94,10 @@ public class WelcomeWindow extends JFrame{
         public void keyTyped(KeyEvent e) {
              /** Handle the key typed event */
         }
+    }
+
+    public SoundEffect getSoundEffect() {
+        return soundEffect;
     }
     
     public static void main(String[] args) throws SQLException {

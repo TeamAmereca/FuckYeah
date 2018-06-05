@@ -95,7 +95,7 @@ public class Paint extends JComponent {
     public void paintBalle(Graphics g, int x, int y, String o) {
         //Paint the balle
         System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.YELLOW);
         g.drawRect(x*blockLength, y*blockLength, 50, 50);
         g.fillRect(x*blockLength, y*blockLength, 50, 50);
         g.setColor(Color.RED);
