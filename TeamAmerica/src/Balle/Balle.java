@@ -46,19 +46,20 @@ public class Balle implements ActionListener {
             }
             requete.close();
             if (this.typeBalle == "AK47"){
-                this.degats=50;
+                this.degats=100;
                 this.portee=0;
-                this.vitesse=10;}
+                this.vitesse=100;}
             else if (this.typeBalle == "M16"){
                 this.degats=50;
                 this.portee=0;
-                this.vitesse=10;}
+                this.vitesse=100;}
             else if (this.typeBalle == "Gun"){
                 this.degats=20;
                 this.portee=0;
-                this.vitesse=5;}
+                this.vitesse=500;}
             else {System.out.println("Balle non référencée");}
-            this.timer = new Timer( 1000 , this);
+            this.timer = new Timer( 100 , this);
+            this.connexion = connexion;
             timer.start();
         } catch (SQLException ex) {
             Logger.getLogger(Balle.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,27 +67,29 @@ public class Balle implements ActionListener {
     }
     public void deplacer(){
         
-        if (this.orientationBalle == "Haut"){
-            deplacement(this.positionx, this.positiony+1);}
-        if (this.orientationBalle == "Bas"){
+        if (this.orientationBalle.equals("Haut")){
             deplacement(this.positionx, this.positiony-1);}
-        if (this.orientationBalle == "Droite"){
+        if (this.orientationBalle.equals("Bas")){
+            deplacement(this.positionx, this.positiony+1);}
+        if (this.orientationBalle.equals("Droite")){
             deplacement(this.positionx+1, this.positiony);}
-        if (this.orientationBalle == "Gauche"){
+        if (this.orientationBalle.equals("Gauche")){
             deplacement(this.positionx-1, this.positiony);
         }
     }
 
     public  void deplacement(int posx, int posy){
         try {
-            Connection connexion = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
+            //Connection connexion = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
             PreparedStatement requete = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
             requete.setInt(1, posx);
             requete.setInt(2, posy);
             ResultSet resultat = requete.executeQuery();
             if (resultat.next()==true) {
                 System.out.println("joueur détecté");
-                String Nom = resultat.getString("Nom");
+                String pseudo = resultat.getString("pseudo");
+                System.out.println(pseudo);
+                System.out.println(this.degats);
                 int x = resultat.getInt("x");
                 int y = resultat.getInt("y");
                 int pv = resultat.getInt("pv");
@@ -96,9 +99,19 @@ public class Balle implements ActionListener {
                 requete.close();
                 PreparedStatement requete2 = connexion.prepareStatement("UPDATE joueur SET pv = ? WHERE pseudo = ?");            
                 requete2.setInt(1, pv-this.degats);
-                requete2.setString(2, Nom);
+                requete2.setString(2, pseudo);
+                requete2.executeUpdate();
                 requete2.close();
-                connexion.close();
+                System.out.println("destruction balle");
+                PreparedStatement requete7 = connexion.prepareStatement("DELETE FROM balle WHERE positionx = ? AND positiony = ? "); 
+                System.out.println(this.positionx);
+                System.out.println(this.positiony);
+                requete7.setInt(1, this.positionx);
+                requete7.setInt(2, this.positiony);
+                requete7.executeUpdate();
+                requete7.close();
+                timer.stop();
+                //connexion.close();
             }
             PreparedStatement requete3 = connexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
             requete3.setInt(1, posx);
@@ -128,7 +141,7 @@ public class Balle implements ActionListener {
                 requete5.executeUpdate();
                 requete5.close();
                 timer.stop();
-                connexion.close();
+                //connexion.close();
             }else {
                 this.positionx=posx;
                 this.positiony=posy;
@@ -142,7 +155,7 @@ public class Balle implements ActionListener {
                 requete6.executeUpdate();
                 
                 requete6.close();
-                connexion.close();
+                //connexion.close();
             }
             
     } catch (SQLException ex) {

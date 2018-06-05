@@ -56,7 +56,7 @@ public class CountdownDisplay extends JPanel{
     public void countdownSound(){
         //Play countdown sound
         JFXPanel fxPanel = new JFXPanel();
-        String bip = "build/classes/sound/countdown.mp3";
+        String bip = "build\\classes\\sound\\countdown.mp3";
         MediaPlayer mediaPlayer = new MediaPlayer(new Media(new File(bip).toURI().toString()));
         mediaPlayer.play();
     }
