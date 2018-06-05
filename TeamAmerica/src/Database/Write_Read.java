@@ -1,6 +1,7 @@
 package Database;
 
 import Joueur.Joueur;
+import Map.Bloc;
 import Map.Map;
 
 import java.sql.Connection;
@@ -72,6 +73,22 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    public void refreshMap(){
+        try {
+            PreparedStatement requete = connection.prepareStatement("SELECT * FROM blocs");
+            ResultSet result = requete.executeQuery();
+            while(result.next()){
+                this.map.addBloc(new Bloc(result.getInt("positionX"), result.getInt("positionY"), result.getBoolean("cassable")));
+            }
+            requete.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(this.map);
+    }
+    public Map getMap(){
+        return this.map;
     }
     public void refreshBalle() {
         try {
@@ -149,7 +166,7 @@ public class Write_Read {
                 //there are enough players in the waiting room
                 //the last player in the waiting room creates the game
                 initializePlayers(model,blockXNumber,blockYNumber);//initialize every player's positions
-                this.map = new Map(0, connection);//create a new map
+                this.map = new Map(1, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
                 this.mainPlayer.modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
                 boolean everyoneReady = false;              
@@ -181,7 +198,7 @@ public class Write_Read {
                 //it means that this player is going to join the game
                 getLastPlayerPV(model, numberOfPlayers, 50);//true if map is ready
                 retrievePlayers(model);//retrieve information about every single players from the database
-                this.map = new Map(0, connection);//create a new map
+                this.map = new Map(1, connection);//create a new map
                 map.miseAJourMap();//download the lastest map from the database
                 getLastPlayerPV(model, numberOfPlayers, 100);//true if the game is going to start
                 getTimeDatabase();
@@ -259,23 +276,23 @@ public class Write_Read {
                         orientation="Droite";
                         break;
                     case 1:
-                        variableX = blockXNumber-2;
-                        variableY = blockYNumber-2;
+                        variableX = 1;
+                        variableY = 1;
                         orientation="Gauche";                        
                         break;
                     case 2:
-                        variableX = blockXNumber-2;
-                        variableY = 1;
+                        variableX = 1;
+                        variableY = 0;
                         orientation="Bas";
                         break;
                     default:
-                        variableX = 1;
-                        variableY = blockYNumber-2;
+                        variableX = 0;
+                        variableY = 1;
                         orientation="Haut";
                         break;
                 }
-                requeteWrite.setInt(1,variableX);
-                requeteWrite.setInt(2,variableY);
+                requeteWrite.setInt(1,(blockXNumber-1)*variableX);
+                requeteWrite.setInt(2,(blockYNumber-1)*variableY);
                 requeteWrite.setString(3, orientation);
                 requeteWrite.setString(4, pseudo);
                 requeteWrite.executeUpdate();
@@ -420,7 +437,7 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }      
-}
+    }
 }
 
  

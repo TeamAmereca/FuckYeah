@@ -2,6 +2,7 @@ package Display;
 
 import Database.Write_Read;
 import Joueur.Joueur;
+import Map.Bloc;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JComponent;
+
+import java.awt.Image;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 public class Paint extends JComponent {
     
@@ -41,16 +47,27 @@ public class Paint extends JComponent {
     }
     
     public void paintMap(Graphics g) {
-        //Paint the map
-        g.setColor(Color.BLACK);
-        for(int i=0;i<=blockYNumber;i++) {
-            //Horizontal lines
-            g.drawLine(0, i*blockLength, blockXNumber*blockLength, i*blockLength);
-        }
         
-        for(int i=0;i<=blockXNumber;i++) {
-            //Vertical lines
-            g.drawLine(i*blockLength, 0, i*blockLength, blockYNumber*blockLength);
+        for(int i=0; i<database.getMap().nombreBlocs(); i++){
+            paintBloc(g, database.getMap().getBloc(i));
+        }
+    }
+    public void paintBloc(Graphics g, Bloc b){
+        g.setColor(Color.RED);
+        try{
+            Image solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
+            Image breakable = ImageIO.read(new File("./src/Images/test.png"));
+            //Image sand = ImageIO.read(new File("./src/Images/sand.png"));
+                //g.drawLine(b.getX()*blockLength,b.getY()*blockLength,50,50);
+                //for(int i = 0; i<this.database.Map.getX(); i++)
+                if(b.getCassable()){
+                    g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
+                }
+                else{
+                    g.drawImage(solidBloc, b.getX()*50, b.getY()*50, this);
+                }
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
     
@@ -95,7 +112,7 @@ public class Paint extends JComponent {
     public void paintBalle(Graphics g, int x, int y, String o) {
         //Paint the balle
         System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.BLACK);
         g.drawRect(x*blockLength, y*blockLength, 50, 50);
         g.fillRect(x*blockLength, y*blockLength, 50, 50);
         g.setColor(Color.RED);
