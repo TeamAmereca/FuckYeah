@@ -4,7 +4,6 @@ import Balle.Balle;
 
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -531,6 +530,10 @@ public class Joueur {
         
     public String getPseudo() {
         return pseudo;
+    }
+
+    public String getNation() {
+        return nation;
     }
 
     public int getPositionX() {

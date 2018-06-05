@@ -2,13 +2,8 @@ package Display;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import teamamerica.WelcomeWindow;
@@ -33,7 +28,6 @@ public class CountdownDisplay extends JPanel{
         this.add(countdownLabel);
         countdownNumber();
         frame.getSoundEffect().play("countdown");
-
     }
     
     public void countdownNumber(){

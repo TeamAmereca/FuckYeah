@@ -59,7 +59,6 @@ public class DisplayBody extends JPanel{
     private Paint draw;
     
     public DisplayBody(WelcomeWindow frame, int screenWidth, int screenHeight) {
-        super();
         this.frame = frame;
         //Set the height, the width, the position of this panel
         panelHeight = (int) screenHeight*9/10;
@@ -123,7 +122,8 @@ public class DisplayBody extends JPanel{
         public void actionPerformed(ActionEvent e) {
             String selectedNation = (String) box_nations.getSelectedItem();//get the selected item
             ImageIcon icon = new ImageIcon(getClass().getResource("/gif/"+selectedNation+".gif"));
-            label.setIcon(icon);                
+            label.setIcon(icon);
+            frame.getSoundEffect().play("player "+selectedNation);
         }
     };
     public void signUp() {

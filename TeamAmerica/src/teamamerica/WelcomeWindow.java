@@ -66,7 +66,7 @@ public class WelcomeWindow extends JFrame{
     
     class FrameKeyListener implements KeyListener{
         @Override
-        public void keyPressed(KeyEvent e) {System.out.println("KeyPressed");
+        public void keyPressed(KeyEvent e) {
             /** Handle the key-pressed event */        
             if(e.getKeyCode() == 27) {
                 // Click on esc key to close the game
@@ -82,7 +82,8 @@ public class WelcomeWindow extends JFrame{
             else if(e.getKeyCode()== KeyEvent.VK_DOWN)
                 centralPanel.getDatabase().getMainPlayer().deplacer(e);
             else if(e.getKeyCode()== KeyEvent.VK_SPACE)
-                centralPanel.getDatabase().getMainPlayer().tir();            
+                centralPanel.getDatabase().getMainPlayer().tir();
+                soundEffect.play("rifle "+centralPanel.getDatabase().getMainPlayer().getNation());
         }        
 
         @Override
