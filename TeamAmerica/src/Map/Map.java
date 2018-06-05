@@ -164,5 +164,23 @@ public class Map {
         	}
         }
     }
+    
+    public void addBloc(Bloc b) {
+        this.listeBloc.add(b);
+    }
+    
+    public int nombreBlocs(){
+        return this.listeBloc.size();
+    }
+    
+    public Bloc getBloc(int i){
+        return this.listeBloc.get(i);
+    }
+    public int getX(){
+        return this.nbCase_X;
+    }
+    public int getY(){
+        return this.nbCase_Y;
+    }
 }
 

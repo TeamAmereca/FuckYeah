@@ -22,7 +22,7 @@ public class SoundEffect {
     
     public void play(String name){
         //Play sound effect
-        MediaPlayer mediaPlayer = new MediaPlayer(new Media(new File("./build/classes/sound/"+name+".mp3").toURI().toString()));
-        mediaPlayer.play();
+        //MediaPlayer mediaPlayer = new MediaPlayer(new Media(new File("./build/classes/sound/"+name+".mp3").toURI().toString()));
+        //mediaPlayer.play();
     }       
 }

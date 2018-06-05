@@ -32,7 +32,7 @@ public class CountdownDisplay extends JPanel{
         countdownLabel.setBackground(new Color(255,255,255,255));
         this.add(countdownLabel);
         countdownNumber();
-        countdownSound();
+        //countdownSound();
     }
     
     public void countdownNumber(){
