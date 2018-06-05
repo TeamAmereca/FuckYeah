@@ -259,23 +259,23 @@ public class Write_Read {
                         orientation="Droite";
                         break;
                     case 1:
-                        variableX = 1;
-                        variableY = 1;
+                        variableX = blockXNumber-2;
+                        variableY = blockYNumber-2;
                         orientation="Gauche";                        
                         break;
                     case 2:
-                        variableX = 1;
-                        variableY = 0;
+                        variableX = blockXNumber-2;
+                        variableY = 1;
                         orientation="Bas";
                         break;
                     default:
-                        variableX = 0;
-                        variableY = 1;
+                        variableX = 1;
+                        variableY = blockYNumber-2;
                         orientation="Haut";
                         break;
                 }
-                requeteWrite.setInt(1,(blockXNumber-1)*variableX);
-                requeteWrite.setInt(2,(blockYNumber-1)*variableY);
+                requeteWrite.setInt(1,variableX);
+                requeteWrite.setInt(2,variableY);
                 requeteWrite.setString(3, orientation);
                 requeteWrite.setString(4, pseudo);
                 requeteWrite.executeUpdate();
