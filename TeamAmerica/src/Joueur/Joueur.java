@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Joueur {
     
@@ -21,31 +23,42 @@ public class Joueur {
     private int vitesse;
     private Boolean connectePartie;
     private Connection connexion; //contient le lien de connexion au serveur
+    private Boolean peutTirer;
     
     public Joueur(String pseudo, String nation, Connection connexion){
         positionX = 0;
         positionY = 0;
         this.pseudo = pseudo;
         this.nation = nation;
-        orientation = "Droite";
-        arme = "M16";
+        orientation = "Bas";
+        if (nation=="America"){
+            arme = "M16";
+        } else if (nation=="Terrorist"){
+            arme = "AK47";
+        }
         pv = 0;
         vitesse = 1; //joueur se déplace case par case par défaut
         connectePartie = false;
         this.connexion = connexion;
+        peutTirer = true;
     }
     
-    public Joueur(String pseudo, int positionX, int positionY, int pv,String nation, String orientation, Connection connexion){
+    public Joueur(String pseudo, int positionX, int positionY, int pv, String nation, String orientation, Connection connexion){
         this.positionX = positionX;
         this.positionY = positionY;
         this.pseudo = pseudo;
         this.nation = nation;
         this.orientation = orientation;
-        arme = "M16";
+        if (nation=="America"){
+            arme = "M16";
+        } else if (nation=="Terrorist"){
+            arme = "AK47";
+        }
         this.pv = pv;
         vitesse = 1; //joueur se déplace case par case par défaut
         connectePartie = true;
         this.connexion = connexion;
+        peutTirer = true;
     }
     
     public void creerJoueurSQL() throws SQLException { //crée le jouer dans la BDD SQL
@@ -160,20 +173,38 @@ public class Joueur {
     }
     
     public void tir(){
-        int positionBalleX = positionX;
-        int positionBalleY = positionY;
-        if(orientation == "Gauche"){
-            positionBalleX -= 1;
-        }else if(orientation == "Droite"){
-            positionBalleX += 1;
-        }else if(orientation == "Haut"){
-            positionBalleY += 1;
-        }else if(orientation == "Bas"){
-            positionBalleY -= 1;
+        System.out.println("vérification avant de tirer : peutTirer = " + peutTirer);
+        if (peutTirer){
+            int positionBalleX = positionX;
+            int positionBalleY = positionY;
+            if(orientation == "Gauche"){
+                positionBalleX -= 1;
+            }else if(orientation == "Droite"){
+                positionBalleX += 1;
+            }else if(orientation == "Haut"){
+                positionBalleY -= 1;
+            }else if(orientation == "Bas"){
+                positionBalleY += 1;
+            }
+            Balle balle = new Balle(connexion, orientation, arme, positionBalleX, positionBalleY);
+            System.out.println("Balle : " + orientation + ' ' + arme + ' ' + positionBalleX + ' ' + positionBalleY);
+            peutTirer = false;
+            //temps attente avant prochain tir possible
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    peutTirer=true;
+                }
+            };
+            Timer timer = new Timer();
+            timer.schedule(timerTask,2*1000); //empêche de tirer pendant 2s
+            //timerTask.cancel();
+            //timer.cancel();
+            //peutTirer = true;
+            System.out.println("tir effectué et temps d'attente terminé : peutTirer = " + peutTirer);
+        } else if (peutTirer==false){ //pour tests, à supprimer ensuite
+            System.out.println("temps d'attente non écoulé");
         }
-        Balle balle = new Balle(connexion, orientation, arme, positionBalleX, positionBalleY);
-        System.out.println(orientation + ' ' + arme + ' ' + positionBalleX + ' ' + positionBalleY);
-        //ajouter temps attente avant prochain tir possible (dans DisplayWindow)
     }
     
     public void modifierConnection(){
@@ -198,7 +229,6 @@ public class Joueur {
     
     public void deplacer(KeyEvent e){ //déplace le joueur automatiquement en fonction de sa vitesse et de son orientation
         try {
-            Connection laconnexion = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
             
             System.out.println("Position x avant appui = "+this.positionX);
             System.out.println("Position y avant appui = "+this.positionY);
@@ -207,14 +237,14 @@ public class Joueur {
         
             switch (e.getKeyCode()){
                 case (KeyEvent.VK_RIGHT):
-                    System.out.println("Touche de droite appuyée");
-                    if (this.orientation == "droite"){ 
-                        PreparedStatement requeteJoueur = laconnexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
+                    System.out.println("Touche de Droite appuyée");
+                    if (this.orientation == "Droite"){ 
+                        PreparedStatement requeteJoueur = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
                         requeteJoueur.setInt(1, this.positionX+1);
                         requeteJoueur.setInt(2, this.positionY);
                         ResultSet resultatJoueur = requeteJoueur.executeQuery();                        
                         
-                        PreparedStatement requeteBloc = laconnexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
+                        PreparedStatement requeteBloc = connexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
                         requeteBloc.setInt(1, this.positionX+1);
                         requeteBloc.setInt(2, this.positionY);
                         ResultSet resultatBloc = requeteBloc.executeQuery();
@@ -223,7 +253,7 @@ public class Joueur {
                         
                         if ((resultatJoueur.next()==false) && (resultatBloc.next()==false))  {
                             System.out.println("Aucun joueur et aucun bloc n'est sur la case : x = "+(this.positionX+1)+", y = "+this.positionY);
-                            PreparedStatement requeteNouvellesCoordonnees = laconnexion.prepareStatement("UPDATE joueur SET x = ? WHERE pseudo = ?");            
+                            PreparedStatement requeteNouvellesCoordonnees = connexion.prepareStatement("UPDATE joueur SET x = ? WHERE pseudo = ?");            
                             requeteNouvellesCoordonnees.setInt(1, this.positionX+1);
                             requeteNouvellesCoordonnees.setString(2, this.pseudo);
                             requeteNouvellesCoordonnees.executeUpdate();
@@ -239,13 +269,13 @@ public class Joueur {
                         System.out.println("------------------------------------------");
                     }
                     else{
-                        PreparedStatement requeteNouvelleOrientation = laconnexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
-                        requeteNouvelleOrientation.setString(1, "droite");
+                        PreparedStatement requeteNouvelleOrientation = connexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
+                        requeteNouvelleOrientation.setString(1, "Droite");
                         requeteNouvelleOrientation.setString(2, this.pseudo);
                         requeteNouvelleOrientation.executeUpdate();
                         requeteNouvelleOrientation.close();
-                        this.orientation = "droite";
-                        System.out.println("Votre joueur est réorienté vers la droite");
+                        this.orientation = "Droite";
+                        System.out.println("Votre joueur est réorienté vers la Droite");
                         System.out.println("Fin du tour");
                         System.out.println("------------------------------------------");
                         System.out.println("------------------------------------------");
@@ -253,14 +283,14 @@ public class Joueur {
                     break;
                     
                 case (KeyEvent.VK_LEFT):
-                    System.out.println("Touche de gauche appuyée");
-                    if (this.orientation == "gauche"){ 
-                        PreparedStatement requeteJoueur = laconnexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
+                    System.out.println("Touche de Gauche appuyée");
+                    if (this.orientation == "Gauche"){ 
+                        PreparedStatement requeteJoueur = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
                         requeteJoueur.setInt(1, this.positionX-1);
                         requeteJoueur.setInt(2, this.positionY);
                         ResultSet resultatJoueur = requeteJoueur.executeQuery();                        
                         
-                        PreparedStatement requeteBloc = laconnexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
+                        PreparedStatement requeteBloc = connexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
                         requeteBloc.setInt(1, this.positionX-1);
                         requeteBloc.setInt(2, this.positionY);
                         ResultSet resultatBloc = requeteBloc.executeQuery();
@@ -269,7 +299,7 @@ public class Joueur {
                         
                         if ((resultatJoueur.next()==false) && (resultatBloc.next()==false))  {
                             System.out.println("Aucun joueur et aucun bloc n'est sur la case : x = "+(this.positionX-1)+", y = "+this.positionY);
-                            PreparedStatement requeteNouvellesCoordonnees = laconnexion.prepareStatement("UPDATE joueur SET x = ? WHERE pseudo = ?");            
+                            PreparedStatement requeteNouvellesCoordonnees = connexion.prepareStatement("UPDATE joueur SET x = ? WHERE pseudo = ?");            
                             requeteNouvellesCoordonnees.setInt(1, this.positionX-1);
                             requeteNouvellesCoordonnees.setString(2, this.pseudo);
                             requeteNouvellesCoordonnees.executeUpdate();
@@ -285,28 +315,28 @@ public class Joueur {
                         System.out.println("------------------------------------------");
                     }
                     else{
-                        PreparedStatement requeteNouvelleOrientation = laconnexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
-                        requeteNouvelleOrientation.setString(1, "gauche");
+                        PreparedStatement requeteNouvelleOrientation = connexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
+                        requeteNouvelleOrientation.setString(1, "Gauche");
                         requeteNouvelleOrientation.setString(2, this.pseudo);
                         requeteNouvelleOrientation.executeUpdate();
                         requeteNouvelleOrientation.close();
-                        this.orientation = "gauche";
-                        System.out.println("Votre joueur est réorienté vers la gauche");
+                        this.orientation = "Gauche";
+                        System.out.println("Votre joueur est réorienté vers la Gauche");
                         System.out.println("Fin du tour");
                         System.out.println("------------------------------------------");
                         System.out.println("------------------------------------------");
                     }
                     break;    
-        
-                case (KeyEvent.VK_DOWN):
-                    System.out.println("Touche du bas appuyée");
-                    if (this.orientation == "bas"){ 
-                        PreparedStatement requeteJoueur = laconnexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
+         
+                case (KeyEvent.VK_UP):
+                    System.out.println("Touche du Haut appuyée");
+                    if (this.orientation == "Haut"){ 
+                        PreparedStatement requeteJoueur = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
                         requeteJoueur.setInt(1, this.positionX);
                         requeteJoueur.setInt(2, this.positionY-1);
                         ResultSet resultatJoueur = requeteJoueur.executeQuery();                        
                         
-                        PreparedStatement requeteBloc = laconnexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
+                        PreparedStatement requeteBloc = connexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
                         requeteBloc.setInt(1, this.positionX);
                         requeteBloc.setInt(2, this.positionY-1);
                         ResultSet resultatBloc = requeteBloc.executeQuery();
@@ -315,7 +345,7 @@ public class Joueur {
                         
                         if ((resultatJoueur.next()==false) && (resultatBloc.next()==false))  {
                             System.out.println("Aucun joueur et aucun bloc n'est sur la case : x = "+this.positionX+", y = "+(this.positionY-1));
-                            PreparedStatement requeteNouvellesCoordonnees = laconnexion.prepareStatement("UPDATE joueur SET y = ? WHERE pseudo = ?");            
+                            PreparedStatement requeteNouvellesCoordonnees = connexion.prepareStatement("UPDATE joueur SET y = ? WHERE pseudo = ?");            
                             requeteNouvellesCoordonnees.setInt(1, this.positionY-1);
                             requeteNouvellesCoordonnees.setString(2, this.pseudo);
                             requeteNouvellesCoordonnees.executeUpdate();
@@ -331,28 +361,28 @@ public class Joueur {
                         System.out.println("------------------------------------------");
                     }
                     else{
-                        PreparedStatement requeteNouvelleOrientation = laconnexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
-                        requeteNouvelleOrientation.setString(1, "bas");
+                        PreparedStatement requeteNouvelleOrientation = connexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
+                        requeteNouvelleOrientation.setString(1, "Haut");
                         requeteNouvelleOrientation.setString(2, this.pseudo);
                         requeteNouvelleOrientation.executeUpdate();
                         requeteNouvelleOrientation.close();
-                        this.orientation = "bas";
-                        System.out.println("Votre joueur est réorienté vers le bas");
+                        this.orientation = "Haut";
+                        System.out.println("Votre joueur est réorienté vers le Bas");
                         System.out.println("Fin du tour");
                         System.out.println("------------------------------------------");
                         System.out.println("------------------------------------------");
                     }
                     break;
 
-                case (KeyEvent.VK_UP):
-                    System.out.println("Touche du haut appuyée");
-                    if (this.orientation == "haut"){ 
-                        PreparedStatement requeteJoueur = laconnexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
+                case (KeyEvent.VK_DOWN):
+                    System.out.println("Touche du Bas appuyée");
+                    if (this.orientation == "Bas"){ 
+                        PreparedStatement requeteJoueur = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
                         requeteJoueur.setInt(1, this.positionX);
                         requeteJoueur.setInt(2, this.positionY+1);
                         ResultSet resultatJoueur = requeteJoueur.executeQuery();                        
                         
-                        PreparedStatement requeteBloc = laconnexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
+                        PreparedStatement requeteBloc = connexion.prepareStatement("SELECT * FROM blocs WHERE positionX = ? AND positionY = ?");
                         requeteBloc.setInt(1, this.positionX);
                         requeteBloc.setInt(2, this.positionY+1);
                         ResultSet resultatBloc = requeteBloc.executeQuery();
@@ -361,7 +391,7 @@ public class Joueur {
                         
                         if ((resultatJoueur.next()==false) && (resultatBloc.next()==false))  {
                             System.out.println("Aucun joueur et aucun bloc n'est sur la case : x = "+this.positionX+", y = "+(this.positionY+1));
-                            PreparedStatement requeteNouvellesCoordonnees = laconnexion.prepareStatement("UPDATE joueur SET y = ? WHERE pseudo = ?");            
+                            PreparedStatement requeteNouvellesCoordonnees = connexion.prepareStatement("UPDATE joueur SET y = ? WHERE pseudo = ?");            
                             requeteNouvellesCoordonnees.setInt(1, this.positionY+1);
                             requeteNouvellesCoordonnees.setString(2, this.pseudo);
                             requeteNouvellesCoordonnees.executeUpdate();
@@ -377,20 +407,19 @@ public class Joueur {
                         System.out.println("------------------------------------------");
                     }
                     else{
-                        PreparedStatement requeteNouvelleOrientation = laconnexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
-                        requeteNouvelleOrientation.setString(1, "haut");
+                        PreparedStatement requeteNouvelleOrientation = connexion.prepareStatement("UPDATE joueur SET orientation = ? WHERE pseudo = ?");            
+                        requeteNouvelleOrientation.setString(1, "Bas");
                         requeteNouvelleOrientation.setString(2, this.pseudo);
                         requeteNouvelleOrientation.executeUpdate();
                         requeteNouvelleOrientation.close();
-                        this.orientation = "haut";
-                        System.out.println("Votre joueur est réorienté vers le haut");
+                        this.orientation = "Bas";
+                        System.out.println("Votre joueur est réorienté vers le Haut");
                         System.out.println("Fin du tour");
                         System.out.println("------------------------------------------");
                         System.out.println("------------------------------------------");
                     }
                     break;        
             }
-            laconnexion.close();
             
         } catch (SQLException ex) {
             ex.printStackTrace();

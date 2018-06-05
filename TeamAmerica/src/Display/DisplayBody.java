@@ -17,18 +17,21 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import teamamerica.WelcomeWindow;
 
 /**
  *
  * @author Morris
  */
 public class DisplayBody extends JPanel{
+    private final WelcomeWindow frame;
     private final int panelHeight;
     private final int panelWidth;
     
@@ -55,8 +58,9 @@ public class DisplayBody extends JPanel{
     private Write_Read database;
     private Paint draw;
     
-    
-    public DisplayBody(int screenWidth, int screenHeight) {
+    public DisplayBody(WelcomeWindow frame, int screenWidth, int screenHeight) {
+        super();
+        this.frame = frame;
         //Set the height, the width, the position of this panel
         panelHeight = (int) screenHeight*9/10;
         panelWidth = screenWidth;
@@ -199,16 +203,18 @@ public class DisplayBody extends JPanel{
         this.repaint();
         draw=new Paint(database, timer, blockLength, blockXNumber, blockYNumber);
         draw.setBorder(BorderFactory.createLineBorder(Color.black));
-        draw.setSize(draw.getPanelWidth(), draw.getPanelHeight());
-        draw.setLocation((int)(panelWidth-draw.getPanelWidth())/2, (int)(panelHeight-draw.getPanelHeight())/2);
+        int mapHeight = blockYNumber*blockLength;
+        int mapWidth = blockXNumber*blockLength;
+        draw.setSize(mapWidth, mapHeight);
+        draw.setLocation((int)(panelWidth-mapWidth)/2, (int)(panelHeight-mapHeight)/2);
         this.add(draw);
-    }
-    public Paint getDraw() {
-        return draw;
+        CountdownDisplay countdownDisplay = new CountdownDisplay(frame,4);
+        countdownDisplay.setBounds(0, 0, panelWidth, panelHeight);
+        this.add(countdownDisplay);//adds countdown timer
     }
 
-    public Timer getTimer() {
-        return timer;
+    public Write_Read getDatabase() {
+        return database;
     }
     
     public void close() {
@@ -219,17 +225,5 @@ public class DisplayBody extends JPanel{
         } catch (SQLException ex) {
             Logger.getLogger(DisplayBody.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public Write_Read getDatabase() {
-        return database;
-    }
-
-    public int getPanelHeight() {
-        return panelHeight;
-    }
-
-    public int getPanelWidth() {
-        return panelWidth;
     }
 }

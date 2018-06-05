@@ -2,14 +2,15 @@ package Database;
 
 import Joueur.Joueur;
 import Map.Map;
-import Map.Bloc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ public class Write_Read {
     private int blockXNumber;
     private int blockYNumber;
     
+    private int delay = 8;
     
     public Write_Read(int blockLength, int blockXNumber, int blockYNumber) {
         this.blockLength = blockLength;
@@ -51,7 +53,6 @@ public class Write_Read {
             refreshPlayer(players.get(i));
         }
        refreshBalle();
-       refreshMap();
     }
     public void refreshPlayer(Joueur joueur) {
         try {
@@ -61,7 +62,7 @@ public class Write_Read {
             resultat.next();
             int positionX = resultat.getInt("x");
             int positionY = resultat.getInt("y");
-            int pv = resultat.getInt("pv");System.out.println("refresh "+joueur.getPseudo()+":"+positionX+";"+positionY+";"+pv);
+            int pv = resultat.getInt("pv");
             String orientation = resultat.getString("orientation");
             joueur.setPositionX(positionX);
             joueur.setPositionY(positionY);
@@ -71,22 +72,6 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    public void refreshMap(){
-        try {
-            PreparedStatement requete = connection.prepareStatement("SELECT * FROM blocs");
-            ResultSet result = requete.executeQuery();
-            while(result.next()){
-                this.map.addBloc(new Bloc(result.getInt("positionX"), result.getInt("positionY"), result.getBoolean("cassable")));
-            }
-            requete.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println(this.map);
-    }
-    public Map getMap(){
-        return this.map;
     }
     public void refreshBalle() {
         try {
@@ -136,7 +121,7 @@ public class Write_Read {
     }
     
     public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers) {
-        boolean firstWaitingPlayer = false;
+        boolean lastWaitingPlayer = false;
         boolean modelContainsMainPlayer = false;
         try {            
             PreparedStatement requete = connection.prepareStatement("SELECT pseudo,nation FROM joueur WHERE status = 0 LIMIT ?");
@@ -149,8 +134,8 @@ public class Write_Read {
                 model.addRow(new Object[]{pseudo,nation,0});
                 if(this.mainPlayer.getPseudo().equals(pseudo)){
                     modelContainsMainPlayer = true;
-                    if(resultat.getRow() ==1){
-                        firstWaitingPlayer = true;
+                    if(resultat.getRow() ==numberOfPlayers){
+                        lastWaitingPlayer = true;
                     }             
                 }
             }
@@ -160,15 +145,17 @@ public class Write_Read {
         }
         
         if(model.getRowCount() == numberOfPlayers && modelContainsMainPlayer){
-            if(firstWaitingPlayer){
-                //there is enought players in the waiting room
-                //the first player in the waiting room creates the game
-                initializePlayers(model,blockXNumber,blockYNumber);//initialize the players positions
+            if(lastWaitingPlayer){
+                //there are enough players in the waiting room
+                //the last player in the waiting room creates the game
+                initializePlayers(model,blockXNumber,blockYNumber);//initialize every player's positions
                 this.map = new Map(0, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
-                boolean everyoneReady = false;
-                
+                this.mainPlayer.modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
+                boolean everyoneReady = false;              
                 while(!everyoneReady){
+                    //if everyone is ready, meaning that all other player has set his pv to 100
+                    //else the main player waits so that they can fetch all data of all players
                     getWaitingPlayers(model);
                     for(int i=0;i<numberOfPlayers;i++){
                         if((int)model.getValueAt(i,2) == 100){
@@ -185,20 +172,44 @@ public class Write_Read {
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-                modifyPlayersStatus();//modify all players' status to true
+                }                
+                setTimeDatabase();//set the beginning time
                 this.mainPlayer.modifierPv(100);
+                modifyPlayersStatus();//modify all players' status to true
             }else{
                 //the player is not in the waiting room
                 //it means that this player is going to join the game
+                getLastPlayerPV(model, numberOfPlayers, 50);//true if map is ready
                 retrievePlayers(model);//retrieve information about every single players from the database
                 this.map = new Map(0, connection);//create a new map
-                map.miseAJourMap();//download the lastest map from the database                
+                map.miseAJourMap();//download the lastest map from the database
+                getLastPlayerPV(model, numberOfPlayers, 100);//true if the game is going to start
+                getTimeDatabase();
             }
             return true;
         }else{
             return false;
         }
+    }
+    
+    public void getLastPlayerPV(DefaultTableModel model, int numberOfPlayers, int pv){
+        boolean equal = false; 
+        try {
+            while(!equal){
+                //we wait until the map is created, that is when the last entered player's pv is 100
+                getWaitingPlayers(model);
+                if(model.getRowCount()==0){
+                    break;
+                }else{
+                    equal = (int)model.getValueAt(numberOfPlayers-1,2) == pv;
+                    TimeUnit.SECONDS.sleep(1);    
+                }
+                    
+            }                
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public void modifyPlayersStatus() {
@@ -234,25 +245,39 @@ public class Write_Read {
         //assign each player to a different place
         this.players = new ArrayList();
         int variableX, variableY;
+        String orientation;
         for(int i=0;i<model.getRowCount();i++) {
             String pseudo = (String) model.getValueAt(i, 0);
             try {
                 //write in data
                 //Set the initial position this player
-                PreparedStatement requeteWrite = connection.prepareStatement("UPDATE joueur SET x = ?, y = ? WHERE pseudo = ?");
-                if(i==0 || i==3){
-                    variableX = 0;
-                } else {
-                    variableX = 1;
-                }
-                if(i==0 || i==2){
-                    variableY = 0;
-                } else {
-                    variableY = 1;
+                PreparedStatement requeteWrite = connection.prepareStatement("UPDATE joueur SET x = ?, y = ?,orientation=? WHERE pseudo = ?");
+                switch (i) {
+                    case 0:
+                        variableX = 1;
+                        variableY = 1;
+                        orientation="Droite";
+                        break;
+                    case 1:
+                        variableX = 1;
+                        variableY = 1;
+                        orientation="Gauche";                        
+                        break;
+                    case 2:
+                        variableX = 1;
+                        variableY = 0;
+                        orientation="Bas";
+                        break;
+                    default:
+                        variableX = 0;
+                        variableY = 1;
+                        orientation="Haut";
+                        break;
                 }
                 requeteWrite.setInt(1,(blockXNumber-1)*variableX);
                 requeteWrite.setInt(2,(blockYNumber-1)*variableY);
-                requeteWrite.setString(3, pseudo);
+                requeteWrite.setString(3, orientation);
+                requeteWrite.setString(4, pseudo);
                 requeteWrite.executeUpdate();
                 requeteWrite.close();   
 
@@ -265,7 +290,7 @@ public class Write_Read {
                 int positionY = resultat.getInt("y");
                 int pv = resultat.getInt("pv");
                 String nation = resultat.getString("nation");
-                String orientation = resultat.getString("orientation");
+                orientation = resultat.getString("orientation");
                 
                 if(!this.mainPlayer.getPseudo().equals(pseudo)){
                     //Add all other players to the array list players
@@ -311,11 +336,53 @@ public class Write_Read {
             }
         }       
     }
-
-    public void setMap(Map map) {
-        this.map = map;
+    
+    public void setTimeDatabase() {
+        //set game beginning time
+        try {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp.getTime());
+            cal.add(Calendar.SECOND, delay);
+            Timestamp later = new Timestamp(cal.getTime().getTime());System.out.println("The game is set to begin at:"+later);
+            PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
+            requete.setTimestamp(1, later);
+            requete.executeUpdate();
+            requete.close();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            waitMilliSeconds(later.getTime()-now.getTime());
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+    }
+    
+    public void getTimeDatabase() {
+        //get game beginning time
+        try {
+            PreparedStatement requete = connection.prepareStatement("SELECT date FROM time WHERE number = 0");
+            ResultSet resultat = requete.executeQuery();
+            resultat.next();//we are sure that this 'resultat' exists
+            Timestamp later = resultat.getTimestamp("date");
+            Timestamp now = new Timestamp(System.currentTimeMillis());System.out.println("The game will begin at:"+later);
+            requete.close();
+            waitMilliSeconds(later.getTime()-now.getTime());//have to convert GMT to UTC+2 local time
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }      
     }
 
+    public void waitMilliSeconds(long x){
+        try {
+            if(x<0){
+                x=0;
+            }else{
+                x = Math.min(Math.abs(x),delay*1000);
+            }
+            TimeUnit.MILLISECONDS.sleep(x);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public ArrayList<Integer> getBallesX() {
         return ballesX;
     }
@@ -328,4 +395,32 @@ public class Write_Read {
         return ballesO;
     }
 
+    
+    
+    public static void main(String[] args){
+    int delay = 5;
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
+            
+            
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());System.out.println("Now:"+timestamp);
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp.getTime());
+            cal.add(Calendar.SECOND, delay);
+            Timestamp later = new Timestamp(cal.getTime().getTime());System.out.println("What I want:"+later);
+            PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
+            requete.setTimestamp(1, later);
+            requete.executeUpdate();
+            requete.close();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            //waitMilliSeconds(later.getTime()-now.getTime());
+            
+            System.exit(0);
+        connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }      
 }
+}
+
+ 

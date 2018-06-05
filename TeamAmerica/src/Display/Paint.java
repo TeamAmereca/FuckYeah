@@ -2,7 +2,6 @@ package Display;
 
 import Database.Write_Read;
 import Joueur.Joueur;
-import Map.Bloc;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,11 +9,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JComponent;
-
-import java.awt.Image;
-import java.io.File;
-import javax.imageio.ImageIO;
-import java.io.IOException;
 
 public class Paint extends JComponent {
     
@@ -25,18 +19,13 @@ public class Paint extends JComponent {
     private int blockYNumber;
     private Timer timer;
     
-    private int panelHeight;
-    private int panelWidth;
-    
     public Paint(Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) {
         // Initialisation
         this.database = database;
         this.timer = timer;
         this.blockLength = blockLength;
         this.blockXNumber = blockXNumber;
-        this.blockYNumber = blockYNumber;
-        this.panelHeight = blockYNumber*blockLength;
-        this.panelWidth = blockXNumber*blockLength;
+        this.blockYNumber = blockYNumber;        
         paintTimer();
     }
 
@@ -53,7 +42,7 @@ public class Paint extends JComponent {
     
     public void paintMap(Graphics g) {
         //Paint the map
-        /*g.setColor(Color.BLACK);
+        g.setColor(Color.BLACK);
         for(int i=0;i<=blockYNumber;i++) {
             //Horizontal lines
             g.drawLine(0, i*blockLength, blockXNumber*blockLength, i*blockLength);
@@ -62,20 +51,6 @@ public class Paint extends JComponent {
         for(int i=0;i<=blockXNumber;i++) {
             //Vertical lines
             g.drawLine(i*blockLength, 0, i*blockLength, blockYNumber*blockLength);
-        }*/
-        for(int i=0; i<database.getMap().nombreBlocs(); i++){
-            paintBloc(g, database.getMap().getBloc(i));
-        }
-    }
-    
-    public void paintBloc(Graphics g, Bloc b){
-        g.setColor(Color.RED);
-        try{
-            Image img = ImageIO.read(new File("src/Display/bloc.jpg"));
-                //g.drawLine(b.getX()*blockLength,b.getY()*blockLength,50,50);
-                g.drawImage(img, b.getX()*50, b.getY()*50, this);
-        } catch (IOException e){
-            e.printStackTrace();
         }
     }
     
@@ -121,7 +96,6 @@ public class Paint extends JComponent {
         //Paint the balle
         System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
         g.setColor(Color.BLACK);
-        System.out.println("Balle is at: ("+o+","+x+","+y+")");
         g.drawRect(x*blockLength, y*blockLength, 50, 50);
         g.fillRect(x*blockLength, y*blockLength, 50, 50);
         g.setColor(Color.RED);
@@ -143,40 +117,11 @@ public class Paint extends JComponent {
         //Here we set a timer to get a copy of the database every 0.25 sec
         TimerTask timerTask = new TimerTask() {
                 @Override
-                public void run() {System.out.println("timer for database");
+                public void run() {
                     database.refreshDataBase();
                     repaint();
                 }
             };
         timer.scheduleAtFixedRate(timerTask,0, 250);
-    }
-
-    public void moveRight() {
-        database.getMainPlayer().setPositionX(database.getMainPlayer().getPositionX() + increment);
-        repaint();
-    }
-
-    public void moveLeft() {
-        database.getMainPlayer().setPositionX(database.getMainPlayer().getPositionX() - increment);
-        repaint();
-    }
-
-    public void moveDown() {
-        database.getMainPlayer().setPositionY(database.getMainPlayer().getPositionY() + increment);
-        repaint();
-    }
-
-    public void moveUp() {
-        database.getMainPlayer().setPositionY(database.getMainPlayer().getPositionY() - increment);
-        repaint();
-    }
-
-    public int getPanelHeight() {
-        return panelHeight;
-    }
-
-    public int getPanelWidth() {
-        return panelWidth;
-    }
-    
+    }    
 }
