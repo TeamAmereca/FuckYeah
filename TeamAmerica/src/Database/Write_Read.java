@@ -1,6 +1,7 @@
 package Database;
 
 import Joueur.Joueur;
+import Map.Bloc;
 import Map.Map;
 
 import java.sql.Connection;
@@ -72,6 +73,22 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    public void refreshMap(){
+        try {
+            PreparedStatement requete = connection.prepareStatement("SELECT * FROM blocs");
+            ResultSet result = requete.executeQuery();
+            while(result.next()){
+                this.map.addBloc(new Bloc(result.getInt("positionX"), result.getInt("positionY"), result.getBoolean("cassable")));
+            }
+            requete.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(this.map);
+    }
+    public Map getMap(){
+        return this.map;
     }
     public void refreshBalle() {
         try {
@@ -420,7 +437,7 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }      
-}
+    }
 }
 
  
