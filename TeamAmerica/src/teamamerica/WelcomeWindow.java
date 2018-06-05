@@ -13,7 +13,8 @@ import sound.SoundEffect;
 public class WelcomeWindow extends JFrame{
     
     private final String GAME_NAME = "Team America";
-    private DisplayBody centralPanel;  
+    private DisplayBody centralPanel;
+    private DisplayHeader displayHeader;  
     private FrameKeyListener frameKeyListener = new FrameKeyListener();
     private SoundEffect soundEffect = new SoundEffect();
 
@@ -28,11 +29,11 @@ public class WelcomeWindow extends JFrame{
         int screenHeight = (int) screenSize.getHeight();
         
         ///////////////////////////////
-        //  adding header on frame  //
+        //  ddding DisplayHeader on frame  //
         //////////////////////////////
-        DisplayHeader header = new DisplayHeader(screenWidth,screenHeight);
-        header.addHeader(GAME_NAME);
-        add(header);
+        displayHeader = new DisplayHeader(screenWidth,screenHeight);
+        displayHeader.addHeader(GAME_NAME);
+        add(displayHeader);
         //Initialize centralPanel
         centralPanel = new DisplayBody(this,screenWidth, screenHeight);
         add(centralPanel);
@@ -67,23 +68,32 @@ public class WelcomeWindow extends JFrame{
     class FrameKeyListener implements KeyListener{
         @Override
         public void keyPressed(KeyEvent e) {
-            /** Handle the key-pressed event */        
-            if(e.getKeyCode() == 27) {
-                // Click on esc key to close the game
-                dispose();
-                System.exit(0);
-            }
-                if(e.getKeyCode()== KeyEvent.VK_RIGHT)
-                centralPanel.getDatabase().getMainPlayer().deplacer(e);
-            else if(e.getKeyCode()== KeyEvent.VK_LEFT)
-                centralPanel.getDatabase().getMainPlayer().deplacer(e);
-            else if(e.getKeyCode()== KeyEvent.VK_UP)
-                centralPanel.getDatabase().getMainPlayer().deplacer(e);
-            else if(e.getKeyCode()== KeyEvent.VK_DOWN)
-                centralPanel.getDatabase().getMainPlayer().deplacer(e);
-            else if(e.getKeyCode()== KeyEvent.VK_SPACE)
-                centralPanel.getDatabase().getMainPlayer().tir();
-                soundEffect.play("rifle "+centralPanel.getDatabase().getMainPlayer().getNation());
+            /** Handle the key-pressed event */            
+            switch (e.getKeyCode()) {
+                case 27:
+                    // Click on esc key to close the game
+                    dispose();
+                    System.exit(0);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    break;
+                case KeyEvent.VK_LEFT:
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    break;
+                case KeyEvent.VK_UP:
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    break;
+                case KeyEvent.VK_DOWN:
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    centralPanel.getDatabase().getPlayers().get(0).tir();
+                    soundEffect.play("rifle "+centralPanel.getDatabase().getPlayers().get(0).getNation());
+                    break;
+                default:
+                    break;
+            }                
         }        
 
         @Override
@@ -103,5 +113,13 @@ public class WelcomeWindow extends JFrame{
 
     public SoundEffect getSoundEffect() {
         return soundEffect;
+    }
+
+    public DisplayBody getCentralPanel() {
+        return centralPanel;
+    }
+
+    public DisplayHeader getDisplayHeader() {
+        return displayHeader;
     }
 }

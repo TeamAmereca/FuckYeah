@@ -14,9 +14,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+import teamamerica.WelcomeWindow;
 
 public class Paint extends JComponent {
     
+    private WelcomeWindow welcomeWindow;
     private int increment = 10;
     private Write_Read database;
     private int blockLength;
@@ -24,8 +26,9 @@ public class Paint extends JComponent {
     private int blockYNumber;
     private Timer timer;
     
-    public Paint(Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) {
+    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) {
         // Initialisation
+        this.welcomeWindow = welcomeWindow;
         this.database = database;
         this.timer = timer;
         this.blockLength = blockLength;
@@ -42,7 +45,7 @@ public class Paint extends JComponent {
         //Paint main player
         paintPlayers(g);
         paintMap(g);
-        paintBalles(g);
+        paintBalles(g);        
     }
     public void paintMap(Graphics g) {
         for(int i=0; i<database.getMap().nombreBlocs(); i++){
@@ -72,7 +75,6 @@ public class Paint extends JComponent {
     }
     public void paintPlayers(Graphics g) {
         //Paint every players
-        paintPlayer(g,database.getMainPlayer());
         ArrayList<Joueur> players = database.getPlayers();
         for(int i=0;i<players.size();i++){
             paintPlayer(g, players.get(i));
@@ -81,7 +83,7 @@ public class Paint extends JComponent {
     public void paintPlayer(Graphics g, Joueur joueur) {
         //Paint the player
         g.setColor(Color.BLACK);
-        System.out.println("Player is at: ("+joueur.getOrientation()+","+joueur.getPositionX()+","+joueur.getPositionY()+")");
+        //System.out.println("Player is at: ("+joueur.getOrientation()+","+joueur.getPositionX()+","+joueur.getPositionY()+")");
         g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50);
         g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50);
         g.setColor(Color.RED);
@@ -110,7 +112,7 @@ public class Paint extends JComponent {
     }
     public void paintBalle(Graphics g, int x, int y, String o) {
         //Paint the balle
-        System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
+        //System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
         g.setColor(Color.YELLOW);
         g.drawRect(x*blockLength, y*blockLength, 50, 50);
         g.fillRect(x*blockLength, y*blockLength, 50, 50);
@@ -129,12 +131,17 @@ public class Paint extends JComponent {
             g.fillRect(x*blockLength+20, y*blockLength+40, 10, 10);
         }
     }
+    
+    public void paintHealthPoint(){
+        welcomeWindow.getDisplayHeader().setHPbar(database.getPlayers());
+    }
     public void paintTimer() {
         //Here we set a timer to get a copy of the database every 0.25 sec
         TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    database.refreshDataBase();
+                    database.refreshDataBase();  
+                    paintHealthPoint();
                     repaint();
                 }
             };

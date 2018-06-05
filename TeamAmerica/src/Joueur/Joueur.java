@@ -548,6 +548,10 @@ public class Joueur {
         return orientation;
     }
 
+    public int getPv() {
+        return pv;
+    }
+
     public void setPositionX(int positionX) {
         this.positionX = positionX;
     }

@@ -1,7 +1,9 @@
 package Display;
 
+import Joueur.Joueur;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,6 +15,7 @@ import javax.swing.JPanel;
 public class DisplayHeader extends JPanel{
     private final int panelHeight;
     private final int panelWidth;
+    private ArrayList<HealthBarDisplay> healthBarDisplay = new ArrayList<>();
     
     public DisplayHeader(int screenWidth, int screenHeight) {
         //Set the height, the width, the position of this panel
@@ -29,5 +32,37 @@ public class DisplayHeader extends JPanel{
         headerLabel.setForeground(Color.RED);
         headerLabel.setFont(new Font("Serif", Font.PLAIN, 50));
         add(headerLabel);
+    }
+    
+    public void addHPbar(ArrayList<Joueur> players){
+        for (int i=0;i<players.size();i++) {
+            HealthBarDisplay display = new HealthBarDisplay(players.get(i).getPseudo());
+            int variableX, variableY;
+            if(i==0){
+                variableX = 20;
+                variableY = 20;
+            }else if(i==1){
+                variableX = panelWidth-250;
+                variableY = 20;
+            }else if(i==2){
+                variableX = 20;
+                variableY = 100;
+            }else{
+                variableX = panelWidth-250;
+                variableY = 100;
+            }
+            display.setBounds(variableX,variableY, 250,100);
+            add(display);
+            healthBarDisplay.add(display);
+            this.revalidate();
+            repaint();
+        }
+    }
+    
+    public void setHPbar(ArrayList<Joueur> players){
+        for (int i=0;i<players.size();i++) {
+            healthBarDisplay.get(i).setHealthPoint(players.get(i).getPv());
+            repaint();
+        }
     }
 }

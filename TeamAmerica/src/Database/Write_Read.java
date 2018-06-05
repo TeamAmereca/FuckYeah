@@ -24,8 +24,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Write_Read {
     private Connection connection;
-    private Joueur mainPlayer;
-    private ArrayList<Joueur> players;
+    private ArrayList<Joueur> players = new ArrayList();;
     private ArrayList<Integer> ballesX;
     private ArrayList<Integer> ballesY;
     private ArrayList<String> ballesO;
@@ -35,7 +34,7 @@ public class Write_Read {
     private int blockXNumber;
     private int blockYNumber;
     
-    private int delay = 8;
+    private int delay = 10;
     
     public Write_Read(int blockLength, int blockXNumber, int blockYNumber) {
         this.blockLength = blockLength;
@@ -49,7 +48,6 @@ public class Write_Read {
     }
     
     public void refreshDataBase() {
-       refreshPlayer(this.mainPlayer);
        for(int i=0;i<players.size();i++){
             refreshPlayer(players.get(i));
         }
@@ -115,8 +113,8 @@ public class Write_Read {
     }
     public void createMainPlayer(String pseudo, String nation) throws SQLException{
         //create an instance of joueur in the database
-        mainPlayer = new Joueur(pseudo, nation, connection);
-        mainPlayer.creerJoueurSQL();
+        players.add(new Joueur(pseudo, nation, connection));
+        players.get(0).creerJoueurSQL();
     }
  
     public void getWaitingPlayers(DefaultTableModel model) {
@@ -149,7 +147,7 @@ public class Write_Read {
                 String pseudo = resultat.getString("pseudo");
                 String nation = resultat.getString("nation");
                 model.addRow(new Object[]{pseudo,nation,0});
-                if(this.mainPlayer.getPseudo().equals(pseudo)){
+                if(this.players.get(0).getPseudo().equals(pseudo)){
                     modelContainsMainPlayer = true;
                     if(resultat.getRow() ==numberOfPlayers){
                         lastWaitingPlayer = true;
@@ -168,7 +166,7 @@ public class Write_Read {
                 initializePlayers(model,blockXNumber,blockYNumber);//initialize every player's positions
                 this.map = new Map(1, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
-                this.mainPlayer.modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
+                this.players.get(0).modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
                 boolean everyoneReady = false;              
                 while(!everyoneReady){
                     //if everyone is ready, meaning that all other player has set his pv to 100
@@ -178,7 +176,7 @@ public class Write_Read {
                         if((int)model.getValueAt(i,2) == 100){
                             everyoneReady=true;
                         }else{
-                            if(!((String)model.getValueAt(i,0)).equals(this.mainPlayer.getPseudo())){
+                            if(!((String)model.getValueAt(i,0)).equals(this.players.get(0).getPseudo())){
                                 everyoneReady=false;
                                 break;
                             }
@@ -191,7 +189,7 @@ public class Write_Read {
                     }
                 }                
                 setTimeDatabase();//set the beginning time
-                this.mainPlayer.modifierPv(100);
+                this.players.get(0).modifierPv(100);
                 modifyPlayersStatus();//modify all players' status to true
             }else{
                 //the player is not in the waiting room
@@ -234,11 +232,6 @@ public class Write_Read {
         for(int i=0; i<players.size();i++) {
             players.get(i).modifierStatus();
         }
-        this.mainPlayer.modifierStatus();
-    }
-    
-    public Joueur getMainPlayer() {
-        return mainPlayer;
     }
 
     public ArrayList<Joueur> getPlayers() {
@@ -249,10 +242,6 @@ public class Write_Read {
         return connection;
     }
 
-    public void setMainPlayer(Joueur mainPlayer) {
-        this.mainPlayer = mainPlayer;
-    }
-
     public void setPlayers(ArrayList<Joueur> players) {
         this.players = players;
     }
@@ -260,7 +249,6 @@ public class Write_Read {
     public void initializePlayers(DefaultTableModel model, int blockXNumber, int blockYNumber) {
         //initialize the variable players
         //assign each player to a different place
-        this.players = new ArrayList();
         int variableX, variableY;
         String orientation;
         for(int i=0;i<model.getRowCount();i++) {
@@ -309,7 +297,7 @@ public class Write_Read {
                 String nation = resultat.getString("nation");
                 orientation = resultat.getString("orientation");
                 
-                if(!this.mainPlayer.getPseudo().equals(pseudo)){
+                if(!this.players.get(0).getPseudo().equals(pseudo)){
                     //Add all other players to the array list players
                     this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection, true));              
                 }
@@ -318,12 +306,11 @@ public class Write_Read {
             } catch (SQLException ex) {
                 Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }       
+        }
     }
 
     public void retrievePlayers(DefaultTableModel model) {
         //retrieve players information from the database
-        this.players = new ArrayList();
         for(int i=0;i<model.getRowCount();i++) {
             String pseudo = (String) model.getValueAt(i, 0);
             try {                
@@ -338,20 +325,20 @@ public class Write_Read {
                 String nation = resultat.getString("nation");
                 String orientation = resultat.getString("orientation");
                 
-                if(!this.mainPlayer.getPseudo().equals(pseudo)){
+                if(!this.players.get(0).getPseudo().equals(pseudo)){
                     //Add all other players to the array list players
                     this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection, true));              
                 }else{
                     //this player's pv is set to 100
                     //meaning that this player gots all the necessary information to create a party
-                    this.mainPlayer.modifierPv(100);
+                    this.players.get(0).modifierPv(100);
                 }
                 requete.close();
                 
             } catch (SQLException ex) {
                 Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }       
+        }
     }
     
     public void setTimeDatabase() {
@@ -361,7 +348,7 @@ public class Write_Read {
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp.getTime());
             cal.add(Calendar.SECOND, delay);
-            Timestamp later = new Timestamp(cal.getTime().getTime());System.out.println("The game is set to begin at:"+later);
+            Timestamp later = new Timestamp(cal.getTime().getTime());
             PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
             requete.setTimestamp(1, later);
             requete.executeUpdate();
@@ -380,7 +367,7 @@ public class Write_Read {
             ResultSet resultat = requete.executeQuery();
             resultat.next();//we are sure that this 'resultat' exists
             Timestamp later = resultat.getTimestamp("date");
-            Timestamp now = new Timestamp(System.currentTimeMillis());System.out.println("The game will begin at:"+later);
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             requete.close();
             waitMilliSeconds(later.getTime()-now.getTime());//have to convert GMT to UTC+2 local time
         } catch (SQLException ex) {
@@ -420,11 +407,11 @@ public class Write_Read {
             Connection connection = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
             
             
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());System.out.println("Now:"+timestamp);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp.getTime());
             cal.add(Calendar.SECOND, delay);
-            Timestamp later = new Timestamp(cal.getTime().getTime());System.out.println("What I want:"+later);
+            Timestamp later = new Timestamp(cal.getTime().getTime());
             PreparedStatement requete = connection.prepareStatement("UPDATE time SET date = ? WHERE number = 0");
             requete.setTimestamp(1, later);
             requete.executeUpdate();

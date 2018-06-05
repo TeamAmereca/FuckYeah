@@ -1,6 +1,7 @@
 package Display;
 
 import Database.Write_Read;
+import Joueur.Joueur;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -9,6 +10,7 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -17,7 +19,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -154,7 +155,8 @@ public class DisplayBody extends JPanel{
         goButton.setText("Connect To The Server!");
 }
     public void waitingRoom() {
-        // Create a waiting room before launching a party        
+        // Create a waiting room before launching a party   
+        frame.getSoundEffect().stop();
         centralPanel.removeAll();
         model = new DefaultTableModel();
         model.addColumn("pseudo");
@@ -201,7 +203,9 @@ public class DisplayBody extends JPanel{
         this.removeAll();
         this.revalidate();
         this.repaint();
-        draw=new Paint(database, timer, blockLength, blockXNumber, blockYNumber);
+        
+        draw=new Paint(frame, database, timer, blockLength, blockXNumber, blockYNumber);
+        frame.getDisplayHeader().addHPbar(database.getPlayers());
         draw.setBorder(BorderFactory.createLineBorder(Color.black));
         int mapHeight = blockYNumber*blockLength;
         int mapWidth = blockXNumber*blockLength;
@@ -220,7 +224,7 @@ public class DisplayBody extends JPanel{
     public void close() {
         try {
             this.timer.cancel();//cancel the timer
-            this.database.getMainPlayer().deleteJoueur();//delete entity joueur in the database
+            this.database.getPlayers().get(0).deleteJoueur();//delete entity joueur in the database
             this.database.getConnection().close();//close the connection
         } catch (SQLException ex) {
             Logger.getLogger(DisplayBody.class.getName()).log(Level.SEVERE, null, ex);
