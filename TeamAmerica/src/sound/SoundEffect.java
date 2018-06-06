@@ -27,7 +27,7 @@ public class SoundEffect{
         try{
             mediaPlayer.stop();            
         }catch(java.lang.NullPointerException e){
-            System.out.println(e);
+            System.out.println("No track is playing: "e);
         }
     }
 }
