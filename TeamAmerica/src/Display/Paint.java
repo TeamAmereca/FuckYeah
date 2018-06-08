@@ -43,32 +43,35 @@ public class Paint extends JComponent {
         super.paintComponent(g);
         
         //Paint main player
-        paintPlayers(g);
         paintMap(g);
-        paintBalles(g);        
+        paintPlayers(g);
+        paintBalles(g);
     }
     public void paintMap(Graphics g) {
+        try{
+            Image sand = ImageIO.read(new File("./src/Images/sable.png"));
+            for(int i = 0; i<this.database.getMap().getX(); i++){
+                for(int j=0; j<this.database.getMap().getY();j++){
+                    g.drawImage(sand, i*50, j*50, this);
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         for(int i=0; i<database.getMap().nombreBlocs(); i++){
             paintBloc(g, database.getMap().getBloc(i));
         }
     }
     public void paintBloc(Graphics g, Bloc b){
-        g.setColor(Color.RED);
         try{
             Image solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
             Image breakable = ImageIO.read(new File("./src/Images/test.png"));
-            Image sand = ImageIO.read(new File("./src/Images/sable.png"));
-//                for(int i = 6; i<this.database.getMap().getX()-2; i++){
-//                    for(int j=3; i<this.database.getMap().getY()-2;j++){
-//                        g.drawImage(sand, 5*50, 5*50, this);
-//                    }
-//                }
-                if(b.getCassable()){
-                    g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
-                }
-                else{
-                    g.drawImage(solidBloc, b.getX()*50, b.getY()*50, this);
-                }
+            if(b.getCassable()){
+                g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
+            }
+            else{
+                g.drawImage(solidBloc, b.getX()*50, b.getY()*50, this);
+            }
         } catch (IOException e){
             e.printStackTrace();
         }

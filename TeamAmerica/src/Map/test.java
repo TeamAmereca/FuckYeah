@@ -28,11 +28,11 @@ public class test {
             //yo.nouvelleMap();
             //yo.miseAJourMap();
             Map yo = new Map(1,connexion);
-            System.out.println(yo);
+            //System.out.println(yo);
+            System.out.println(yo.getX()+","+yo.getY());
         } catch (SQLException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
 }
