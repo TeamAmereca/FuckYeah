@@ -58,7 +58,7 @@ public class Balle implements ActionListener {
                 this.portee=0;
                 this.vitesse=500;}
             else {System.out.println("Balle non référencée");}
-            this.timer = new Timer( 100 , this);
+            this.timer = new Timer( 1000 , this);
             this.connexion = connexion;
             timer.start();
         } catch (SQLException ex) {
