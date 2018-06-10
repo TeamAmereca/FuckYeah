@@ -34,7 +34,7 @@ public class Write_Read {
     private int blockXNumber;
     private int blockYNumber;
     
-    private int delay = 7;
+    private int delay = 10;
     
     public Write_Read(int blockLength, int blockXNumber, int blockYNumber) {
         this.blockLength = blockLength;
