@@ -1,7 +1,6 @@
 package Display;
 
 import Database.Write_Read;
-import Joueur.Joueur;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -10,7 +9,6 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -44,7 +42,7 @@ public class DisplayBody extends JPanel{
     private TimerTask timerTask;
     private JComboBox box_nations;
     private DefaultTableModel model;
-    private JLabel label;
+    private JLabel label = new JLabel();
     public static final int GO_BUTTON_HEIGHT = 100;
     public static final int GO_BUTTON_WIDTH = 400;
     public static final int TEXT_FIELD_HEIGHT = 20;
@@ -75,11 +73,17 @@ public class DisplayBody extends JPanel{
         add(centralPanel);
         
         database = new Write_Read(blockLength, blockXNumber, blockYNumber);
-                
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Images/Team America.jpg"));
+        label.setBounds((int)(panelWidth-icon.getIconWidth())/2,(int)(panelHeight-icon.getIconHeight())/2,icon.getIconWidth(),icon.getIconHeight());
+        label.setIcon(icon);
+        centralPanel.add(label);
+            
         addButton(); 
     }
     
     public void addButton() {
+        label.removeAll();
         //Add multifunctionnale button on this panel
         goButton = new JButton();
         goButton.setText("Play!");
@@ -146,7 +150,6 @@ public class DisplayBody extends JPanel{
         box_nations.setBounds(labelPositionX,(int)panelHeight*7/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
         
         // add label for gif
-        label = new JLabel();
         label.setBounds((int)(panelWidth-GIF_WIDTH)/2,(int)panelHeight*8/24,GIF_WIDTH,GIF_HEIGHT);
         centralPanel.add(label);
         
