@@ -27,4 +27,16 @@ public class Bonus {
             requete.close();
     }
     
+    public void deleteBonus(){
+        try {
+            PreparedStatement requete = connexion.prepareStatement("DELETE FROM bonus WHERE positionX = ? AND positionY = ?");
+            requete.setInt(1, this.positionX);
+            requete.setInt(2, this.positionY);
+            requete.executeUpdate();
+            requete.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }
