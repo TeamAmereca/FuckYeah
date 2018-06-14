@@ -52,6 +52,7 @@ public class Write_Read {
             refreshPlayer(players.get(i));
         }
        refreshBalle();
+       refreshMap();
     }
     public void refreshPlayer(Joueur joueur) {
         try {
@@ -97,6 +98,7 @@ public class Write_Read {
     }
     public void refreshMap(){
         try {
+            this.map.deleteMap();
             PreparedStatement requete = connection.prepareStatement("SELECT * FROM blocs");
             ResultSet result = requete.executeQuery();
             while(result.next()){
@@ -106,7 +108,6 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(this.map);
     }
     public Map getMap(){
         return this.map;
