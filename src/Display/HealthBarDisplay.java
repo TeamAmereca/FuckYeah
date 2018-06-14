@@ -2,7 +2,7 @@ package Display;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,11 +25,12 @@ public class HealthBarDisplay extends JPanel {
         labelPseudo.setFont(new Font("Serif", Font.ROMAN_BASELINE, 25));
         labelPseudo.setBounds(MARGIN,0, HEALTH_BAR_LENGTH, HEALTH_BAR_HEIGHT);
         add(labelPseudo);
+        setSize(HEALTH_BAR_LENGTH+2*MARGIN,HEALTH_BAR_HEIGHT+HEIGHT+MARGIN+MARGIN);
         setLayout(null);
         setVisible(true);
     }
     
-    public void paintComponent(Graphics2D g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.drawRoundRect(MARGIN, MARGIN+HEIGHT, HEALTH_BAR_LENGTH, HEALTH_BAR_HEIGHT,5,5); //draws healthbar outline
@@ -50,7 +51,10 @@ public class HealthBarDisplay extends JPanel {
         frame.setLayout(null);
         frame.setVisible(true);
         HealthBarDisplay ss = new HealthBarDisplay("ss");
-        ss.setBounds(0, 0, 1000, 600);
+        ss.setLocation(0, 0);
         frame.add(ss);
+        HealthBarDisplay sss = new HealthBarDisplay("sss");
+        sss.setLocation(0,50);
+        frame.add(sss);
     }
 }
