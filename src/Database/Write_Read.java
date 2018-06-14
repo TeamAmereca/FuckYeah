@@ -72,6 +72,7 @@ public class Write_Read {
             if(joueur.getPv()<=0){
                 //If PV is negative, then the player is erased from the local database
                 this.players.remove(joueur);
+                joueur.deleteJoueur();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
