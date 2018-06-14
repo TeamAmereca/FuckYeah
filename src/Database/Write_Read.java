@@ -47,14 +47,14 @@ public class Write_Read {
         }
     }
     
-    public void refreshDataBase() {System.out.println("Database:number of players"+this.players.size());
+    public void refreshDataBase() {
        for(int i=0;i<players.size();i++){
             refreshPlayer(players.get(i));
         }
        refreshBalle();
        refreshMap();
     }
-    public void refreshPlayer(Joueur joueur) {System.out.println("refreshPlayer:"+joueur.getPseudo()+joueur.getPv());
+    public void refreshPlayer(Joueur joueur) {
         try {
             PreparedStatement requete = connection.prepareStatement("SELECT x, y, pv, orientation FROM joueur WHERE pseudo = ?");
             requete.setString(1,joueur.getPseudo());
@@ -72,6 +72,7 @@ public class Write_Read {
             if(joueur.getPv()<=0){
                 //If PV is negative, then the player is erased from the local database
                 this.players.remove(joueur);
+                joueur.deleteJoueur();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
