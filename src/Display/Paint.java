@@ -79,7 +79,7 @@ public class Paint extends JComponent {
     public void paintPlayers(Graphics g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
-        for(int i=0;i<players.size();i++){System.out.println("number of players"+players.size());
+        for(int i=0;i<players.size();i++){
             paintPlayer(g, players.get(i));
         }
     }

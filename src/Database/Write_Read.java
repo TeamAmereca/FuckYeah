@@ -47,14 +47,14 @@ public class Write_Read {
         }
     }
     
-    public void refreshDataBase() {System.out.println("Database:number of players"+this.players.size());
+    public void refreshDataBase() {
        for(int i=0;i<players.size();i++){
             refreshPlayer(players.get(i));
         }
        refreshBalle();
        refreshMap();
     }
-    public void refreshPlayer(Joueur joueur) {System.out.println("refreshPlayer:"+joueur.getPseudo()+joueur.getPv());
+    public void refreshPlayer(Joueur joueur) {
         try {
             PreparedStatement requete = connection.prepareStatement("SELECT x, y, pv, orientation FROM joueur WHERE pseudo = ?");
             requete.setString(1,joueur.getPseudo());
