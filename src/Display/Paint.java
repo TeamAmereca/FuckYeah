@@ -1,5 +1,6 @@
 package Display;
 
+import Bonus.Bonus;
 import Database.Write_Read;
 import Joueur.Joueur;
 import Map.Bloc;
@@ -72,6 +73,10 @@ public class Paint extends JComponent {
         }
         for(int i=0; i<database.getMap().nombreBlocs(); i++){
             paintBloc(g, database.getMap().getBloc(i));
+        }
+        for(int i=0; i<database.getMap().getListeBonus().size(); i++){
+            Bonus bonus = database.getMap().getListeBonus().get(i);
+            g.fillRect(bonus.getPositionX()*blockLength, bonus.getPositionY()*blockLength, 50, 50);
         }
     }
     public void paintBloc(Graphics2D g, Bloc b){           
