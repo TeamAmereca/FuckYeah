@@ -23,11 +23,8 @@ import teamamerica.WelcomeWindow;
 public class Paint extends JComponent {
     
     private WelcomeWindow welcomeWindow;
-    private int increment = 10;
     private Write_Read database;
     private int blockLength;
-    private int blockXNumber;
-    private int blockYNumber;
     private Timer timer;
     private Image solidBloc;
     private Image breakable;
@@ -36,15 +33,13 @@ public class Paint extends JComponent {
     private Image balle2;
     
 
-    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber){
+    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength){
         try {
             // Initialisation
             this.welcomeWindow = welcomeWindow;
             this.database = database;
             this.timer = timer;
             this.blockLength = blockLength;
-            this.blockXNumber = blockXNumber;
-            this.blockYNumber = blockYNumber;
             
             this.solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
             this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
@@ -166,4 +161,3 @@ public class Paint extends JComponent {
         timer.scheduleAtFixedRate(timerTask,0, 100);
     }  
 }
-

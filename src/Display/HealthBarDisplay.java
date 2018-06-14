@@ -12,10 +12,10 @@ import javax.swing.JPanel;
  * @author Morris
  */
 public class HealthBarDisplay extends JPanel {
-    //This panel displays a timer and players' health bar
+    //This panel displays players' health bar
     private final int HEALTH_BAR_LENGTH = 200;
     private final int HEALTH_BAR_HEIGHT = 20;
-    private final int HEIGHT = 20;//height between the label and the hp abr
+    private final int HEIGHT = 20;//height between the label and the hp bar
     private final int MARGIN = 5;
     private int healthPoint;
     

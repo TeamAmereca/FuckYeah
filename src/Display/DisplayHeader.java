@@ -46,12 +46,12 @@ public class DisplayHeader extends JPanel{
                 variableY = 20;
             }else if(i==2){
                 variableX = 20;
-                variableY = 100;
+                variableY = 70;
             }else{
                 variableX = panelWidth-250;
-                variableY = 100;
+                variableY = 70;
             }
-            display.setBounds(variableX,variableY, 250,100);
+            display.setLocation(variableX,variableY);
             add(display);
             healthBarDisplay.add(display);
             this.revalidate();
