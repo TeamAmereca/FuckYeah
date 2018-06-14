@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import teamamerica.WelcomeWindow;
@@ -31,20 +33,25 @@ public class Paint extends JComponent {
     private Image sand;
     private Image balle;
     
-    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) throws IOException {
-        // Initialisation
-        this.welcomeWindow = welcomeWindow;
-        this.database = database;
-        this.timer = timer;
-        this.blockLength = blockLength;
-        this.blockXNumber = blockXNumber;
-        this.blockYNumber = blockYNumber;
-        
-        this.solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
-        this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
-        this.sand = ImageIO.read(new File("./src/Images/sable.png"));
-        this.balle = ImageIO.read(new File("./src/Images/balle.png"));
-        paintTimer();
+
+    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber){
+        try {
+            // Initialisation
+            this.welcomeWindow = welcomeWindow;
+            this.database = database;
+            this.timer = timer;
+            this.blockLength = blockLength;
+            this.blockXNumber = blockXNumber;
+            this.blockYNumber = blockYNumber;
+            
+            this.solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
+            this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
+            this.sand = ImageIO.read(new File("./src/Images/sable.png"));
+            this.balle = ImageIO.read(new File("./src/Images/balle.png"))
+            paintTimer();
+        } catch (IOException ex) {
+            Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void paintComponent(Graphics g) {

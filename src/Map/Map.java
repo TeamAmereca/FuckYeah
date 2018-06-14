@@ -181,5 +181,9 @@ public class Map {
     public int getY(){
         return this.nbCase_Y;
     }
+
+    public ArrayList<Bonus> getListeBonus() {
+        return listeBonus;
+    }
 }
 
