@@ -152,17 +152,9 @@ public class Map {
         return s;
     }
  
-    public void afficherMap(){
-        //créer un tableau de la taille de la carte
-        //parcours la liste de blocs de la base sql, la liste des joueurs et la liste des balles
-        //ajoute chacun des éléments à la bonne position dans le tableau en le nommant par x o j ou b
-        //affiche chaque élément du tableau
-        String [][] carte = new String[this.nbCase_X][this.nbCase_Y]; // on créer la map vide
-        for (int x=0; x<this.nbCase_X; x++) {
-        	for (int y=0; y<this.nbCase_Y; y++) {
-        		carte[x][y] = "-";
-        	}
-        }
+    
+    public void deleteMap(){
+        this.listeBloc.clear();
     }
     
     public void addBloc(Bloc b) {
