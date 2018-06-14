@@ -630,6 +630,8 @@ public class Joueur {
             this.bonusVitesse();
         }else if(i==2){
             this.bonusTeteChercheuse();
+        }else if(i==3){
+            this.bonusVie();
         }
     }
     
