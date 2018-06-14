@@ -67,9 +67,53 @@ public class Map {
             }
         }
         if (forme==1){ // on rajoute des blocs cassables
-            for(int i = 1; i<5; i++){
-                this.listeBloc.add(new Bloc(4, i, true));
+            for(int i = 2; i<17; i=i+2){
+                for(int j = 1; j<12; j=j+2){
+                this.listeBloc.add(new Bloc(i, j, false));
+                }
             }
+            for(int i = 1; i<12; i++){
+                this.listeBloc.add(new Bloc(18, i, false));
+            }
+            this.listeBloc.add(new Bloc(10, 2, false));
+            this.listeBloc.add(new Bloc(14, 2, false));
+            this.listeBloc.add(new Bloc(5, 3, false));
+            this.listeBloc.add(new Bloc(17, 3, false));
+            this.listeBloc.add(new Bloc(4, 6, false));
+            this.listeBloc.add(new Bloc(5, 7, false));
+            this.listeBloc.add(new Bloc(9, 7, false));
+            this.listeBloc.add(new Bloc(13, 7, false));
+            this.listeBloc.add(new Bloc(2, 8, false));
+            this.listeBloc.add(new Bloc(4, 10, false));
+            this.listeBloc.add(new Bloc(8, 10, false));
+            this.listeBloc.add(new Bloc(2, 2, true));
+            this.listeBloc.add(new Bloc(6, 2, true));
+            this.listeBloc.add(new Bloc(8, 2, true));
+            this.listeBloc.add(new Bloc(13, 2, true));
+            this.listeBloc.add(new Bloc(16, 2, true));
+            this.listeBloc.add(new Bloc(9, 3, true));
+            this.listeBloc.add(new Bloc(3, 4, true));
+            this.listeBloc.add(new Bloc(8, 4, true));
+            this.listeBloc.add(new Bloc(10, 4, true));
+            this.listeBloc.add(new Bloc(12, 4, true));
+            this.listeBloc.add(new Bloc(15, 4, true));
+            this.listeBloc.add(new Bloc(8, 6, true));
+            this.listeBloc.add(new Bloc(10, 6, true));
+            this.listeBloc.add(new Bloc(12, 6, true));
+            this.listeBloc.add(new Bloc(1, 7, true));
+            this.listeBloc.add(new Bloc(11, 7, true));
+            this.listeBloc.add(new Bloc(6, 8, true));
+            this.listeBloc.add(new Bloc(15, 8, true));
+            this.listeBloc.add(new Bloc(3, 9, true));
+            this.listeBloc.add(new Bloc(7, 9, true));
+            this.listeBloc.add(new Bloc(9, 9, true));
+            this.listeBloc.add(new Bloc(10, 10, true));
+            this.listeBloc.add(new Bloc(12, 10, true));
+            this.listeBloc.add(new Bloc(15, 10, true));
+            
+
+            
+            
     	}
     }
     
