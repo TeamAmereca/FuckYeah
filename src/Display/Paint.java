@@ -148,6 +148,6 @@ public class Paint extends JComponent {
                     repaint();
                 }
             };
-        timer.scheduleAtFixedRate(timerTask,0, 100);
+        timer.scheduleAtFixedRate(timerTask,0, 250);
     }  
 }
