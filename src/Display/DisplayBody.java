@@ -40,7 +40,8 @@ public class DisplayBody extends JPanel{
     private JButton goButton;
     private TextField text_pseudo;
     private TimerTask timerTask;
-    private JComboBox box_nations;
+    private JComboBox boxNations;
+    private JComboBox boxnumberOfPlayers;
     private DefaultTableModel model;
     private JLabel label = new JLabel();
     public static final int GO_BUTTON_HEIGHT = 100;
@@ -104,7 +105,7 @@ public class DisplayBody extends JPanel{
                 signUp();
             } else if(button.getText() == "Connect To The Server!") {
                 try {
-                    database.createMainPlayer(text_pseudo.getText(), (String) box_nations.getSelectedItem());
+                    database.createMainPlayer(text_pseudo.getText(), (String) boxNations.getSelectedItem());
                     waitingRoom();
                 } catch(SQLException exception) {
                     if(exception.getErrorCode() == 1062) {
@@ -125,7 +126,7 @@ public class DisplayBody extends JPanel{
         // ActionListener for combo box. Display gif according to the selected item in the combo box
         @Override
         public void actionPerformed(ActionEvent e) {
-            String selectedNation = (String) box_nations.getSelectedItem();//get the selected item
+            String selectedNation = (String) boxNations.getSelectedItem();//get the selected item
             ImageIcon icon = new ImageIcon(getClass().getResource("/gif/"+selectedNation+".gif"));
             label.setIcon(icon);
             frame.getSoundEffect().play("player "+selectedNation);
@@ -135,25 +136,31 @@ public class DisplayBody extends JPanel{
         //Create input fields in order to sign in as a player
         JLabel label_pseudo = new JLabel("Pseudo");
         JLabel label_nation = new JLabel("Nation");
+        JLabel label_numberOfPlayers = new JLabel("Number of Players");
         text_pseudo = new TextField(20);
-        box_nations  = new JComboBox(new String[]{ "America", "Terrorist" });
-        box_nations.addActionListener(comboBoxActionListener);
+        boxNations  = new JComboBox(new String[]{ "America", "Terrorist" });
+        boxNations.addActionListener(comboBoxActionListener);
+        boxnumberOfPlayers  = new JComboBox(new Integer [] {2,3,4});
         centralPanel.add(label_pseudo);
         centralPanel.add(text_pseudo);
         centralPanel.add(label_nation);
-        centralPanel.add(box_nations);
+        centralPanel.add(boxnumberOfPlayers);
+        centralPanel.add(label_numberOfPlayers);
+        centralPanel.add(boxNations);
 
         int labelPositionX = (int) (panelWidth-TEXT_FIELD_WIDTH)/2;
         label_pseudo.setBounds(labelPositionX,(int)panelHeight*3/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
         text_pseudo.setBounds(labelPositionX,(int)panelHeight*4/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
         label_nation.setBounds(labelPositionX,(int)panelHeight*6/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
-        box_nations.setBounds(labelPositionX,(int)panelHeight*7/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        boxNations.setBounds(labelPositionX,(int)panelHeight*7/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);        
+        label_numberOfPlayers.setBounds(labelPositionX,(int)panelHeight*9/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        boxnumberOfPlayers.setBounds(labelPositionX,(int)panelHeight*10/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
         
         // add label for gif
-        label.setBounds((int)(panelWidth-GIF_WIDTH)/2,(int)panelHeight*8/24,GIF_WIDTH,GIF_HEIGHT);
+        label.setBounds((int)(panelWidth-GIF_WIDTH)/2,(int)panelHeight*10/24,GIF_WIDTH,GIF_HEIGHT);
         centralPanel.add(label);
         
-        box_nations.setSelectedIndex(0);
+        boxNations.setSelectedIndex(0);
 
         goButton.setText("Connect To The Server!");
 }
@@ -187,12 +194,11 @@ public class DisplayBody extends JPanel{
         goButton.setText("Wait for opponent!");
         setCursor(new Cursor(Cursor.WAIT_CURSOR));//Set the cursor on waiting image
 
-        int numberOfPlayers = 2;
         timerTask.cancel();//Kill the old timer
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                if(database.enoughPlayers(timer,model, numberOfPlayers)) {
+                if(database.enoughPlayers(timer,model, (int)boxnumberOfPlayers.getSelectedItem())) {
                     timerTask.cancel();
                     display();
                 }      
