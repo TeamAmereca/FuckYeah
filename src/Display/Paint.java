@@ -112,22 +112,28 @@ public class Paint extends JComponent {
     public void paintBalle(Graphics g, int x, int y, String o) {
         //Paint the balle
         //System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
-        g.setColor(Color.YELLOW);
-        g.drawRect(x*blockLength, y*blockLength, 50, 50);
-        g.fillRect(x*blockLength, y*blockLength, 50, 50);
-        g.setColor(Color.RED);
-        if(o.equals("Droite")) {
-            g.drawRect(x*blockLength+40, y*blockLength+20, 10, 10);
-            g.fillRect(x*blockLength+40, y*blockLength+20, 10, 10);
-        } else if(o.equals("Gauche")) {
-            g.drawRect(x*blockLength, y*blockLength+20, 10, 10);
-            g.fillRect(x*blockLength, y*blockLength+20, 10, 10);
-        } else if(o.equals("Haut")) {
-            g.drawRect(x*blockLength+20, y*blockLength, 10, 10);
-            g.fillRect(x*blockLength+20, y*blockLength, 10, 10);
-        } else if(o.equals("Bas")) {
-            g.drawRect(x*blockLength+20, y*blockLength+40, 10, 10);
-            g.fillRect(x*blockLength+20, y*blockLength+40, 10, 10);
+//        g.setColor(Color.YELLOW);
+//        g.drawRect(x*blockLength, y*blockLength, 50, 50);
+//        g.fillRect(x*blockLength, y*blockLength, 50, 50);
+//        g.setColor(Color.RED);
+//        if(o.equals("Droite")) {
+//            g.drawRect(x*blockLength+40, y*blockLength+20, 10, 10);
+//            g.fillRect(x*blockLength+40, y*blockLength+20, 10, 10);
+//        } else if(o.equals("Gauche")) {
+//            g.drawRect(x*blockLength, y*blockLength+20, 10, 10);
+//            g.fillRect(x*blockLength, y*blockLength+20, 10, 10);
+//        } else if(o.equals("Haut")) {
+//            g.drawRect(x*blockLength+20, y*blockLength, 10, 10);
+//            g.fillRect(x*blockLength+20, y*blockLength, 10, 10);
+//        } else if(o.equals("Bas")) {
+//            g.drawRect(x*blockLength+20, y*blockLength+40, 10, 10);
+//            g.fillRect(x*blockLength+20, y*blockLength+40, 10, 10);
+//        }
+            try{
+            Image balle = ImageIO.read(new File("./src/Images/balle.png"));
+                g.drawImage(balle, x*50, y*50, this);
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
     
