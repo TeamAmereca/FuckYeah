@@ -47,7 +47,7 @@ public class Paint extends JComponent {
             this.solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
             this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
             this.sand = ImageIO.read(new File("./src/Images/sable.png"));
-            this.balle = ImageIO.read(new File("./src/Images/balle.png"))
+            this.balle = ImageIO.read(new File("./src/Images/balle.png"));
             paintTimer();
         } catch (IOException ex) {
             Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
