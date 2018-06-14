@@ -117,14 +117,13 @@ public class Write_Read {
             
             requete = connection.prepareStatement("SELECT * FROM bonus");
             result = requete.executeQuery();
+            this.map.getListeBonus().clear();
             while(result.next()){
                 int positionX = result.getInt("positionX");
                 int positionY = result.getInt("positionY");
-                int type = result.getInt("type");
+                int type = result.getInt("type");System.out.println("Database: Bonus at:"+positionX+";"+positionY);    
                 Bonus bonus = new Bonus(positionX, positionY, type, connection);
-                if(!this.map.getListeBonus().contains(bonus)){
-                    this.map.getListeBonus().remove(bonus);
-                }
+                this.map.getListeBonus().add(bonus);
             }
             requete.close();
         } catch (SQLException ex) {
