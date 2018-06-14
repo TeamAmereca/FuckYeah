@@ -1,6 +1,7 @@
 package Joueur;
 
 import Balle.Balle;
+import Bonus.Bonus;
 
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -261,6 +262,22 @@ public class Joueur {
                            
                             // Gestion du temps de pause après déplacement
                             peutSeDeplacer = false; 
+                            
+                            // Bonus
+                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
+                            requeteBonus.setInt(1, this.positionX);
+                            requeteBonus.setInt(2, this.positionY);
+                            ResultSet resultatBonus = requeteBonus.executeQuery();
+                            if(resultatBonus.next()==true){
+                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
+                                ResultSet resultat = requeteType.executeQuery();
+                                int type = resultat.getInt("type");
+                                requeteType.close();
+                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
+                                bonus.deleteBonus();
+                                this.bonus(type);
+                            }
+                            
                             TimerTask timerTask = new TimerTask() {
                                 @Override
                                 public void run() {
@@ -331,6 +348,23 @@ public class Joueur {
                             
                             // Gestion du temps de pause après déplacement
                             peutSeDeplacer = false; 
+                            
+                            // Bonus
+                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
+                            requeteBonus.setInt(1, this.positionX);
+                            requeteBonus.setInt(2, this.positionY);
+                            ResultSet resultatBonus = requeteBonus.executeQuery();
+                            if(resultatBonus.next()==true){
+                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
+                                ResultSet resultat = requeteType.executeQuery();
+                                int type = resultat.getInt("type");
+                                requeteType.close();
+                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
+                                bonus.deleteBonus();
+                                this.bonus(type);
+                            }
+                            
+                           
                             TimerTask timerTask = new TimerTask() {
                                 @Override
                                 public void run() {
@@ -401,6 +435,23 @@ public class Joueur {
                             
                             // Gestion du temps de pause après déplacement
                             peutSeDeplacer = false; 
+                            
+                            // Bonus
+                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
+                            requeteBonus.setInt(1, this.positionX);
+                            requeteBonus.setInt(2, this.positionY);
+                            ResultSet resultatBonus = requeteBonus.executeQuery();
+                            if(resultatBonus.next()==true){
+                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
+                                ResultSet resultat = requeteType.executeQuery();
+                                int type = resultat.getInt("type");
+                                requeteType.close();
+                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
+                                bonus.deleteBonus();
+                                this.bonus(type);
+                            }
+                            
+                            
                             TimerTask timerTask = new TimerTask() {
                                 @Override
                                 public void run() {
@@ -471,6 +522,23 @@ public class Joueur {
                             
                             // Gestion du temps de pause après déplacement
                             peutSeDeplacer = false; 
+                            
+                            // Bonus
+                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
+                            requeteBonus.setInt(1, this.positionX);
+                            requeteBonus.setInt(2, this.positionY);
+                            ResultSet resultatBonus = requeteBonus.executeQuery();
+                            if(resultatBonus.next()==true){
+                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
+                                ResultSet resultat = requeteType.executeQuery();
+                                int type = resultat.getInt("type");
+                                requeteType.close();
+                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
+                                bonus.deleteBonus();
+                                this.bonus(type);
+                            }
+                            
+                            
                             TimerTask timerTask = new TimerTask() {
                                 @Override
                                 public void run() {
