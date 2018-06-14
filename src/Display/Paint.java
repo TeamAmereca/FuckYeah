@@ -65,7 +65,7 @@ public class Paint extends JComponent {
     public void paintBloc(Graphics g, Bloc b){
         try{
             Image solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
-            Image breakable = ImageIO.read(new File("./src/Images/cassable.png"));
+            Image breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
             if(b.getCassable()){
                 g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
             }
