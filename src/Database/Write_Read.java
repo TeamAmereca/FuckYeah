@@ -47,14 +47,14 @@ public class Write_Read {
         }
     }
     
-    public void refreshDataBase() {
+    public void refreshDataBase() {System.out.println("Database:number of players"+this.players.size());
        for(int i=0;i<players.size();i++){
             refreshPlayer(players.get(i));
         }
        refreshBalle();
        refreshMap();
     }
-    public void refreshPlayer(Joueur joueur) {
+    public void refreshPlayer(Joueur joueur) {System.out.println("refreshPlayer:"+joueur.getPseudo()+joueur.getPv());
         try {
             PreparedStatement requete = connection.prepareStatement("SELECT x, y, pv, orientation FROM joueur WHERE pseudo = ?");
             requete.setString(1,joueur.getPseudo());
@@ -63,16 +63,16 @@ public class Write_Read {
             int positionX = resultat.getInt("x");
             int positionY = resultat.getInt("y");
             int pv = resultat.getInt("pv");
-            if(joueur.getPv()<=0){
-                //If PV is negative, then the player is erased from the local database
-                this.players.remove(joueur);
-            }
             String orientation = resultat.getString("orientation");
             joueur.setPositionX(positionX);
             joueur.setPositionY(positionY);
             joueur.setPv(pv);
             joueur.setOrientation(orientation);
-            requete.close();            
+            requete.close();
+            if(joueur.getPv()<=0){
+                //If PV is negative, then the player is erased from the local database
+                this.players.remove(joueur);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -195,7 +195,7 @@ public class Write_Read {
                 }                
                 setTimeDatabase();//set the beginning time
                 this.players.get(0).modifierPv(100);
-                modifyPlayersStatus();//modify all players' status to true
+                modifyPlayersStatus();//modify all players' status to true                
             }else{
                 //the player is not in the waiting room
                 //it means that this player is going to join the game
@@ -304,7 +304,7 @@ public class Write_Read {
                 
                 if(!this.players.get(0).getPseudo().equals(pseudo)){
                     //Add all other players to the array list players
-                    this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection, true));              
+                    this.players.add(new Joueur(pseudo, positionX, positionY, pv, nation, orientation, this.connection, true));
                 }
                 requete.close();
                 

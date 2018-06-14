@@ -33,7 +33,7 @@ public class Paint extends JComponent {
         this.timer = timer;
         this.blockLength = blockLength;
         this.blockXNumber = blockXNumber;
-        this.blockYNumber = blockYNumber;        
+        this.blockYNumber = blockYNumber;   
         paintTimer();
     }
 
@@ -79,7 +79,7 @@ public class Paint extends JComponent {
     public void paintPlayers(Graphics g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
-        for(int i=0;i<players.size();i++){
+        for(int i=0;i<players.size();i++){System.out.println("number of players"+players.size());
             paintPlayer(g, players.get(i));
         }
     }
