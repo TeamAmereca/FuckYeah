@@ -29,7 +29,6 @@ public class HealthBarDisplay extends JPanel {
         setVisible(true);
     }
     
-    @Override
     public void paintComponent(Graphics2D g) {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
