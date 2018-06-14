@@ -220,7 +220,7 @@ public class Joueur {
         }
     }
     
-    public void deplacer(KeyEvent e){ //déplace le joueur automatiquement en fonction de sa vitesse et de son orientation
+    public void deplacer(KeyEvent e, DisplayBody centralPanel){ //déplace le joueur automatiquement en fonction de sa vitesse et de son orientation
         //System.out.println("deplacement : "+peutSeDeplacer);
         if (this.peutSeDeplacer){
             try {
