@@ -63,12 +63,16 @@ public class Write_Read {
             int positionX = resultat.getInt("x");
             int positionY = resultat.getInt("y");
             int pv = resultat.getInt("pv");
+            if(joueur.getPv()<=0){
+                //If PV is negative, then the player is erased from the local database
+                this.players.remove(joueur);
+            }
             String orientation = resultat.getString("orientation");
             joueur.setPositionX(positionX);
             joueur.setPositionY(positionY);
             joueur.setPv(pv);
             joueur.setOrientation(orientation);
-            requete.close();
+            requete.close();            
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }
