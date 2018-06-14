@@ -1,5 +1,6 @@
 package Database;
 
+import Bonus.Bonus;
 import Joueur.Joueur;
 import Map.Bloc;
 import Map.Map;
@@ -109,6 +110,19 @@ public class Write_Read {
             while(result.next()){
                 if(result.getBoolean("cassable")){
                     this.map.addBloc(new Bloc(result.getInt("positionX"), result.getInt("positionY"), result.getBoolean("cassable")));
+                }
+            }
+            requete.close();
+            
+            requete = connection.prepareStatement("SELECT * FROM bonus");
+            result = requete.executeQuery();
+            while(result.next()){
+                int positionX = result.getInt("positionX");
+                int positionY = result.getInt("positionY");
+                int type = result.getInt("type");
+                Bonus bonus = new Bonus(positionX, positionY, type, connection);
+                if(!this.map.getListeBonus().contains(bonus)){
+                    this.map.getListeBonus().remove(bonus);
                 }
             }
             requete.close();
