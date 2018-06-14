@@ -38,5 +38,17 @@ public class Bonus {
             ex.printStackTrace();
         }
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public int getPositionX() {
+        return positionX;
+    }
+
+    public int getPositionY() {
+        return positionY;
+    }
     
 }
