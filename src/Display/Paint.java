@@ -25,15 +25,22 @@ public class Paint extends JComponent {
     private int blockXNumber;
     private int blockYNumber;
     private Timer timer;
+    private Image solidBloc;
+    private Image breakable;
+    private Image sand;
     
-    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) {
+    public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) throws IOException {
         // Initialisation
         this.welcomeWindow = welcomeWindow;
         this.database = database;
         this.timer = timer;
         this.blockLength = blockLength;
         this.blockXNumber = blockXNumber;
-        this.blockYNumber = blockYNumber;   
+        this.blockYNumber = blockYNumber;
+        
+        this.solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
+        this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
+        this.sand = ImageIO.read(new File("./src/Images/sable.png"));
         paintTimer();
     }
 
@@ -47,33 +54,22 @@ public class Paint extends JComponent {
         paintPlayers(g);
         paintBalles(g);
     }
-    public void paintMap(Graphics g) {
-        try{
-            Image sand = ImageIO.read(new File("./src/Images/sable.png"));
-            for(int i = 0; i<this.database.getMap().getX(); i++){
-                for(int j=0; j<this.database.getMap().getY();j++){
-                    g.drawImage(sand, i*50, j*50, this);
-                }
+    public void paintMap(Graphics g) {          
+        for(int i = 0; i<this.database.getMap().getX(); i++){
+            for(int j=0; j<this.database.getMap().getY();j++){
+                g.drawImage(sand, i*50, j*50, this);
             }
-        } catch (IOException e){
-            e.printStackTrace();
         }
         for(int i=0; i<database.getMap().nombreBlocs(); i++){
             paintBloc(g, database.getMap().getBloc(i));
         }
     }
-    public void paintBloc(Graphics g, Bloc b){
-        try{
-            Image solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
-            Image breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
-            if(b.getCassable()){
-                g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
-            }
-            else{
-                g.drawImage(solidBloc, b.getX()*50, b.getY()*50, this);
-            }
-        } catch (IOException e){
-            e.printStackTrace();
+    public void paintBloc(Graphics g, Bloc b){           
+        if(b.getCassable()){
+            g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
+        }
+        else{
+            g.drawImage(solidBloc, b.getX()*50, b.getY()*50, this);
         }
     }
     public void paintPlayers(Graphics g) {
@@ -148,6 +144,6 @@ public class Paint extends JComponent {
                     repaint();
                 }
             };
-        timer.scheduleAtFixedRate(timerTask,0, 200);
+        timer.scheduleAtFixedRate(timerTask,0, 100);
     }  
 }
