@@ -74,8 +74,8 @@ public class Paint extends JComponent {
         for(int i=0; i<database.getMap().nombreBlocs(); i++){
             paintBloc(g, database.getMap().getBloc(i));
         }
-        for(int i=0; i<database.getMap().getListeBonus().size(); i++){
-            
+        for(int i=0; i<database.getMap().getListeBonus().size(); i++){            
+            //Draw bonus
             Bonus bonus = database.getMap().getListeBonus().get(i);
             g.setColor(Color.YELLOW);
             g.fillRect(bonus.getPositionX()*blockLength, bonus.getPositionY()*blockLength, 50, 50);

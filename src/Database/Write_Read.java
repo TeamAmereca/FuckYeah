@@ -121,7 +121,7 @@ public class Write_Read {
             while(result.next()){
                 int positionX = result.getInt("positionX");
                 int positionY = result.getInt("positionY");
-                int type = result.getInt("type");System.out.println("Database: Bonus at:"+positionX+";"+positionY);    
+                int type = result.getInt("type");    
                 Bonus bonus = new Bonus(positionX, positionY, type, connection);
                 this.map.getListeBonus().add(bonus);
             }
