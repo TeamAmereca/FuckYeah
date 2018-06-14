@@ -7,6 +7,7 @@ import Map.Bloc;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Paint extends JComponent {
     private Image solidBloc;
     private Image breakable;
     private Image sand;
+    private Image balle;
     
     public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber) throws IOException {
         // Initialisation
@@ -41,6 +43,7 @@ public class Paint extends JComponent {
         this.solidBloc = ImageIO.read(new File("./src/Images/bloc.jpg"));
         this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
         this.sand = ImageIO.read(new File("./src/Images/sable.png"));
+        this.balle = ImageIO.read(new File("./src/Images/balle.png"));
         paintTimer();
     }
 
@@ -116,24 +119,15 @@ public class Paint extends JComponent {
 //        g.drawRect(x*blockLength, y*blockLength, 50, 50);
 //        g.fillRect(x*blockLength, y*blockLength, 50, 50);
 //        g.setColor(Color.RED);
-//        if(o.equals("Droite")) {
-//            g.drawRect(x*blockLength+40, y*blockLength+20, 10, 10);
-//            g.fillRect(x*blockLength+40, y*blockLength+20, 10, 10);
-//        } else if(o.equals("Gauche")) {
-//            g.drawRect(x*blockLength, y*blockLength+20, 10, 10);
-//            g.fillRect(x*blockLength, y*blockLength+20, 10, 10);
-//        } else if(o.equals("Haut")) {
-//            g.drawRect(x*blockLength+20, y*blockLength, 10, 10);
-//            g.fillRect(x*blockLength+20, y*blockLength, 10, 10);
-//        } else if(o.equals("Bas")) {
-//            g.drawRect(x*blockLength+20, y*blockLength+40, 10, 10);
-//            g.fillRect(x*blockLength+20, y*blockLength+40, 10, 10);
-//        }
-            try{
-            Image balle = ImageIO.read(new File("./src/Images/balle.png"));
-                g.drawImage(balle, x*50, y*50, this);
-        } catch (IOException e){
-            e.printStackTrace();
+        AffineTransform r = new AffineTransform();
+        if(o.equals("Droite")) {
+            g.drawImage(balle, x*50 + 50, y*50, -50, 50, this);
+        } else if(o.equals("Gauche")) {
+            g.drawImage(balle, x*50, y*50, this);
+        } else if(o.equals("Haut")) {
+            g.drawImage(balle, x*50, y*50, this);
+        } else if(o.equals("Bas")) {
+            g.drawImage(balle, x*50, y*50, this);
         }
     }
     
