@@ -268,6 +268,7 @@ public class Joueur {
                             requeteBonus.setInt(1, this.positionX);
                             requeteBonus.setInt(2, this.positionY);
                             ResultSet resultatBonus = requeteBonus.executeQuery();
+                            requeteBonus.close();
                             if(resultatBonus.next()==true){
                                 PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
                                 ResultSet resultat = requeteType.executeQuery();
@@ -354,6 +355,7 @@ public class Joueur {
                             requeteBonus.setInt(1, this.positionX);
                             requeteBonus.setInt(2, this.positionY);
                             ResultSet resultatBonus = requeteBonus.executeQuery();
+                            requeteBonus.close();
                             if(resultatBonus.next()==true){
                                 PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
                                 ResultSet resultat = requeteType.executeQuery();
@@ -441,6 +443,7 @@ public class Joueur {
                             requeteBonus.setInt(1, this.positionX);
                             requeteBonus.setInt(2, this.positionY);
                             ResultSet resultatBonus = requeteBonus.executeQuery();
+                            requeteBonus.close();
                             if(resultatBonus.next()==true){
                                 PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
                                 ResultSet resultat = requeteType.executeQuery();
@@ -528,6 +531,7 @@ public class Joueur {
                             requeteBonus.setInt(1, this.positionX);
                             requeteBonus.setInt(2, this.positionY);
                             ResultSet resultatBonus = requeteBonus.executeQuery();
+                            requeteBonus.close();
                             if(resultatBonus.next()==true){
                                 PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
                                 ResultSet resultat = requeteType.executeQuery();
