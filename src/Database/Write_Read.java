@@ -77,6 +77,7 @@ public class Write_Read {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+            joueur.deleteJoueur();
         }
     }
     public void refreshBalle() {
