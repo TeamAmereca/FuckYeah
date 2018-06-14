@@ -65,7 +65,7 @@ public class Paint extends JComponent {
         paintPlayers(g);
         paintBalles(g);
     }
-    public void paintMap(Graphics g) {          
+    public void paintMap(Graphics g) {   
         for(int i = 0; i<this.database.getMap().getX(); i++){
             for(int j=0; j<this.database.getMap().getY();j++){
                 g.drawImage(sand, i*50, j*50, this);
@@ -75,7 +75,9 @@ public class Paint extends JComponent {
             paintBloc(g, database.getMap().getBloc(i));
         }
         for(int i=0; i<database.getMap().getListeBonus().size(); i++){
+            
             Bonus bonus = database.getMap().getListeBonus().get(i);
+            g.setColor(Color.YELLOW);
             g.fillRect(bonus.getPositionX()*blockLength, bonus.getPositionY()*blockLength, 50, 50);
         }
     }
