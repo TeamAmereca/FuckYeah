@@ -2,6 +2,7 @@ package Joueur;
 
 import Balle.Balle;
 import Bonus.Bonus;
+import Display.DisplayBody;
 
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -219,7 +220,7 @@ public class Joueur {
         }
     }
     
-    public void deplacer(KeyEvent e){ //déplace le joueur automatiquement en fonction de sa vitesse et de son orientation
+    public void deplacer(KeyEvent e, DisplayBody centralPanel){ //déplace le joueur automatiquement en fonction de sa vitesse et de son orientation
         //System.out.println("deplacement : "+peutSeDeplacer);
         if (this.peutSeDeplacer){
             try {
@@ -264,19 +265,14 @@ public class Joueur {
                             peutSeDeplacer = false; 
                             
                             // Bonus
-                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
-                            requeteBonus.setInt(1, this.positionX);
-                            requeteBonus.setInt(2, this.positionY);
-                            ResultSet resultatBonus = requeteBonus.executeQuery();
-                            requeteBonus.close();
-                            if(resultatBonus.next()==true){
-                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
-                                ResultSet resultat = requeteType.executeQuery();
-                                int type = resultat.getInt("type");
-                                requeteType.close();
-                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
-                                bonus.deleteBonus();
-                                this.bonus(type);
+                            ArrayList<Bonus> listeBonus = centralPanel.getDatabase().getMap().getListeBonus();
+                            for(int i = 0; i < listeBonus.size(); i++){
+                                Bonus bonus = listeBonus.get(i);
+                                if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
+                                    int type = listeBonus.get(i).getType();
+                                    bonus.deleteBonus();
+                                    this.bonus(type);
+                                }
                             }
                             
                             TimerTask timerTask = new TimerTask() {
@@ -351,19 +347,14 @@ public class Joueur {
                             peutSeDeplacer = false; 
                             
                             // Bonus
-                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
-                            requeteBonus.setInt(1, this.positionX);
-                            requeteBonus.setInt(2, this.positionY);
-                            ResultSet resultatBonus = requeteBonus.executeQuery();
-                            requeteBonus.close();
-                            if(resultatBonus.next()==true){
-                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
-                                ResultSet resultat = requeteType.executeQuery();
-                                int type = resultat.getInt("type");
-                                requeteType.close();
-                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
-                                bonus.deleteBonus();
-                                this.bonus(type);
+                            ArrayList<Bonus> listeBonus = centralPanel.getDatabase().getMap().getListeBonus();
+                            for(int i = 0; i < listeBonus.size(); i++){
+                                Bonus bonus = listeBonus.get(i);
+                                if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
+                                    int type = listeBonus.get(i).getType();
+                                    bonus.deleteBonus();
+                                    this.bonus(type);
+                                }
                             }
                             
                            
@@ -439,19 +430,14 @@ public class Joueur {
                             peutSeDeplacer = false; 
                             
                             // Bonus
-                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
-                            requeteBonus.setInt(1, this.positionX);
-                            requeteBonus.setInt(2, this.positionY);
-                            ResultSet resultatBonus = requeteBonus.executeQuery();
-                            requeteBonus.close();
-                            if(resultatBonus.next()==true){
-                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
-                                ResultSet resultat = requeteType.executeQuery();
-                                int type = resultat.getInt("type");
-                                requeteType.close();
-                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
-                                bonus.deleteBonus();
-                                this.bonus(type);
+                            ArrayList<Bonus> listeBonus = centralPanel.getDatabase().getMap().getListeBonus();
+                            for(int i = 0; i < listeBonus.size(); i++){
+                                Bonus bonus = listeBonus.get(i);
+                                if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
+                                    int type = listeBonus.get(i).getType();
+                                    bonus.deleteBonus();
+                                    this.bonus(type);
+                                }
                             }
                             
                             
@@ -527,19 +513,14 @@ public class Joueur {
                             peutSeDeplacer = false; 
                             
                             // Bonus
-                            PreparedStatement requeteBonus = connexion.prepareStatement("SELECT * FROM bonus WHERE positionX = ? AND positionY = ?");
-                            requeteBonus.setInt(1, this.positionX);
-                            requeteBonus.setInt(2, this.positionY);
-                            ResultSet resultatBonus = requeteBonus.executeQuery();
-                            requeteBonus.close();
-                            if(resultatBonus.next()==true){
-                                PreparedStatement requeteType = connexion.prepareStatement("SELECT type FROM bonus WHERE positionX = ? AND positionY = ?");
-                                ResultSet resultat = requeteType.executeQuery();
-                                int type = resultat.getInt("type");
-                                requeteType.close();
-                                Bonus bonus = new Bonus(positionX,positionY,type,connexion);
-                                bonus.deleteBonus();
-                                this.bonus(type);
+                            ArrayList<Bonus> listeBonus = centralPanel.getDatabase().getMap().getListeBonus();
+                            for(int i = 0; i < listeBonus.size(); i++){
+                                Bonus bonus = listeBonus.get(i);
+                                if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
+                                    int type = listeBonus.get(i).getType();
+                                    bonus.deleteBonus();
+                                    this.bonus(type);
+                                }
                             }
                             
                             
