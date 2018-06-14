@@ -102,11 +102,13 @@ public class Write_Read {
     }
     public void refreshMap(){
         try {
-            this.map.deleteMap();
+            this.map.deleteCassable();
             PreparedStatement requete = connection.prepareStatement("SELECT * FROM blocs");
             ResultSet result = requete.executeQuery();
             while(result.next()){
-                this.map.addBloc(new Bloc(result.getInt("positionX"), result.getInt("positionY"), result.getBoolean("cassable")));
+                if(result.getBoolean("cassable")){
+                    this.map.addBloc(new Bloc(result.getInt("positionX"), result.getInt("positionY"), result.getBoolean("cassable")));
+                }
             }
             requete.close();
         } catch (SQLException ex) {

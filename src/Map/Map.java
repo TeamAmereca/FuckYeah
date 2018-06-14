@@ -153,8 +153,13 @@ public class Map {
     }
  
     
-    public void deleteMap(){
-        this.listeBloc.clear();
+    public void deleteCassable(){
+        for(int i=0; i<this.listeBloc.size(); i++){
+            if(this.listeBloc.get(i).getCassable()){
+                this.listeBloc.remove(i);
+                i--;
+            }
+        }
     }
     
     public void addBloc(Bloc b) {
