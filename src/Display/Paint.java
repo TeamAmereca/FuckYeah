@@ -33,7 +33,10 @@ public class Paint extends JComponent {
     private Image breakable;
     private Image sand;
     private Image balle;
+<<<<<<< HEAD
     private Image balle2;
+=======
+>>>>>>> deed3ff334856fb9faeaabf2856989c68c4351d0
     
 
     public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength, int blockXNumber, int blockYNumber){
@@ -50,7 +53,10 @@ public class Paint extends JComponent {
             this.breakable = ImageIO.read(new File("./src/Images/cassable2.png"));
             this.sand = ImageIO.read(new File("./src/Images/sable.png"));
             this.balle = ImageIO.read(new File("./src/Images/balle.png"));
+<<<<<<< HEAD
             this.balle2 = ImageIO.read(new File("./src/Images/balle2.png"));
+=======
+>>>>>>> deed3ff334856fb9faeaabf2856989c68c4351d0
             paintTimer();
         } catch (IOException ex) {
             Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,8 +82,13 @@ public class Paint extends JComponent {
         for(int i=0; i<database.getMap().nombreBlocs(); i++){
             paintBloc(g, database.getMap().getBloc(i));
         }
+<<<<<<< HEAD
+        for(int i=0; i<database.getMap().getListeBonus().size(); i++){
+            
+=======
         for(int i=0; i<database.getMap().getListeBonus().size(); i++){            
             //Draw bonus
+>>>>>>> deed3ff334856fb9faeaabf2856989c68c4351d0
             Bonus bonus = database.getMap().getListeBonus().get(i);
             g.setColor(Color.YELLOW);
             g.fillRect(bonus.getPositionX()*blockLength, bonus.getPositionY()*blockLength, 50, 50);
@@ -143,11 +154,18 @@ public class Paint extends JComponent {
         } else if(o.equals("Haut")) {
 //            AffineTransform old = g.getTransform();
 //            g.rotate(Math.toRadians(45));
+<<<<<<< HEAD
             g.drawImage(balle2, x*50, y*50+50, 50, -50, this);
 //            g.setTransform(old);
         } else if(o.equals("Bas")) {
-            g.drawImage(balle2, x*50, y*50, 50,50,this);
-        } 
+            g.drawImage(balle2, x*50, y*50, this);
+=======
+            g.drawImage(balle, x*50, y*50, this);
+//            g.setTransform(old);
+        } else if(o.equals("Bas")) {
+            g.drawImage(balle, x*50, y*50, this);
+>>>>>>> deed3ff334856fb9faeaabf2856989c68c4351d0
+        }
     }
     
     public void paintHealthPoint(){
@@ -165,5 +183,8 @@ public class Paint extends JComponent {
             };
         timer.scheduleAtFixedRate(timerTask,0, 100);
     }  
-
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> deed3ff334856fb9faeaabf2856989c68c4351d0
