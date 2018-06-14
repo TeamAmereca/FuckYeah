@@ -557,5 +557,21 @@ public class Joueur {
         this.pv = pv;
     }
     
+    public void bonus(int i){
+        if(i==1){
+            this.bonusVitesse();
+        }else if(i==2){
+            this.bonusTeteChercheuse();
+        }
+    }
+    
+    public void bonusVitesse(){
+        vitesse+=0.2;
+    }
+    
+    public void bonusTeteChercheuse(){
+        
+    }
+    
     
 }
