@@ -96,7 +96,7 @@ public class Balle implements ActionListener {
                             if (resultat2.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Droite";
-                                
+                                i=50;
                                 }}
                     else if (i%4==1){
                         PreparedStatement requete13 = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ? AND NOT pseudo = ?");
@@ -107,7 +107,7 @@ public class Balle implements ActionListener {
                             if (resultat3.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Bas";
-                                
+                                i=50;
                                 }
                          }
                     else if (i%4==2){
@@ -119,7 +119,7 @@ public class Balle implements ActionListener {
                             if (resultat3.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Haut";
-                                
+                                i=50;
                                 }
                          }
                     else if (i%4==3){
@@ -131,7 +131,7 @@ public class Balle implements ActionListener {
                             if (resultat3.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Gauche";
-                                
+                                i=50;
                                 }
                          }
                 
