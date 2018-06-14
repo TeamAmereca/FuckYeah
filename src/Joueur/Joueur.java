@@ -31,10 +31,10 @@ public class Joueur {
         this.pseudo = pseudo;
         this.nation = nation;
         orientation = "Bas";
-        if (nation=="America"){
+        if ("America".equals(nation)){
             arme = "M16";
-        } else if (nation=="Terrorist"){
-            arme = "AK47";
+        } else if ("Terrorist".equals(nation)){
+            arme = "Gun";
         }
         pv = 0;
         vitesse = 1; //joueur se déplace case par case par défaut
@@ -50,10 +50,10 @@ public class Joueur {
         this.pseudo = pseudo;
         this.nation = nation;
         this.orientation = orientation;
-        if (nation=="America"){
+        if ("America".equals(nation)){
             arme = "M16";
-        } else if (nation=="Terrorist"){
-            arme = "AK47";
+        } else if ("Terrorist".equals(nation)){
+            arme = "Gun";
         }
         this.pv = pv;
         vitesse = 1; //joueur se déplace case par case par défaut
@@ -123,10 +123,10 @@ public class Joueur {
     
     public void modifierNation(String nouvelleNation){
         this.nation = nouvelleNation;
-        if (nouvelleNation=="America"){
+        if ("America".equals(nouvelleNation)){
             arme = "M16";
-        } else if (nouvelleNation=="Terrorist"){
-            arme = "AK47";
+        } else if ("Terrorist".equals(nouvelleNation)){
+            arme = "Gun";
         }
         try {
 
@@ -177,19 +177,8 @@ public class Joueur {
     public void tir(){
         System.out.println("vérification avant de tirer : peutTirer = " + peutTirer);
         if (peutTirer){
-            int positionBalleX = positionX;
-            int positionBalleY = positionY;
-            if(orientation.equals("Gauche")){
-                positionBalleX -= 1;
-            }else if(orientation.equals("Droite")){
-                positionBalleX += 1;
-            }else if(orientation.equals("Haut")){
-                positionBalleY -= 1;
-            }else if(orientation.equals("Bas")){
-                positionBalleY += 1;
-            }
-            Balle balle = new Balle(connexion, orientation, arme, positionBalleX, positionBalleY);
-            System.out.println("Balle : " + orientation + ' ' + arme + ' ' + positionBalleX + ' ' + positionBalleY);
+            Balle balle = new Balle(connexion, orientation, arme, positionX, positionY, this.pseudo);
+            System.out.println("Balle : " + orientation + ' ' + arme + ' ' + positionX + ' ' + positionY);
             peutTirer = false;
             //temps attente avant prochain tir possible
             TimerTask timerTask = new TimerTask() {
@@ -199,7 +188,7 @@ public class Joueur {
                 }
             };
             Timer timer = new Timer();
-            timer.schedule(timerTask,2*1000); //empêche de tirer pendant 2s
+            timer.schedule(timerTask,800); //empêche de tirer pendant 2s
             //timerTask.cancel();
             //timer.cancel();
             //peutTirer = true;
@@ -279,7 +268,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,250); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,500); //empêche de se déplacer pendant 2s
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");

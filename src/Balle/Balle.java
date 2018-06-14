@@ -26,13 +26,15 @@ public class Balle implements ActionListener {
     private String orientationBalle;
     private Connection connexion;
     private Timer timer;
+    private String tireur;
     
-    public Balle (Connection connexion, String orientationBalle, String typeBalle, int positionx, int positiony){
+    public Balle (Connection connexion, String orientationBalle, String typeBalle, int positionx, int positiony, String tireur){
         try {
             this.typeBalle = typeBalle;
             this.positionx = positionx;
             this.positiony = positiony;
             this.orientationBalle = orientationBalle;
+            this.tireur = tireur;
             String[] returnId = { "BATCHID" };
             PreparedStatement requete = connexion.prepareStatement("INSERT INTO balle VALUES (0,?,?,?,?)",returnId);
             requete.setString(4, this.typeBalle);
@@ -54,11 +56,11 @@ public class Balle implements ActionListener {
                 this.portee=0;
                 this.vitesse=100;}
             else if (this.typeBalle == "Gun"){
-                this.degats=20;
+                this.degats=10;
                 this.portee=0;
-                this.vitesse=500;}
+                this.vitesse=100;}
             else {System.out.println("Balle non référencée");}
-            this.timer = new Timer( 1000 , this);
+            this.timer = new Timer( 250 , this);
             this.connexion = connexion;
             timer.start();
         } catch (SQLException ex) {
@@ -80,10 +82,67 @@ public class Balle implements ActionListener {
 
     public  void deplacement(int posx, int posy){
         try {
+            System.out.println(this.typeBalle);
+            //part en couille
+            if (this.typeBalle=="Gun"){
+                System.out.println("balle chercheuses");
+                for(int i = 4; i<40; i++){
+                    if (i%4==0){
+                        PreparedStatement requete12 = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ? AND NOT pseudo = ?");
+                        requete12.setInt(1, posx+(i/4));
+                        requete12.setInt(2, posy);
+                        requete12.setString(3, this.tireur);
+                        ResultSet resultat2 = requete12.executeQuery();
+                            if (resultat2.next()==true) {
+                                System.out.println("joueur trouvé");
+                                this.orientationBalle="Droite";
+                                
+                                }}
+                    else if (i%4==1){
+                        PreparedStatement requete13 = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ? AND NOT pseudo = ?");
+                        requete13.setInt(1, posx);
+                        requete13.setInt(2, posy+(i/4));
+                        requete13.setString(3, this.tireur);
+                        ResultSet resultat3 = requete13.executeQuery();
+                            if (resultat3.next()==true) {
+                                System.out.println("joueur trouvé");
+                                this.orientationBalle="Bas";
+                                
+                                }
+                         }
+                    else if (i%4==2){
+                        PreparedStatement requete13 = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ? AND NOT pseudo = ?");
+                        requete13.setInt(1, posx);
+                        requete13.setInt(2, posy-(i/4));
+                        requete13.setString(3, this.tireur);
+                        ResultSet resultat3 = requete13.executeQuery();
+                            if (resultat3.next()==true) {
+                                System.out.println("joueur trouvé");
+                                this.orientationBalle="Haut";
+                                
+                                }
+                         }
+                    else if (i%4==3){
+                        PreparedStatement requete13 = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ? AND NOT pseudo = ?");
+                        requete13.setInt(1, posx-(i/4));
+                        requete13.setInt(2, posy);
+                        requete13.setString(3, this.tireur);
+                        ResultSet resultat3 = requete13.executeQuery();
+                            if (resultat3.next()==true) {
+                                System.out.println("joueur trouvé");
+                                this.orientationBalle="Gauche";
+                                
+                                }
+                         }
+                
+                }
+
+                }
             //Connection connexion = DriverManager.getConnection("jdbc:mysql://nemrod.ens2m.fr:3306/20172018_s2_vs2_fuckyeah?serverTimezone=UTC", "fuckyeah", "america");
-            PreparedStatement requete = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ?");
+            PreparedStatement requete = connexion.prepareStatement("SELECT * FROM joueur WHERE x = ? AND y = ? AND NOT pseudo = ?");
             requete.setInt(1, posx);
             requete.setInt(2, posy);
+            requete.setString(3, this.tireur);
             ResultSet resultat = requete.executeQuery();
             if (resultat.next()==true) {
                 System.out.println("joueur détecté");
@@ -124,6 +183,7 @@ public class Balle implements ActionListener {
                 int positionY = resultat3.getInt("positionY");
                 boolean cassable = resultat3.getBoolean("cassable");
                 requete3.close();
+
                 if (cassable==true){
                     System.out.println("cassable, destruction bloc");
                     PreparedStatement requete4 = connexion.prepareStatement("DELETE FROM blocs WHERE positionX = ? AND positionY = ?"); 
