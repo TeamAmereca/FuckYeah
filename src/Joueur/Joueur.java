@@ -573,5 +573,8 @@ public class Joueur {
         arme = "Gun";
     }
     
+    public void bonusVie(){
+        pv+=30;
+    }
     
 }
