@@ -570,7 +570,7 @@ public class Joueur {
     }
     
     public void bonusTeteChercheuse(){
-        
+        arme = "Gun";
     }
     
     
