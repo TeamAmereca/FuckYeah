@@ -286,12 +286,12 @@ public class Write_Read {
                         orientation="Droite";
                         break;
                     case 1:
-                        variableX = blockXNumber-2;
+                        variableX = blockXNumber-3;
                         variableY = blockYNumber-2;
                         orientation="Gauche";                        
                         break;
                     case 2:
-                        variableX = blockXNumber-2;
+                        variableX = blockXNumber-3;
                         variableY = 1;
                         orientation="Bas";
                         break;
