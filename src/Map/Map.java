@@ -1,5 +1,6 @@
 package Map;
 
+import Bonus.Bonus;
 import java.util.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ public class Map {
     private int nbCase_X;
     private int nbCase_Y;
     private ArrayList<Bloc> listeBloc;
+    private ArrayList<Bonus> listeBonus;
     private Connection connexion;
     
 //Création de cartes
@@ -22,7 +24,8 @@ public class Map {
         this.connexion = connexion;
         this.nbCase_X = X;
         this.nbCase_Y = Y;
-        this.listeBloc = new ArrayList<Bloc>();
+        this.listeBloc = new ArrayList<>();
+        this.listeBonus = new ArrayList<>();
         for(int x=0; x<this.nbCase_X; x++) {//on ajoute des cases sur les cotés
             this.listeBloc.add(new Bloc(x, 0, false));
             this.listeBloc.add(new Bloc(x, this.nbCase_Y - 1, false));
@@ -51,7 +54,8 @@ public class Map {
         this.connexion = connexion;
     	this.nbCase_X = 20;
     	this.nbCase_Y = 13;
-    	this.listeBloc = new ArrayList<Bloc>();
+    	this.listeBloc = new ArrayList<>();
+        this.listeBonus = new ArrayList<>();
         if (forme==0 || forme ==1){ // Carte carré sans objets à l'intérieur = carte simple
             for(int x=0; x<this.nbCase_X; x++) {//on ajoute des cases sur les cotés
                 this.listeBloc.add(new Bloc(x, 0, false));
