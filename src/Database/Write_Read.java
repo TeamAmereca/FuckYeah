@@ -70,7 +70,7 @@ public class Write_Read {
             joueur.setOrientation(orientation);
             requete.close();
             if(joueur.getPv()<=0){
-                //If PV is negative, then the player is erased from the local database
+                //If PV is negative, then the player is erased from the database
                 this.players.remove(joueur);
                 joueur.deleteJoueur();
             }
