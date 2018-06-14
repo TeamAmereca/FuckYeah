@@ -5,7 +5,7 @@ import Joueur.Joueur;
 import Map.Bloc;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.io.File;
@@ -54,7 +54,7 @@ public class Paint extends JComponent {
         }
     }
 
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics2D g) {
         //Here where we paint the players and the map
         //It is refreshed to every changes
         super.paintComponent(g);
@@ -64,7 +64,7 @@ public class Paint extends JComponent {
         paintPlayers(g);
         paintBalles(g);
     }
-    public void paintMap(Graphics g) {          
+    public void paintMap(Graphics2D g) {          
         for(int i = 0; i<this.database.getMap().getX(); i++){
             for(int j=0; j<this.database.getMap().getY();j++){
                 g.drawImage(sand, i*50, j*50, this);
@@ -74,7 +74,7 @@ public class Paint extends JComponent {
             paintBloc(g, database.getMap().getBloc(i));
         }
     }
-    public void paintBloc(Graphics g, Bloc b){           
+    public void paintBloc(Graphics2D g, Bloc b){           
         if(b.getCassable()){
             g.drawImage(breakable, b.getX()*50, b.getY()*50, this);
         }
@@ -82,14 +82,14 @@ public class Paint extends JComponent {
             g.drawImage(solidBloc, b.getX()*50, b.getY()*50, this);
         }
     }
-    public void paintPlayers(Graphics g) {
+    public void paintPlayers(Graphics2D g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
         for(int i=0;i<players.size();i++){
             paintPlayer(g, players.get(i));
         }
     }
-    public void paintPlayer(Graphics g, Joueur joueur) {
+    public void paintPlayer(Graphics2D g, Joueur joueur) {
         //Paint the player
         g.setColor(Color.BLACK);
         //System.out.println("Player is at: ("+joueur.getOrientation()+","+joueur.getPositionX()+","+joueur.getPositionY()+")");
@@ -110,7 +110,7 @@ public class Paint extends JComponent {
             g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
         }
     }
-    public void paintBalles(Graphics g) {
+    public void paintBalles(Graphics2D g) {
         // Paint every balles
         ArrayList<Integer> ballesX = database.getBallesX();
         ArrayList<Integer>ballesY = database.getBallesY();
@@ -119,7 +119,7 @@ public class Paint extends JComponent {
             paintBalle(g, ballesX.get(i), ballesY.get(i), ballesO.get(i));
         }
     }
-    public void paintBalle(Graphics g, int x, int y, String o) {
+    public void paintBalle(Graphics2D g, int x, int y, String o) {
         //Paint the balle
         //System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
 //        g.setColor(Color.YELLOW);

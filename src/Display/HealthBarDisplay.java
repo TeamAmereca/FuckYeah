@@ -2,7 +2,7 @@ package Display;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,7 +30,7 @@ public class HealthBarDisplay extends JPanel {
     }
     
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics2D g) {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.drawRoundRect(MARGIN, MARGIN+HEIGHT, HEALTH_BAR_LENGTH, HEALTH_BAR_HEIGHT,5,5); //draws healthbar outline
