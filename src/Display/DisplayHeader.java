@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 public class DisplayHeader extends JPanel{
     private final int panelHeight;
     private final int panelWidth;
-    private ArrayList<HealthBarDisplay> healthBarDisplay = new ArrayList<>();
+    private final ArrayList<HealthBarDisplay> healthBarDisplay = new ArrayList<>();
     
     public DisplayHeader(int screenWidth, int screenHeight) {
         //Set the height, the width, the position of this panel
@@ -62,6 +62,7 @@ public class DisplayHeader extends JPanel{
     }
     
     public void setHPbar(ArrayList<Joueur> players){
+        //modify each player's pv bar accordingly
         for (int i=0;i<players.size();i++) {
             for(int j=0;j<healthBarDisplay.size();j++) {
                 if(healthBarDisplay.get(j).getPseudo().equals(players.get(i).getPseudo())){

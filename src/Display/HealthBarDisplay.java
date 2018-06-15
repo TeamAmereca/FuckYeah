@@ -55,6 +55,7 @@ public class HealthBarDisplay extends JPanel {
     public void setHealthPoint(int healthPoint){
         //Repaint the hp bar every time it is modified
         if(healthPoint==0){
+            //modify the background color when the playre's pv is null, that is the player is dead
             setBackground(new Color(132,236,204));
         }
         this.healthPoint = healthPoint;
