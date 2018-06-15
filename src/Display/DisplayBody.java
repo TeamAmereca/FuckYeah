@@ -140,7 +140,7 @@ public class DisplayBody extends JPanel{
         text_pseudo = new TextField(20);
         boxNations  = new JComboBox(new String[]{ "America", "Terrorist" });
         boxNations.addActionListener(comboBoxActionListener);
-        boxnumberOfPlayers  = new JComboBox(new Integer [] {2,3,4});
+        boxnumberOfPlayers  = new JComboBox(new Integer [] {1,2,3,4});
         centralPanel.add(label_pseudo);
         centralPanel.add(text_pseudo);
         centralPanel.add(label_nation);
