@@ -138,10 +138,10 @@ public class Paint extends JComponent {
         } else if(o.equals("Haut")) {
 //            AffineTransform old = g.getTransform();
 //            g.rotate(Math.toRadians(45));
-            g.drawImage(balle2, x*50, y*50+50, 50, -50, this);
+            g.drawImage(balle2, x*50, y*50, 50, 50, this);
 //            g.setTransform(old);
         } else if(o.equals("Bas")) {
-            g.drawImage(balle2, x*50, y*50, 50,50,this);
+            g.drawImage(balle2, x*50, y*50+50, 50, -50,this);
         } 
     }
     
