@@ -213,7 +213,7 @@ public class DisplayBody extends JPanel{
         this.revalidate();
         this.repaint();
         
-        draw=new Paint(frame, database, timer, blockLength, blockXNumber, blockYNumber);
+        draw=new Paint(frame, database, timer, blockLength);
         frame.getDisplayHeader().addHPbar(database.getPlayers());
         draw.setBorder(BorderFactory.createLineBorder(Color.black));
         int mapHeight = blockYNumber*blockLength;

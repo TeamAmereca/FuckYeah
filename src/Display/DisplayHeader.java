@@ -4,6 +4,7 @@ import Joueur.Joueur;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -25,6 +26,7 @@ public class DisplayHeader extends JPanel{
         this.setLocation(0,0);
         this.setLayout(null);
     }
+    
     public void addHeader(String text) {
         //Add a title
         JLabel headerLabel = new JLabel(text);
@@ -34,24 +36,26 @@ public class DisplayHeader extends JPanel{
         add(headerLabel);
     }
     
-    public void addHPbar(ArrayList<Joueur> players){
+    public void addHPbar(ArrayList<Joueur> players){        
         for (int i=0;i<players.size();i++) {
             HealthBarDisplay display = new HealthBarDisplay(players.get(i).getPseudo());
-            int variableX, variableY;
+            int variableX;
+            int MARGIN = 20,
+                DISTANCE_BAR = 90;
             if(i==0){
-                variableX = 20;
-                variableY = 20;
+                //First hp bar
+                variableX = MARGIN;
             }else if(i==1){
-                variableX = panelWidth-250;
-                variableY = 20;
+                //Fourth hp bar
+                variableX = panelWidth-(display.getWidth()+MARGIN);
             }else if(i==2){
-                variableX = 20;
-                variableY = 100;
+                //Second hp bar
+                variableX = MARGIN+display.getWidth()+DISTANCE_BAR;
             }else{
-                variableX = panelWidth-250;
-                variableY = 100;
+                //Third hp bar
+                variableX = panelWidth-(DISTANCE_BAR+2*display.getWidth()+MARGIN);
             }
-            display.setBounds(variableX,variableY, 250,100);
+            display.setLocation(variableX,20);
             add(display);
             healthBarDisplay.add(display);
             this.revalidate();
@@ -64,5 +68,21 @@ public class DisplayHeader extends JPanel{
             healthBarDisplay.get(i).setHealthPoint(players.get(i).getPv());
             repaint();
         }
+    }
+    
+    public static void main(String[] args){
+        JFrame frame = new JFrame();
+        frame.setBounds(0, 0, 1000, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
+        frame.setVisible(true);
+        DisplayHeader display = new DisplayHeader(1000,600);
+        frame.add(display);
+//        HealthBarDisplay ss = new HealthBarDisplay("ss");
+//        ss.setLocation(0, 0);
+//        frame.add(ss);
+//        HealthBarDisplay sss = new HealthBarDisplay("sss");
+//        sss.setLocation(0,50);
+//        frame.add(sss);
     }
 }

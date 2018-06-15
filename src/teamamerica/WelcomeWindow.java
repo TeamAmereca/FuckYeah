@@ -76,16 +76,16 @@ public class WelcomeWindow extends JFrame{
                     System.exit(0);
                     break;
                 case KeyEvent.VK_RIGHT:
-                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
                     break;
                 case KeyEvent.VK_LEFT:
-                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
                     break;
                 case KeyEvent.VK_UP:
-                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
                     break;
                 case KeyEvent.VK_DOWN:
-                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e);
+                    centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
                     break;
                 case KeyEvent.VK_SPACE:
                     centralPanel.getDatabase().getPlayers().get(0).tir();
