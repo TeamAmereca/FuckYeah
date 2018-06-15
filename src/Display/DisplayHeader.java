@@ -56,18 +56,21 @@ public class DisplayHeader extends JPanel{
                 variableX = panelWidth-(DISTANCE_BAR+2*display.getWidth()+MARGIN);
             }
             display.setLocation(variableX,20);
-            add(display);
-            healthBarDisplay.add(display);
-            this.revalidate();
-            repaint();
+            add(display);//add to JPanel
+            healthBarDisplay.add(display);//add to healthBarDisplay
         }
     }
     
     public void setHPbar(ArrayList<Joueur> players){
         for (int i=0;i<players.size();i++) {
-            healthBarDisplay.get(i).setHealthPoint(players.get(i).getPv());
-            repaint();
+            for(int j=0;j<healthBarDisplay.size();j++) {
+                if(healthBarDisplay.get(j).getPseudo().equals(players.get(i).getPseudo())){
+                    healthBarDisplay.get(j).setHealthPoint(players.get(i).getPv());
+                    break;
+                }
+            }
         }
+        repaint();
     }
     
     public static void main(String[] args){

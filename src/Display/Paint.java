@@ -52,7 +52,9 @@ public class Paint extends JComponent {
         }
     }
 
+    @Override
     public void paintComponent(Graphics g) {
+        this.removeAll();
         //Here where we paint the players and the map
         //It is refreshed to every changes
         super.paintComponent(g);
@@ -89,8 +91,16 @@ public class Paint extends JComponent {
     public void paintPlayers(Graphics g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
-        for(int i=0;i<players.size();i++){
-            paintPlayer(g, players.get(i));
+        for(int i=0;i<players.size();i++){       
+            if(players.get(i).getPv()>0){
+                //the player is still alive
+                paintPlayer(g, players.get(i));
+            }else{
+                //the player is dead
+                if(i==0){
+                    this.welcomeWindow.setMovePlayer(false);
+                }
+            }
         }
     }
     public void paintPlayer(Graphics g, Joueur joueur) {
@@ -145,16 +155,13 @@ public class Paint extends JComponent {
         } 
     }
     
-    public void paintHealthPoint(){
-        welcomeWindow.getDisplayHeader().setHPbar(database.getPlayers());
-    }
     public void paintTimer() {
         //Here we set a timer to get a copy of the database every 0.25 sec
         TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
                     database.refreshDataBase();  
-                    paintHealthPoint();
+                    welcomeWindow.getDisplayHeader().setHPbar(database.getPlayers());
                     repaint();
                 }
             };

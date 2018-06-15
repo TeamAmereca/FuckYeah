@@ -17,6 +17,7 @@ public class WelcomeWindow extends JFrame{
     private DisplayHeader displayHeader;  
     private FrameKeyListener frameKeyListener = new FrameKeyListener();
     private SoundEffect soundEffect = new SoundEffect();
+    private boolean movePlayer = false;
 
     WelcomeWindow() {
         setTitle(GAME_NAME);
@@ -65,34 +66,27 @@ public class WelcomeWindow extends JFrame{
         centralPanel.close();
     }
     
-    class FrameKeyListener implements KeyListener{
+    class FrameKeyListener implements KeyListener{        
         @Override
         public void keyPressed(KeyEvent e) {
             /** Handle the key-pressed event */            
-            switch (e.getKeyCode()) {
-                case 27:
-                    // Click on esc key to close the game
-                    dispose();
-                    System.exit(0);
-                    break;
-                case KeyEvent.VK_RIGHT:
+            if (e.getKeyCode() == 27) {
+                // Click on esc key to close the game
+                dispose();
+                System.exit(0);
+            }else if(movePlayer){
+                if(e.getKeyCode() == KeyEvent.VK_RIGHT){
                     centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
-                    break;
-                case KeyEvent.VK_LEFT:
+                }else if(e.getKeyCode() == KeyEvent.VK_LEFT){
                     centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
-                    break;
-                case KeyEvent.VK_UP:
+                }else if(e.getKeyCode() == KeyEvent.VK_UP){
                     centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
-                    break;
-                case KeyEvent.VK_DOWN:
+                }else if(e.getKeyCode() == KeyEvent.VK_DOWN){
                     centralPanel.getDatabase().getPlayers().get(0).deplacer(e,centralPanel);
-                    break;
-                case KeyEvent.VK_SPACE:
+                }else if(e.getKeyCode() == KeyEvent.VK_SPACE){
                     centralPanel.getDatabase().getPlayers().get(0).tir();
-                    soundEffect.play("rifle "+centralPanel.getDatabase().getPlayers().get(0).getNation());
-                    break;
-                default:
-                    break;
+                    soundEffect.play("rifle "+centralPanel.getDatabase().getPlayers().get(0).getNation());            
+                }
             }                
         }        
 
@@ -122,4 +116,9 @@ public class WelcomeWindow extends JFrame{
     public DisplayHeader getDisplayHeader() {
         return displayHeader;
     }
+
+    public void setMovePlayer(boolean movePlayer) {
+        this.movePlayer = movePlayer;
+    }
+    
 }

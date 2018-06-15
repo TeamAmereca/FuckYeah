@@ -71,12 +71,13 @@ public class Write_Read {
             joueur.setOrientation(orientation);
             requete.close();
             if(joueur.getPv()<=0){
-                //If PV is negative, then the player is erased from the database
-                this.players.remove(joueur);
-                joueur.deleteJoueur();
+                //If PV is negative
+                throw new SQLException();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+            //the player is erased from the database
+            joueur.setPv(0);
             joueur.deleteJoueur();
         }
     }

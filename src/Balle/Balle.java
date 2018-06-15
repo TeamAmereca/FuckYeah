@@ -144,7 +144,7 @@ public class Balle implements ActionListener {
             requete.setInt(2, posy);
             requete.setString(3, this.tireur);
             ResultSet resultat = requete.executeQuery();
-            if (resultat.next()==true) {
+            while(resultat.next()) {
                 System.out.println("joueur détecté");
                 String pseudo = resultat.getString("pseudo");
                 System.out.println(pseudo);

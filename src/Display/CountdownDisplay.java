@@ -20,7 +20,7 @@ public class CountdownDisplay extends JPanel{
     public CountdownDisplay(WelcomeWindow frame, int countdown){
         super();
         this.frame = frame;
-        frame.removeKeyListener0();//remove key listener while in countdown to prevent player from moving
+        frame.setMovePlayer(false);//disable player moving
         this.countdown = countdown;
         this.countdownLabel = new JLabel();
         countdownLabel.setFont(new Font("SansSerif", Font.BOLD, 320));
@@ -39,7 +39,7 @@ public class CountdownDisplay extends JPanel{
                 if(countdown--==0){
                     timer.cancel();
                     countdownLabel.setVisible(false);  
-                    frame.addKeyListener0();//add keylistener back to the frame since the countdown is finished
+                    frame.setMovePlayer(true);//enable player moving
                 }else{
                     countdownLabel.setText(countdown+"");
                 }
