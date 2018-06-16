@@ -3,6 +3,8 @@ package Map;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Bonus {
     private int type;
@@ -10,14 +12,16 @@ public class Bonus {
     private int positionY;
     private Connection connexion;
     
-    public Bonus(int positionX, int positionY, int type, Connection connexion) throws SQLException{
+    public Bonus(int positionX, int positionY, int type, Connection connexion) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.type = type;
         this.connexion = connexion;
     }
     
-    public void creerBonusSQL() throws SQLException { //crée le bonus dans la BDD SQL
+    public void creerBonusSQL(){
+        try {
+            //crée le bonus dans la BDD SQL
             PreparedStatement requete = connexion.prepareStatement("INSERT INTO bonus VALUES (?,?,?)");
             requete.setInt(1, positionX);
             requete.setInt(2, positionY);
@@ -25,6 +29,9 @@ public class Bonus {
             requete.executeUpdate();
 
             requete.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Bonus.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void deleteBonus(){

@@ -49,7 +49,7 @@ public class Map {
         }
     }
     
-    public Map(int forme, Connection connexion) throws SQLException {// forme = 0 : carte simple
+    public Map(int forme, Connection connexion){// forme = 0 : carte simple
         this.connexion = connexion;
     	this.nbCase_X = 20;
     	this.nbCase_Y = 13;

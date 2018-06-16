@@ -158,7 +158,7 @@ public class Write_Read {
         }
     }
     
-    public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers) throws SQLException {
+    public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers){
         boolean lastWaitingPlayer = false;
         boolean modelContainsMainPlayer = false;
         try {            
