@@ -97,7 +97,7 @@ public class Write_Read {
                 this.ballesX.add(positionx);
                 this.ballesY.add(positiony);
                 this.ballesO.add(orientation);
-                this.ballesT.add(type);
+                //this.ballesT.add(type);
             }       
             requete.close();            
         } catch (SQLException ex) {
@@ -158,7 +158,7 @@ public class Write_Read {
         }
     }
     
-    public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers) {
+    public boolean enoughPlayers(Timer timer, DefaultTableModel model,int numberOfPlayers) throws SQLException {
         boolean lastWaitingPlayer = false;
         boolean modelContainsMainPlayer = false;
         try {            
