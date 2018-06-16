@@ -29,6 +29,7 @@ public class Write_Read {
     private ArrayList<Integer> ballesX;
     private ArrayList<Integer> ballesY;
     private ArrayList<String> ballesO;
+    private ArrayList<String> ballesT;
     private Map map;
     
     private int blockLength;
@@ -98,6 +99,7 @@ public class Write_Read {
                 this.ballesX.add(positionx);
                 this.ballesY.add(positiony);
                 this.ballesO.add(orientation);
+                this.ballesT.add(type);
             }       
             requete.close();            
         } catch (SQLException ex) {
@@ -423,6 +425,9 @@ public class Write_Read {
 
     public ArrayList<String> getBallesO() {
         return ballesO;
+    }
+    public ArrayList<String> getBallesT() {
+        return ballesT;
     }
 
     public void clearBalles() {
