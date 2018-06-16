@@ -191,29 +191,31 @@ public class Write_Read {
                 map.nouvelleMap();//clear the database and send the actual one to the database
                 this.players.get(0).modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
                 clearBalles();//clear every instances of balle in the database
-                boolean everyoneReady = false;              
-                while(!everyoneReady){
-                    //if everyone is ready, meaning that all other player has set his pv to 100
-                    //else the main player waits so that they can fetch all data of all players
-                    getWaitingPlayers(model);
-                    for(int i=0;i<numberOfPlayers;i++){
-                        if((int)model.getValueAt(i,2) == 100){
-                            everyoneReady=true;
-                        }else{
-                            if(!((String)model.getValueAt(i,0)).equals(this.players.get(0).getPseudo())){
-                                everyoneReady=false;
-                                break;
+                if(numberOfPlayers!=1){
+                    boolean everyoneReady = false;              
+                    while(!everyoneReady){
+                        //if everyone is ready, meaning that all other player has set his pv to 100
+                        //else the main player waits so that they can fetch all data of all players
+                        getWaitingPlayers(model);
+                        for(int i=0;i<numberOfPlayers;i++){
+                            if((int)model.getValueAt(i,2) == 100){
+                                everyoneReady=true;
+                            }else{
+                                if(!((String)model.getValueAt(i,0)).equals(this.players.get(0).getPseudo())){
+                                    everyoneReady=false;
+                                    break;
+                                }
                             }
                         }
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }                
-                setTimeDatabase();//set the beginning time
-                this.players.get(0).modifierPv(100);
+                    setTimeDatabase();//set the beginning time
+                    this.players.get(0).modifierPv(100);
+                }
                 modifyPlayersStatus();//modify all players' status to true                
             }else{
                 //the player is not in the waiting room
@@ -423,7 +425,16 @@ public class Write_Read {
         return ballesO;
     }
 
-    
+    public void clearBalles() {
+        //clear every instances of balle in the database
+        try {
+            PreparedStatement requete = connection.prepareStatement("DELETE FROM balle");
+            requete.executeUpdate();            
+            requete.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public static void main(String[] args){
     int delay = 5;
@@ -448,18 +459,8 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }      
-    }
+    }   
     
-    public void clearBalles() {
-        //clear every instances of balle in the database
-        try {
-            PreparedStatement requete = connection.prepareStatement("DELETE FROM balle");
-            requete.executeUpdate();            
-            requete.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }
 
  
