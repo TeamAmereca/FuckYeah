@@ -31,6 +31,8 @@ public class Paint extends JComponent {
     private Image sand;
     private Image balle;
     private Image balle2;
+    private Image sideamerica;
+    private Image frontamerica;
     
 
     public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength){
@@ -46,6 +48,8 @@ public class Paint extends JComponent {
             this.sand = ImageIO.read(new File("./src/Images/sable.png"));
             this.balle = ImageIO.read(new File("./src/Images/balle.png"));
             this.balle2 = ImageIO.read(new File("./src/Images/balle2.png"));
+            this.sideamerica = ImageIO.read(new File("./src/Images/sideamerica.png"));
+            this.frontamerica = ImageIO.read(new File("./src/Images/frontamerica.png"));
             paintTimer();
         } catch (IOException ex) {
             Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,23 +109,24 @@ public class Paint extends JComponent {
     }
     public void paintPlayer(Graphics g, Joueur joueur) {
         //Paint the player
-        g.setColor(Color.BLACK);
         //System.out.println("Player is at: ("+joueur.getOrientation()+","+joueur.getPositionX()+","+joueur.getPositionY()+")");
-        g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50);
-        g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50);
         g.setColor(Color.RED);
         if(joueur.getOrientation().equals("Droite")) {
-            g.drawRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 10, 10);
-            g.fillRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 10, 10);
+            g.drawImage(sideamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+//            g.drawRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 10, 10);
+//            g.fillRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 10, 10);
         } else if(joueur.getOrientation().equals("Gauche")) {
-            g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 10, 10);
-            g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 10, 10);
+            g.drawImage(sideamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
+//            g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 10, 10);
+//            g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 10, 10);
         } else if(joueur.getOrientation().equals("Haut")) {
-            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 10, 10);
-            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 10, 10);
+            g.drawImage(frontamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+//            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 10, 10);
+//            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 10, 10);
         } else if(joueur.getOrientation().equals("Bas")) {
-            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
-            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
+            g.drawImage(frontamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
+//            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
+//            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
         }
     }
     public void paintBalles(Graphics g) {
@@ -140,7 +145,6 @@ public class Paint extends JComponent {
 //        g.drawRect(x*blockLength, y*blockLength, 50, 50);
 //        g.fillRect(x*blockLength, y*blockLength, 50, 50);
 //        g.setColor(Color.RED);
-        AffineTransform r = new AffineTransform();
         if(o.equals("Droite")) {
             g.drawImage(balle, x*50 + 50, y*50, -50, 50, this);
         } else if(o.equals("Gauche")) {
