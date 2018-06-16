@@ -621,16 +621,17 @@ public class Joueur {
         }
     }
     
-    public void bonusVitesse(){
+    public void bonusVitesse(){ // bonus 1
         vitesse+=0.2;
     }
     
-    public void bonusTeteChercheuse(){
+    public void bonusTeteChercheuse(){ // bonus 2
         arme = "Gun";
     }
     
-    public void bonusVie(){
-        pv+=30;
+    public void bonusVie(){ // bonus 3
+        this.modifierPv(this.getPv() + 30);
+        
     }
     
 }
