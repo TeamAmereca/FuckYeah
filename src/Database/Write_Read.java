@@ -190,6 +190,7 @@ public class Write_Read {
                 this.map = new Map(1, connection);//create a new map
                 map.nouvelleMap();//clear the database and send the actual one to the database
                 this.players.get(0).modifierPv(50);//the last player sets his pv to 100, meaning that the map and player's positions have been set
+                clearBalles();//clear every instances of balle in the database
                 boolean everyoneReady = false;              
                 while(!everyoneReady){
                     //if everyone is ready, meaning that all other player has set his pv to 100
@@ -447,7 +448,18 @@ public class Write_Read {
         } catch (SQLException ex) {
             Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
         }      
-}
+    }
+    
+    public void clearBalles() {
+        //clear every instances of balle in the database
+        try {
+            PreparedStatement requete = connection.prepareStatement("DELETE FROM balle");
+            requete.executeUpdate();            
+            requete.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Write_Read.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
 
  
