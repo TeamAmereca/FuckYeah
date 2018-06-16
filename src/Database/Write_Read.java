@@ -1,9 +1,7 @@
 package Database;
 
-import Bonus.Bonus;
+import Map.*;
 import Joueur.Joueur;
-import Map.Bloc;
-import Map.Map;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

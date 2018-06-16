@@ -1,4 +1,4 @@
-package Bonus;
+package Map;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

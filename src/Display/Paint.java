@@ -1,6 +1,6 @@
 package Display;
 
-import Bonus.Bonus;
+import Map.Bonus;
 import Database.Write_Read;
 import Joueur.Joueur;
 import Map.Bloc;
@@ -8,7 +8,6 @@ import Map.Bloc;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

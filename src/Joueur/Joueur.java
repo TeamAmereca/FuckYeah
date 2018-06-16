@@ -1,7 +1,7 @@
 package Joueur;
 
 import Balle.Balle;
-import Bonus.Bonus;
+import Map.Bonus;
 import Display.DisplayBody;
 
 import java.awt.event.KeyEvent;
@@ -37,7 +37,7 @@ public class Joueur {
         if ("America".equals(nation)){
             arme = "M16";
         } else if ("Terrorist".equals(nation)){
-            arme = "Gun";
+            arme = "AK47";
         }
         pv = 0;
         vitesse = 1; //joueur se déplace case par case par défaut
@@ -56,7 +56,7 @@ public class Joueur {
         if ("America".equals(nation)){
             arme = "M16";
         } else if ("Terrorist".equals(nation)){
-            arme = "Gun";
+            arme = "AK47";
         }
         this.pv = pv;
         vitesse = 1; //joueur se déplace case par case par défaut

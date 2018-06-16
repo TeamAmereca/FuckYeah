@@ -1,4 +1,4 @@
-package Bonus;
+package Map;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
