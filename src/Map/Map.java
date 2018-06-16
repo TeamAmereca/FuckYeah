@@ -112,7 +112,7 @@ public class Map {
             this.listeBloc.add(new Bloc(15, 10, true));
             
             //création bonus
-            new Bonus(1,1,1,connexion).creerBonusSQL();
+            new Bonus(8,10,1,connexion).creerBonusSQL();
             
     	}
     }
