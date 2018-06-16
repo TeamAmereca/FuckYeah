@@ -37,7 +37,7 @@ public class Joueur {
         if ("America".equals(nation)){
             arme = "M16";
         } else if ("Terrorist".equals(nation)){
-            arme = "AK47";
+            arme = "Gun";
         }
         pv = 0;
         vitesse = 1; //joueur se déplace case par case par défaut
@@ -56,7 +56,7 @@ public class Joueur {
         if ("America".equals(nation)){
             arme = "M16";
         } else if ("Terrorist".equals(nation)){
-            arme = "AK47";
+            arme = "Gun";
         }
         this.pv = pv;
         vitesse = 1; //joueur se déplace case par case par défaut
