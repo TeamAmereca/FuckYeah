@@ -1,6 +1,6 @@
 package Database;
 
-import Bonus.Bonus;
+import Map.Bonus;
 import Joueur.Joueur;
 import Map.Bloc;
 import Map.Map;

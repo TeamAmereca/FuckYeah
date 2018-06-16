@@ -1,7 +1,7 @@
 package Joueur;
 
 import Balle.Balle;
-import Bonus.Bonus;
+import Map.Bonus;
 import Display.DisplayBody;
 
 import java.awt.event.KeyEvent;
