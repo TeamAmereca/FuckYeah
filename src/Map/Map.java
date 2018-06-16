@@ -49,7 +49,7 @@ public class Map {
         }
     }
     
-    public Map(int forme, Connection connexion) {// forme = 0 : carte simple
+    public Map(int forme, Connection connexion) throws SQLException {// forme = 0 : carte simple
         this.connexion = connexion;
     	this.nbCase_X = 20;
     	this.nbCase_Y = 13;
@@ -74,6 +74,7 @@ public class Map {
             for(int i = 1; i<12; i++){
                 this.listeBloc.add(new Bloc(18, i, false));
             }
+            // création bloc cassables et incassables
             this.listeBloc.add(new Bloc(10, 2, false));
             this.listeBloc.add(new Bloc(14, 2, false));
             this.listeBloc.add(new Bloc(5, 3, false));
@@ -110,8 +111,8 @@ public class Map {
             this.listeBloc.add(new Bloc(12, 10, true));
             this.listeBloc.add(new Bloc(15, 10, true));
             
-
-            
+            //création bonus
+            new Bonus(1,1,1,connexion).creerBonusSQL();
             
     	}
     }
