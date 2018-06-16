@@ -63,6 +63,7 @@ public class WelcomeWindow extends JFrame{
     @Override
     public void dispose() {
         super.dispose(); //To change body of generated methods, choose Tools | Templates.
+        soundEffect.stop();
         centralPanel.close();
     }
     

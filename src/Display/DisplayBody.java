@@ -167,7 +167,7 @@ public class DisplayBody extends JPanel{
 }
     public void waitingRoom() {
         // Create a waiting room before launching a party   
-        frame.getSoundEffect().stop();
+        frame.getSoundEffect().stopSoundEffect();
         centralPanel.removeAll();
         model = new DefaultTableModel();
         model.addColumn("pseudo");
