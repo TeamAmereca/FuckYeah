@@ -97,7 +97,7 @@ public class Write_Read {
                 this.ballesX.add(positionx);
                 this.ballesY.add(positiony);
                 this.ballesO.add(orientation);
-                this.ballesT.add(type);
+                //this.ballesT.add(type);
             }       
             requete.close();            
         } catch (SQLException ex) {
