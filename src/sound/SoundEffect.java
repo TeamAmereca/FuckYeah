@@ -1,7 +1,6 @@
 package sound;
 
 import java.io.File;
-import javafx.util.Duration;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -67,8 +66,8 @@ public class SoundEffect{
     public void stop() {
         try{
             //Stop every track
-            mediaPlayerSoundEffect.stop();
             mediaPlayerBackGroundMusic.stop();
+            mediaPlayerSoundEffect.stop();            
         }catch(java.lang.NullPointerException e){
             System.out.println("No track is playing: ");
         }
