@@ -48,8 +48,6 @@ public class DisplayBody extends JPanel{
     public static final int GO_BUTTON_WIDTH = 400;
     public static final int TEXT_FIELD_HEIGHT = 20;
     public static final int TEXT_FIELD_WIDTH = 200;
-    public static final int GIF_HEIGHT = 300;
-    public static final int GIF_WIDTH = 500;
     
     private int blockLength = 50;
     private int blockXNumber = 20;
@@ -85,8 +83,7 @@ public class DisplayBody extends JPanel{
         addButton(); 
     }
     
-    public void addButton() {
-        label.removeAll();
+    public void addButton() {        
         //Add multifunctionnale button on this panel
         goButton = new JButton();
         goButton.setText("Play!");
@@ -102,10 +99,12 @@ public class DisplayBody extends JPanel{
     ActionListener jButtonActionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            centralPanel.removeAll();
+            centralPanel.repaint();
             JButton button = (JButton) e.getSource();
-            if(button.getText() == "Play!") {
+            if("Play!".equals(button.getText())) {
                 signUp();
-            } else if(button.getText() == "Connect To The Server!") {
+            } else if("Connect To The Server!".equals(button.getText())) {
                 try {
                     database.createMainPlayer(text_pseudo.getText(), (String) boxNations.getSelectedItem());
                     waitingRoom();
@@ -118,7 +117,7 @@ public class DisplayBody extends JPanel{
                         exception.printStackTrace();
                     }
                 }
-            } else if(button.getText() == "Ready!") {                
+            } else if("Ready!".equals(button.getText())) {                
                 waitGameBegins();
             }
         }
@@ -131,10 +130,15 @@ public class DisplayBody extends JPanel{
             String selectedNation = (String) boxNations.getSelectedItem();//get the selected item
             ImageIcon icon = new ImageIcon(getClass().getResource("/gif/"+selectedNation+".gif"));
             label.setIcon(icon);
+            int gifWidth = icon.getIconWidth();
+            int gitHeight = icon.getIconHeight();
+            label.setBounds((int)(panelWidth-gifWidth)/2,(int)panelHeight*8/24,gifWidth,gitHeight);
             frame.getSoundEffect().play("player "+selectedNation);
         }
     };
     public void signUp() {
+        int MARGIN = 33,
+            SECTION_GAP = 43;
         //Create input fields in order to sign in as a player
         JLabel label_pseudo = new JLabel("Pseudo");
         JLabel label_nation = new JLabel("Nation");
@@ -142,6 +146,7 @@ public class DisplayBody extends JPanel{
         text_pseudo = new TextField(20);
         boxNations  = new JComboBox(new String[]{ "America", "Terrorist" });
         boxNations.addActionListener(comboBoxActionListener);
+        boxNations.setSelectedIndex(0);
         boxnumberOfPlayers  = new JComboBox(new Integer [] {1,2,3,4});
         boxnumberOfPlayers.setSelectedIndex(1);
         centralPanel.add(label_pseudo);
@@ -152,25 +157,20 @@ public class DisplayBody extends JPanel{
         centralPanel.add(boxNations);
 
         int labelPositionX = (int) (panelWidth-TEXT_FIELD_WIDTH)/2;
-        label_pseudo.setBounds(labelPositionX,(int)panelHeight*3/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
-        text_pseudo.setBounds(labelPositionX,(int)panelHeight*4/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
-        label_nation.setBounds(labelPositionX,(int)panelHeight*6/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
-        boxNations.setBounds(labelPositionX,(int)panelHeight*7/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);        
-        label_numberOfPlayers.setBounds(labelPositionX,(int)panelHeight*9/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
-        boxnumberOfPlayers.setBounds(labelPositionX,(int)panelHeight*10/24,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        label_pseudo.setBounds(labelPositionX,MARGIN,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        text_pseudo.setBounds(labelPositionX,MARGIN+TEXT_FIELD_HEIGHT,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        label_nation.setBounds(labelPositionX,MARGIN+TEXT_FIELD_HEIGHT+SECTION_GAP,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        boxNations.setBounds(labelPositionX,MARGIN+2*TEXT_FIELD_HEIGHT+SECTION_GAP,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);        
+        label_numberOfPlayers.setBounds(labelPositionX,MARGIN+2*TEXT_FIELD_HEIGHT+2*SECTION_GAP,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
+        boxnumberOfPlayers.setBounds(labelPositionX,MARGIN+3*TEXT_FIELD_HEIGHT+2*SECTION_GAP,TEXT_FIELD_WIDTH,TEXT_FIELD_HEIGHT);
         
-        // add label for gif
-        label.setBounds((int)(panelWidth-GIF_WIDTH)/2,(int)panelHeight*10/24,GIF_WIDTH,GIF_HEIGHT);
-        centralPanel.add(label);
-        
-        boxNations.setSelectedIndex(0);
+        centralPanel.add(label);// add label for gif
 
         goButton.setText("Connect To The Server!");
 }
     public void waitingRoom() {
         // Create a waiting room before launching a party   
         frame.getSoundEffect().stopSoundEffect();
-        centralPanel.removeAll();
         model = new DefaultTableModel();
         model.addColumn("pseudo");
         model.addColumn("nation");

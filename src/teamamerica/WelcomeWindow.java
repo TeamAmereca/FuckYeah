@@ -42,7 +42,7 @@ public class WelcomeWindow extends JFrame{
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        addKeyListener0();//add keylistener
+        this.addKeyListener(frameKeyListener);//add keylistener
         
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -51,20 +51,12 @@ public class WelcomeWindow extends JFrame{
         setLayout(null);
         setVisible(true);
     }
-    
-    public void addKeyListener0(){
-        this.addKeyListener(frameKeyListener);
-    }
-    
-    public void removeKeyListener0(){
-        this.removeKeyListener(frameKeyListener);
-    }
 
     @Override
     public void dispose() {
-        super.dispose(); //To change body of generated methods, choose Tools | Templates.
         soundEffect.stop();
         centralPanel.close();
+        super.dispose();
     }
     
     class FrameKeyListener implements KeyListener{        
