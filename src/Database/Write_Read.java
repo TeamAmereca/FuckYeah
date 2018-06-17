@@ -85,6 +85,7 @@ public class Write_Read {
             this.ballesX = new ArrayList<Integer>();
             this.ballesY = new ArrayList<Integer>();
             this.ballesO = new ArrayList<String>();
+            this.ballesT = new ArrayList<String>();
             PreparedStatement requete = connection.prepareStatement("SELECT * FROM balle");
             ResultSet resultat = requete.executeQuery();
             while (resultat.next()) {
@@ -97,7 +98,7 @@ public class Write_Read {
                 this.ballesX.add(positionx);
                 this.ballesY.add(positiony);
                 this.ballesO.add(orientation);
-                //this.ballesT.add(type);
+                this.ballesT.add(type);
             }       
             requete.close();            
         } catch (SQLException ex) {

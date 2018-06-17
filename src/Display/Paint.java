@@ -16,6 +16,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import teamamerica.WelcomeWindow;
 
@@ -34,6 +35,8 @@ public class Paint extends JComponent {
     private Image tetechercheuseside;
     private Image sideamerica;
     private Image frontamerica;
+    private Image bonus;
+    private Image gif;
     
 
     public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength){
@@ -53,6 +56,8 @@ public class Paint extends JComponent {
             this.frontamerica = ImageIO.read(new File("./src/Images/frontamerica.png"));
             this.tetechercheusefront = ImageIO.read(new File("./src/Images/tetechercheusefront.png"));
             this.tetechercheuseside = ImageIO.read(new File("./src/Images/tetechercheuseside.png"));
+            this.bonus = ImageIO.read(new File("./src/Images/bonus.png"));
+            this.gif = ImageIO.read(new File("./gif/america.gif"));
             paintTimer();
         } catch (IOException ex) {
             Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,8 +70,8 @@ public class Paint extends JComponent {
         //Here where we paint the players and the map
         //It is refreshed to every changes
         super.paintComponent(g);
-        
         //Paint main player
+        g.drawImage(gif, 240, 240, this);
         paintMap(g);
         paintPlayers(g);
         paintBalles(g);
@@ -82,9 +87,8 @@ public class Paint extends JComponent {
         }
         for(int i=0; i<database.getMap().getListeBonus().size(); i++){          
             //Draw bonus
-            Bonus bonus = database.getMap().getListeBonus().get(i);
-            g.setColor(Color.YELLOW);
-            g.fillRect(bonus.getPositionX()*blockLength, bonus.getPositionY()*blockLength, 50, 50);
+            Bonus b = database.getMap().getListeBonus().get(i);
+            g.drawImage(bonus, b.getPositionX()*blockLength, b.getPositionY()*blockLength, this);
         }
     }
     public void paintBloc(Graphics g, Bloc b){           
@@ -116,20 +120,20 @@ public class Paint extends JComponent {
         g.setColor(Color.RED);
         if(joueur.getOrientation().equals("Droite")) {
             g.drawImage(sideamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
-//            g.drawRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 10, 10);
-//            g.fillRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 10, 10);
+            g.drawRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 3, 3);
+            g.fillRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 3, 3);
         } else if(joueur.getOrientation().equals("Gauche")) {
             g.drawImage(sideamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
-//            g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 10, 10);
-//            g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 10, 10);
+            g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 3, 3);
+            g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 3, 3);
         } else if(joueur.getOrientation().equals("Haut")) {
             g.drawImage(frontamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
-//            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 10, 10);
-//            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 10, 10);
+            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 3, 3);
+            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 3, 3);
         } else if(joueur.getOrientation().equals("Bas")) {
             g.drawImage(frontamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
-//            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
-//            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 10, 10);
+            g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 3, 3);
+            g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 3, 3);
         }
     }
     public void paintBalles(Graphics g) {
@@ -137,62 +141,52 @@ public class Paint extends JComponent {
         ArrayList<Integer> ballesX = database.getBallesX();
         ArrayList<Integer> ballesY = database.getBallesY();
         ArrayList<String> ballesO =database.getBallesO();
-        //ArrayList<String> ballesT = database.getBallesT();
+        ArrayList<String> ballesT = database.getBallesT();
         for(int i=0;i<ballesX.size();i++){
-            paintBalle(g, ballesX.get(i), ballesY.get(i), ballesO.get(i));
+            paintBalle(g, ballesX.get(i), ballesY.get(i), ballesO.get(i), ballesT.get(i));
         }
     }
-    public void paintBalle(Graphics g, int x, int y, String o) {
-        //Paint the balle
-        //System.out.println("Balle est à ("+x+","+y+") orientée vers "+o);
-//        g.setColor(Color.YELLOW);
-//        g.drawRect(x*blockLength, y*blockLength, 50, 50);
-//        g.fillRect(x*blockLength, y*blockLength, 50, 50);
-//        g.setColor(Color.RED);
+    public void paintBalle(Graphics g, int x, int y, String o, String t) {
         if(o.equals("Droite")) {
-            g.drawImage(tetechercheuseside, x*50 + 50, y*50, -50, 50, this);
-//            if(t.equals("Gun")){
-//                g.drawImage(tetechercheuseside, x*50 + 50, y*50, -50, 50, this);
-//            }
-//            else if(t.equals("AK47")){
-//                g.drawImage(balle, x*50 + 50, y*50, -50, 50, this);
-//            }
-//            else if(t.equals("M16")){
-//                g.drawImage(balle, x*50 + 50, y*50, -50, 50, this);
-//            }
+            if(t.equals("Gun")){
+                g.drawImage(tetechercheuseside, x*50 + 50, y*50, -50, 50, this);
+            }
+            else if(t.equals("AK47")){
+                g.drawImage(balle, x*50 + 50, y*50, -50, 50, this);
+            }
+            else if(t.equals("M16")){
+                g.drawImage(balle, x*50 + 50, y*50, -50, 50, this);
+            }
         } else if(o.equals("Gauche")) {
-            g.drawImage(tetechercheuseside, x*50, y*50, this);
-//            if(t.equals("Gun")){
-//                g.drawImage(tetechercheuseside, x*50, y*50, this);
-//            }
-//            else if(t.equals("AK47")){
-//                g.drawImage(balle, x*50, y*50, this);
-//            }
-//            else if(t.equals("M16")){
-//                g.drawImage(balle, x*50, y*50, this);
-//            }
+            if(t.equals("Gun")){
+                g.drawImage(tetechercheuseside, x*50, y*50, this);
+            }
+            else if(t.equals("AK47")){
+                g.drawImage(balle, x*50, y*50, this);
+            }
+            else if(t.equals("M16")){
+                g.drawImage(balle, x*50, y*50, this);
+            }
         } else if(o.equals("Haut")) {
-            g.drawImage(tetechercheusefront, x*50, y*50, 50, 50, this);
-//            if(t.equals("Gun")){
-//                g.drawImage(tetechercheusefront, x*50, y*50, 50, 50, this);
-//            }
-//            else if(t.equals("AK47")){
-//                g.drawImage(balle2, x*50, y*50, 50, 50, this);
-//            }
-//            else if(t.equals("M16")){
-//                g.drawImage(balle2, x*50, y*50, 50, 50, this);
-//            }
+            if(t.equals("Gun")){
+                g.drawImage(tetechercheusefront, x*50, y*50, 50, 50, this);
+            }
+            else if(t.equals("AK47")){
+                g.drawImage(balle2, x*50, y*50, 50, 50, this);
+            }
+            else if(t.equals("M16")){
+                g.drawImage(balle2, x*50, y*50, 50, 50, this);
+            }
         } else if(o.equals("Bas")) {
-           g.drawImage(tetechercheusefront, x*50, y*50+50, 50, -50,this);
-//            if(t.equals("Gun")){
-//                g.drawImage(tetechercheusefront, x*50, y*50+50, 50, -50,this);
-//            }
-//            else if(t.equals("AK47")){
-//                g.drawImage(balle2, x*50, y*50+50, 50, -50,this);
-//            }
-//            else if(t.equals("M16")){
-//                g.drawImage(balle2, x*50, y*50+50, 50, -50,this);
-//            }
+            if(t.equals("Gun")){
+                g.drawImage(tetechercheusefront, x*50, y*50+50, 50, -50,this);
+            }
+            else if(t.equals("AK47")){
+                g.drawImage(balle2, x*50, y*50+50, 50, -50,this);
+            }
+            else if(t.equals("M16")){
+                g.drawImage(balle2, x*50, y*50+50, 50, -50,this);
+            }
         } 
     }
     
