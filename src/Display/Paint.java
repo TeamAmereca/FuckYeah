@@ -36,7 +36,7 @@ public class Paint extends JComponent {
     private Image sideamerica;
     private Image frontamerica;
     private Image bonus;
-    private Image gif;
+    private Image terroriste;
     
 
     public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength){
@@ -57,7 +57,7 @@ public class Paint extends JComponent {
             this.tetechercheusefront = ImageIO.read(new File("./src/Images/tetechercheusefront.png"));
             this.tetechercheuseside = ImageIO.read(new File("./src/Images/tetechercheuseside.png"));
             this.bonus = ImageIO.read(new File("./src/Images/bonus.png"));
-            this.gif = ImageIO.read(new File("./gif/america.gif"));
+            this.terroriste = ImageIO.read(new File ("./src/Images/terroriste.png"));
             paintTimer();
         } catch (IOException ex) {
             Logger.getLogger(Paint.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,7 +71,6 @@ public class Paint extends JComponent {
         //It is refreshed to every changes
         super.paintComponent(g);
         //Paint main player
-        g.drawImage(gif, 240, 240, this);
         paintMap(g);
         paintPlayers(g);
         paintBalles(g);
@@ -119,19 +118,39 @@ public class Paint extends JComponent {
         //System.out.println("Player is at: ("+joueur.getOrientation()+","+joueur.getPositionX()+","+joueur.getPositionY()+")");
         g.setColor(Color.RED);
         if(joueur.getOrientation().equals("Droite")) {
-            g.drawImage(sideamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+                if(joueur.getNation() == "America"){
+                    g.drawImage(sideamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+                }
+                else if(joueur.getNation() == "Terrorist"){
+                    g.drawImage(terroriste, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+                }
             g.drawRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 3, 3);
             g.fillRect(joueur.getPositionX()*blockLength+40, joueur.getPositionY()*blockLength+20, 3, 3);
         } else if(joueur.getOrientation().equals("Gauche")) {
-            g.drawImage(sideamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
+                if(joueur.getNation() == "America"){
+                    g.drawImage(sideamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
+                }
+                else if(joueur.getNation() == "Terrorist"){
+                    g.drawImage(terroriste, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
+                }
             g.drawRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 3, 3);
             g.fillRect(joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength+20, 3, 3);
         } else if(joueur.getOrientation().equals("Haut")) {
-            g.drawImage(frontamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+                if(joueur.getNation() == "America"){
+                    g.drawImage(frontamerica, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+                }
+                else if(joueur.getNation() == "Terrorist"){
+                    g.drawImage(terroriste, joueur.getPositionX()*blockLength, joueur.getPositionY()*blockLength, 50, 50, this);
+                }
             g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 3, 3);
             g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength, 3, 3);
         } else if(joueur.getOrientation().equals("Bas")) {
-            g.drawImage(frontamerica, joueur.getPositionX()*blockLength +50, joueur.getPositionY()*blockLength, -50, 50, this);
+                if(joueur.getNation() == "America"){
+                    g.drawImage(frontamerica, joueur.getPositionX()*blockLength+50, joueur.getPositionY()*blockLength, -50, 50, this);
+                }
+                else if(joueur.getNation() == "Terrorist"){
+                    g.drawImage(terroriste, joueur.getPositionX()*blockLength+50, joueur.getPositionY()*blockLength, -50, 50, this);
+                }
             g.drawRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 3, 3);
             g.fillRect(joueur.getPositionX()*blockLength+20, joueur.getPositionY()*blockLength+40, 3, 3);
         }
