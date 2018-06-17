@@ -101,7 +101,7 @@ public class Paint extends JComponent {
     public void paintPlayers(Graphics g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
-        for(int i=0;i<players.size();i++){       
+        for(int i=0;i<players.size();i++){ 
             if(players.get(i).getPv()>0){
                 //the player is still alive, so we repaint the player
                 paintPlayer(g, players.get(i));
