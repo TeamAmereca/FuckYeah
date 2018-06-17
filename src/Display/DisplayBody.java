@@ -58,6 +58,8 @@ public class DisplayBody extends JPanel{
     private Write_Read database;
     private Paint draw;
     
+    private JLabel label_end = new JLabel();
+    
     public DisplayBody(WelcomeWindow frame, int screenWidth, int screenHeight) {
         this.frame = frame;
         //Set the height, the width, the position of this panel
@@ -225,6 +227,19 @@ public class DisplayBody extends JPanel{
         CountdownDisplay countdownDisplay = new CountdownDisplay(frame,4);
         countdownDisplay.setBounds(0, 0, panelWidth, panelHeight);
         this.add(countdownDisplay);//adds countdown timer
+    }
+    
+        public void display_end_game(){
+        this.removeAll();
+        this.revalidate();
+        this.repaint();
+        ImageIcon icon2 = new ImageIcon(getClass().getResource("/gif/Explosion_mort_final.gif"));
+        //ImageIcon icon = new ImageIcon(getClass().getResource("/Images/Team America.jpg"));
+        label_end = new JLabel();
+        label_end.setIcon(icon2);
+        label_end.setBounds(450,200,500,288);
+        this.add(label_end);
+        frame.getSoundEffect().play("explosion perso pour gif");
     }
 
     public Write_Read getDatabase() {
