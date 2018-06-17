@@ -96,6 +96,11 @@ public class Balle implements ActionListener {
                             if (resultat2.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Droite";
+                                PreparedStatement requete17 = connexion.prepareStatement("UPDATE balle SET orientation = ? WHERE numero = ? "); 
+                                requete17.setString(1, "Droite");
+                                requete17.setInt(2, this.numeroBalle);
+                                requete17.executeUpdate();
+                                requete17.close();
                                 i=50;
                                 }}
                     else if (i%4==1){
@@ -107,6 +112,11 @@ public class Balle implements ActionListener {
                             if (resultat3.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Bas";
+                                PreparedStatement requete18 = connexion.prepareStatement("UPDATE balle SET orientation = ? WHERE numero = ? "); 
+                                requete18.setString(1, "Bas");
+                                requete18.setInt(2, this.numeroBalle);
+                                requete18.executeUpdate();
+                                requete18.close();
                                 i=50;
                                 }
                          }
@@ -119,6 +129,11 @@ public class Balle implements ActionListener {
                             if (resultat3.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Haut";
+                                PreparedStatement requete19 = connexion.prepareStatement("UPDATE balle SET orientation = ? WHERE numero = ? "); 
+                                requete19.setString(1, "Haut");
+                                requete19.setInt(2, this.numeroBalle);
+                                requete19.executeUpdate();
+                                requete19.close();
                                 i=50;
                                 }
                          }
@@ -131,6 +146,11 @@ public class Balle implements ActionListener {
                             if (resultat3.next()==true) {
                                 System.out.println("joueur trouvé");
                                 this.orientationBalle="Gauche";
+                                PreparedStatement requete20 = connexion.prepareStatement("UPDATE balle SET orientation = ? WHERE numero = ? "); 
+                                requete20.setString(1, "Gauche");
+                                requete20.setInt(2, this.numeroBalle);
+                                requete20.executeUpdate();
+                                requete20.close();
                                 i=50;
                                 }
                          }

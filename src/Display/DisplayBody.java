@@ -49,7 +49,7 @@ public class DisplayBody extends JPanel{
     public static final int TEXT_FIELD_HEIGHT = 20;
     public static final int TEXT_FIELD_WIDTH = 200;
     public static final int GIF_HEIGHT = 300;
-    public static final int GIF_WIDTH = 300;
+    public static final int GIF_WIDTH = 500;
     
     private int blockLength = 50;
     private int blockXNumber = 20;

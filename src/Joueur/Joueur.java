@@ -272,8 +272,12 @@ public class Joueur {
                                 if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
                                     int type = listeBonus.get(i).getType();
                                     bonus.deleteBonus();
-                                    this.bonus(type);
-                                }
+                                    
+                                    if (type==1){
+                                        this.arme="Gun";
+                                        }
+                                    }
+                                
                             }
                             
                             TimerTask timerTask = new TimerTask() {
@@ -355,6 +359,10 @@ public class Joueur {
                                     int type = listeBonus.get(i).getType();
                                     bonus.deleteBonus();
                                     this.bonus(type);
+                                    if (type==1){
+                                        this.arme="Gun";
+                                        
+                                    }
                                 }
                             }
                             
