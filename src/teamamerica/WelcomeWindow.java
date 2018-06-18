@@ -32,10 +32,13 @@ public class WelcomeWindow extends JFrame{
         ///////////////////////////////
         //  ddding DisplayHeader on frame  //
         //////////////////////////////
-        displayHeader = new DisplayHeader(screenWidth,screenHeight);
+        int panelPosition =Math.max((int) screenHeight/10,160);
+        displayHeader = new DisplayHeader(screenWidth, panelPosition);
+        displayHeader.setBounds(0, 0, screenWidth, panelPosition);
         add(displayHeader);
         //Initialize centralPanel
-        centralPanel = new DisplayBody(this,screenWidth, screenHeight);
+        centralPanel = new DisplayBody(this,screenWidth, screenHeight-panelPosition);
+        centralPanel.setBounds(0, panelPosition, screenWidth, screenHeight-panelPosition);
         add(centralPanel);
         //
         setExtendedState(JFrame.MAXIMIZED_BOTH);

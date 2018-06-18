@@ -2,7 +2,6 @@ package Display;
 
 import Joueur.Joueur;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -12,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -27,14 +25,13 @@ public class DisplayHeader extends JPanel{
     
     public DisplayHeader(int screenWidth, int screenHeight) {
         //Set the height, the width, the position of this panel
-        panelHeight = (int) screenHeight/10;
-        panelWidth = screenWidth;
-        this.setBackground(Color.yellow);
-        this.setSize(panelWidth,panelHeight);
-        this.setLocation(0,0);
+        this.panelHeight = screenHeight;
+        this.panelWidth = screenWidth;
+        this.setBackground(new Color(new Float(0.953), new Float(0.949), new Float(0.269), new Float(0.67)));
         this.setLayout(null);
     }
     
+    @Override
     protected void paintComponent(Graphics g) {
         try {
             super.paintComponent(g);

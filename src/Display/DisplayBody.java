@@ -59,12 +59,9 @@ public class DisplayBody extends JPanel{
     private JLabel label_end = new JLabel();
     
     public DisplayBody(WelcomeWindow frame, int screenWidth, int screenHeight) {
-        this.frame = frame;
-        //Set the height, the width, the position of this panel
-        panelHeight = (int) screenHeight*9/10;
-        panelWidth = screenWidth;
-        this.setSize(panelWidth,panelHeight);
-        this.setLocation(0,(int) panelHeight/10);
+        this.frame = frame;        
+        this.panelHeight = screenHeight;//Set the height of this panel
+        this.panelWidth = screenWidth;//Set the width of this panel        
         this.setLayout(null);
         
         centralPanel = new JPanel();
