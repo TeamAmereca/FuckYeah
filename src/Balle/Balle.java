@@ -58,9 +58,9 @@ public class Balle implements ActionListener {
             else if (this.typeBalle == "Gun"){
                 this.degats=10;
                 this.portee=0;
-                this.vitesse=1.2;}
+                this.vitesse=1;}
             else {System.out.println("Balle non référencée");}
-            this.timer = new Timer(200*this.vitesse, this);
+            this.timer = new Timer(150*this.vitesse, this);
             this.connexion = connexion;
             timer.start();
         } catch (SQLException ex) {
