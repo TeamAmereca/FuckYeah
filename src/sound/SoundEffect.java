@@ -23,7 +23,7 @@ public class SoundEffect{
         mediaPlayerBackGroundMusic = new MediaPlayer(new Media(new File("./build/classes/sound/"+BACKGROUND_MUSIC+".mp3").toURI().toString()));
         mediaPlayerBackGroundMusic.setVolume(0.8);
         mediaPlayerBackGroundMusic.play();
-        mediaPlayerBackGroundMusic.setAutoPlay(true);       
+        mediaPlayerBackGroundMusic.setAutoPlay(true);    
         
     }
     

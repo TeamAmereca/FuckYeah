@@ -111,8 +111,6 @@ public class Paint extends JComponent {
                     this.welcomeWindow.setMovePlayer(false);//remove the player's ability to move
                     this.welcomeWindow.getCentralPanel().display_end_game(); //display the ending picture
                     afficheImageDeMort = false;
-                }
-                else if(i==0){
                     this.welcomeWindow.setMovePlayer(false);//remove the player's ability to move
                 }
             }
