@@ -48,19 +48,19 @@ public class Balle implements ActionListener {
             }
             requete.close();
             if (this.typeBalle == "AK47"){
-                this.degats=100;
+                this.degats=50;
                 this.portee=0;
-                this.vitesse=100;}
+                this.vitesse=1;}
             else if (this.typeBalle == "M16"){
                 this.degats=50;
                 this.portee=0;
-                this.vitesse=100;}
+                this.vitesse=1;}
             else if (this.typeBalle == "Gun"){
                 this.degats=10;
                 this.portee=0;
-                this.vitesse=100;}
+                this.vitesse=1.2;}
             else {System.out.println("Balle non référencée");}
-            this.timer = new Timer(250 , this);
+            this.timer = new Timer(200*this.vitesse, this);
             this.connexion = connexion;
             timer.start();
         } catch (SQLException ex) {
