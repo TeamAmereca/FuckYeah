@@ -272,10 +272,8 @@ public class Joueur {
                                 if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
                                     int type = listeBonus.get(i).getType();
                                     bonus.deleteBonus();
+                                    this.bonus(type);
                                     
-                                    if (type==1){
-                                        this.arme="Gun";
-                                        }
                                     }
                                 
                             }
@@ -358,8 +356,7 @@ public class Joueur {
                                 if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
                                     int type = listeBonus.get(i).getType();
                                     bonus.deleteBonus();
-                                    if (type==1){
-                                        this.arme="Gun";
+                                    this.bonus(type);
                                         
                                     }
                                 }
@@ -629,7 +626,7 @@ public class Joueur {
     }
     
     public void bonusVitesse(){ // bonus 1
-        vitesse=5;
+        vitesse=1.7;
     }
     
     public void bonusTeteChercheuse(){ // bonus 2
@@ -637,7 +634,7 @@ public class Joueur {
     }
     
     public void bonusVie(){ // bonus 3
-        this.modifierPv(this.getPv() + 30);
+        this.modifierPv(this.getPv() + 50);
         
     }
     
