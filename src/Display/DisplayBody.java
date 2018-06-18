@@ -234,10 +234,11 @@ public class DisplayBody extends JPanel{
         this.revalidate();
         this.repaint();
         ImageIcon icon2 = new ImageIcon(getClass().getResource("/gif/Explosion_mort_final.gif"));
-        //ImageIcon icon = new ImageIcon(getClass().getResource("/Images/Team America.jpg"));
         label_end = new JLabel();
         label_end.setIcon(icon2);
-        label_end.setBounds(450,200,500,288);
+        int labelWidth = label_end.getWidth(),
+            labelHeight = label_end.getWidth();
+        label_end.setBounds((int)(panelWidth-labelWidth)/2,(int)(panelHeight-labelHeight)/2,labelWidth,labelHeight);
         this.add(label_end);
         frame.getSoundEffect().play("explosion perso pour gif");
     }
