@@ -116,9 +116,6 @@ public class Paint extends JComponent {
                 }
             }
         }
-        if(j==players.size()-1){
-            //tu as gagné
-        }
     }
     public void paintPlayer(Graphics g, Joueur joueur) {
         //Paint the player
