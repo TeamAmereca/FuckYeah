@@ -56,7 +56,7 @@ public class Balle implements ActionListener {
                 this.portee=0;
                 this.vitesse=1;}
             else if (this.typeBalle == "Gun"){
-                this.degats=10;
+                this.degats=20;
                 this.portee=0;
                 this.vitesse=1;}
             else {System.out.println("Balle non référencée");}
