@@ -113,9 +113,11 @@ public class Map {
             
             //création bonus
             //this.listeBonus.add(new Bonus(1,1,1,connexion));
-            //new Bonus(7,10,3,connexion).creerBonusSQL();
-            //new Bonus(7,11,2,connexion).creerBonusSQL();
-            new Bonus(7,10,1,connexion).creerBonusSQL();
+            new Bonus(9,6,2,connexion).creerBonusSQL();
+            new Bonus(9,2,1,connexion).creerBonusSQL();
+            new Bonus(9,11,1,connexion).creerBonusSQL();
+            new Bonus(1,11,3,connexion).creerBonusSQL();
+            new Bonus(17,1,3,connexion).creerBonusSQL();
             
     	}
     }
