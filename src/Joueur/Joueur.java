@@ -37,7 +37,7 @@ public class Joueur {
         if ("America".equals(nation)){
             arme = "M16";
         } else if ("Terrorist".equals(nation)){
-            arme = "Gun";
+            arme = "AK47";
         }
         pv = 0;
         vitesse = 1; //joueur se déplace case par case par défaut
@@ -56,7 +56,7 @@ public class Joueur {
         if ("America".equals(nation)){
             arme = "M16";
         } else if ("Terrorist".equals(nation)){
-            arme = "Gun";
+            arme = "AK47";
         }
         this.pv = pv;
         vitesse = 1; //joueur se déplace case par case par défaut
@@ -129,7 +129,7 @@ public class Joueur {
         if ("America".equals(nouvelleNation)){
             arme = "M16";
         } else if ("Terrorist".equals(nouvelleNation)){
-            arme = "Gun";
+            arme = "AK47";
         }
         try {
 
@@ -310,7 +310,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,100/vitesse); //empêche de se déplacer pendant 1s
+                            timer.schedule(timerTask,100/vitesse); //empêche de se déplacer pendant xx s
                             
                             System.out.println("Votre joueur est réorienté vers la Droite");
                             System.out.println("Fin du tour");
@@ -358,7 +358,6 @@ public class Joueur {
                                 if(bonus.getPositionX()==this.positionX && bonus.getPositionY()==this.positionY){
                                     int type = listeBonus.get(i).getType();
                                     bonus.deleteBonus();
-                                    this.bonus(type);
                                     if (type==1){
                                         this.arme="Gun";
                                         
@@ -374,7 +373,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,500/vitesse); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,500/vitesse); //empêche de se déplacer pendant xxms
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");
@@ -457,7 +456,7 @@ public class Joueur {
                                 }             
                             };             
                             Timer timer = new Timer();
-                            timer.schedule(timerTask,500/vitesse); //empêche de se déplacer pendant 2s
+                            timer.schedule(timerTask,300/vitesse); //empêche de se déplacer pendant 2s
                             
                             System.out.println("Fin du tour");
                             System.out.println("------------------------------------------");
