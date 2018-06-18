@@ -13,7 +13,7 @@ import javafx.scene.media.MediaPlayer;
  *      -the sound effect
  */
 public class SoundEffect{
-    private final String BACKGROUND_MUSIC = "Im So Ronery";
+    private final String BACKGROUND_MUSIC = "Fuck_Yeah";
     private final MediaPlayer mediaPlayerBackGroundMusic;
     private MediaPlayer mediaPlayerSoundEffect;
     public SoundEffect(){        
