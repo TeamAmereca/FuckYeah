@@ -3,7 +3,14 @@ package Display;
 import Joueur.Joueur;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,18 +29,20 @@ public class DisplayHeader extends JPanel{
         //Set the height, the width, the position of this panel
         panelHeight = (int) screenHeight/10;
         panelWidth = screenWidth;
+        this.setBackground(Color.yellow);
         this.setSize(panelWidth,panelHeight);
         this.setLocation(0,0);
         this.setLayout(null);
     }
     
-    public void addHeader(String text) {
-        //Add a title
-        JLabel headerLabel = new JLabel(text);
-        headerLabel.setBounds((int)(panelWidth/2)-150,0, 1000,100);
-        headerLabel.setForeground(Color.RED);
-        headerLabel.setFont(new Font("Serif", Font.PLAIN, 50));
-        add(headerLabel);
+    protected void paintComponent(Graphics g) {
+        try {
+            super.paintComponent(g);
+            Image titleImage = ImageIO.read(new File ("./src/Images/titre.png"));
+            g.drawImage(titleImage, (int)(panelWidth-titleImage.getWidth(this))/2, 0, this); // see javadoc for more info on the parameters            
+        } catch (IOException ex) {
+            Logger.getLogger(DisplayHeader.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void addHPbar(ArrayList<Joueur> players){        

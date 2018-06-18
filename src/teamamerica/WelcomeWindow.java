@@ -33,7 +33,6 @@ public class WelcomeWindow extends JFrame{
         //  ddding DisplayHeader on frame  //
         //////////////////////////////
         displayHeader = new DisplayHeader(screenWidth,screenHeight);
-        displayHeader.addHeader(GAME_NAME);
         add(displayHeader);
         //Initialize centralPanel
         centralPanel = new DisplayBody(this,screenWidth, screenHeight);
