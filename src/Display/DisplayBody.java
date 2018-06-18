@@ -79,8 +79,9 @@ public class DisplayBody extends JPanel{
         label.setBounds((int)(panelWidth-icon.getIconWidth())/2,(int)(panelHeight-icon.getIconHeight())/2,icon.getIconWidth(),icon.getIconHeight());
         label.setIcon(icon);
         centralPanel.add(label);
-            
-        addButton(); 
+        
+        addButton();     
+
     }
     
     public void addButton() {        
@@ -234,10 +235,9 @@ public class DisplayBody extends JPanel{
         this.revalidate();
         this.repaint();
         ImageIcon icon2 = new ImageIcon(getClass().getResource("/gif/Explosion_mort_final.gif"));
-        label_end = new JLabel();
-        label_end.setIcon(icon2);
-        int labelWidth = label_end.getWidth(),
-            labelHeight = label_end.getWidth();
+        label_end = new JLabel(icon2);
+        int labelWidth = icon2.getIconWidth(),
+            labelHeight = icon2.getIconHeight();
         label_end.setBounds((int)(panelWidth-labelWidth)/2,(int)(panelHeight-labelHeight)/2,labelWidth,labelHeight);
         this.add(label_end);
         frame.getSoundEffect().play("explosion perso pour gif");
