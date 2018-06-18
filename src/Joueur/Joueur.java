@@ -358,7 +358,7 @@ public class Joueur {
                                     bonus.deleteBonus();
                                     this.bonus(type);
                                         
-                                    }
+                                    
                                 }
                             }
                             
@@ -626,7 +626,7 @@ public class Joueur {
     }
     
     public void bonusVitesse(){ // bonus 1
-        vitesse=1.7;
+        vitesse=2;
     }
     
     public void bonusTeteChercheuse(){ // bonus 2
