@@ -38,7 +38,7 @@ public class HealthBarDisplay extends JPanel {
         //Configurate this JPanel
         setSize(COMPONENT_LENGTH+2*MARGIN,2*COMPONENT_HEIGHT+GAP_HEIGHT+2*MARGIN);
         setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-        setBackground(new Color(175,167,167));
+        setBackground(new Color(new Float(0.683), new Float(0.652), new Float(0.652), new Float(0.4)));
         setLayout(null);
         setVisible(true);
     }
@@ -48,7 +48,7 @@ public class HealthBarDisplay extends JPanel {
         super.paintComponent(g);
         g.setColor(new Color(72, 74, 69));
         g.drawRoundRect(MARGIN, COMPONENT_HEIGHT+GAP_HEIGHT, COMPONENT_LENGTH, COMPONENT_HEIGHT,5,5); //draws healthbar outline
-        g.setColor(new Color(new Float(0.96), new Float(0.27), new Float(0.27), new Float(Math.min(1, healthPoint/100))));
+        g.setColor(new Color(new Float(0.96), new Float(0.27), new Float(0.27), new Float(Math.min(1, healthPoint/100)*0.6+0.4)));
         g.fillRect(MARGIN, COMPONENT_HEIGHT+GAP_HEIGHT, (int)(healthPoint*COMPONENT_LENGTH/Math.max(100, healthPoint)), COMPONENT_HEIGHT); //draws health               
         g.setColor(new Color(173, 255, 47));
         g.drawString(healthPoint+"", MARGIN+3, COMPONENT_HEIGHT+GAP_HEIGHT+15);

@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -59,16 +60,13 @@ public class DisplayBody extends JPanel{
     private JLabel label_end = new JLabel();
     
     public DisplayBody(WelcomeWindow frame, int screenWidth, int screenHeight) {
-        this.frame = frame;
-        //Set the height, the width, the position of this panel
-        panelHeight = (int) screenHeight*9/10;
-        panelWidth = screenWidth;
-        this.setSize(panelWidth,panelHeight);
-        this.setLocation(0,(int) panelHeight/10);
+        this.frame = frame;        
+        this.panelHeight = screenHeight;//Set the height of this panel
+        this.panelWidth = screenWidth;//Set the width of this panel        
         this.setLayout(null);
         
         centralPanel = new JPanel();
-        centralPanel.setSize(panelWidth,(int) panelHeight*8/10);
+        centralPanel.setSize(panelWidth,panelHeight);
         centralPanel.setLocation(0,0);
         centralPanel.setLayout(null);
         add(centralPanel);
@@ -99,15 +97,15 @@ public class DisplayBody extends JPanel{
     
     ActionListener jButtonActionListener = new ActionListener() {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            centralPanel.removeAll();
-            centralPanel.repaint();
+        public void actionPerformed(ActionEvent e) {            
             JButton button = (JButton) e.getSource();
             if("Play!".equals(button.getText())) {
                 signUp();
             } else if("Connect To The Server!".equals(button.getText())) {
                 try {
                     database.createMainPlayer(text_pseudo.getText(), (String) boxNations.getSelectedItem());
+                    centralPanel.removeAll();
+                    centralPanel.repaint();
                     waitingRoom();
                 } catch(SQLException exception) {
                     if(exception.getErrorCode() == 1062) {
@@ -118,7 +116,7 @@ public class DisplayBody extends JPanel{
                         exception.printStackTrace();
                     }
                 }
-            } else if("Ready!".equals(button.getText())) {                
+            } else if("Ready!".equals(button.getText())) {            
                 waitGameBegins();
             }
         }
@@ -223,11 +221,11 @@ public class DisplayBody extends JPanel{
         int mapHeight = blockYNumber*blockLength;
         int mapWidth = blockXNumber*blockLength;
         draw.setSize(mapWidth, mapHeight);
-        draw.setLocation((int)(panelWidth-mapWidth)/2, (int)(panelHeight-mapHeight)/2);
-        this.add(draw);
+        draw.setLocation((int)(panelWidth-mapWidth)/2, Math.max((int)(panelHeight-mapHeight)/2,0));
+        this.add(draw, -1);
         CountdownDisplay countdownDisplay = new CountdownDisplay(frame,4);
-        countdownDisplay.setBounds(0, 0, panelWidth, panelHeight);
-        this.add(countdownDisplay);//adds countdown timer
+        countdownDisplay.setBounds((int)panelWidth/2-150, 100, panelWidth, panelHeight);
+        this.add(countdownDisplay, 0);//adds countdown timer
     }
     
         public void display_end_game(){
