@@ -116,8 +116,7 @@ public class Map {
             new Bonus(9,6,2,connexion).creerBonusSQL();
             new Bonus(9,2,1,connexion).creerBonusSQL();
             new Bonus(9,11,1,connexion).creerBonusSQL();
-            new Bonus(1,11,3,connexion).creerBonusSQL();
-            new Bonus(17,1,3,connexion).creerBonusSQL();
+
             
     	}
     }
