@@ -101,11 +101,13 @@ public class Paint extends JComponent {
     public void paintPlayers(Graphics g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
+        int j = 0;
         for(int i=0;i<players.size();i++){ 
             if(players.get(i).getPv()>0){
                 //the player is still alive, so we repaint the player
                 paintPlayer(g, players.get(i));
             }else{
+                j++;
                 //the player is dead, we don't repaint the player
                 if(i==0 && afficheImageDeMort){
                     this.welcomeWindow.setMovePlayer(false);//remove the player's ability to move
@@ -113,6 +115,9 @@ public class Paint extends JComponent {
                     afficheImageDeMort = false;
                 }
             }
+        }
+        if(j==players.size()-1){
+            //tu as gagné
         }
     }
     public void paintPlayer(Graphics g, Joueur joueur) {
