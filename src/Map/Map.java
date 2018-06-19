@@ -11,52 +11,21 @@ import java.sql.SQLException;
  * @author gmarino
  */
 public class Map {
-    private int nbCase_X;
-    private int nbCase_Y;
+    private int nbCase_X = 20;
+    private int nbCase_Y = 13;
     private ArrayList<Bloc> listeBloc;
     private ArrayList<Bonus> listeBonus;
     private Connection connexion;
     
 //Création de cartes
     
-    public Map(int X, int Y, Connection connexion){ //créer une carte aléatoire de taille x*y
-        this.connexion = connexion;
-        this.nbCase_X = X;
-        this.nbCase_Y = Y;
-        this.listeBloc = new ArrayList<>();
-        this.listeBonus = new ArrayList<>();
-        for(int x=0; x<this.nbCase_X; x++) {//on ajoute des cases sur les cotés
-            this.listeBloc.add(new Bloc(x, 0, false));
-            this.listeBloc.add(new Bloc(x, this.nbCase_Y - 1, false));
-        }
-        for(int y=1; y<this.nbCase_Y-1; y++) {
-            this.listeBloc.add(new Bloc(0, y, false));
-            this.listeBloc.add(new Bloc(this.nbCase_X-1, y, false));
-        }
-        for (int x=1; x<X-2; x++){
-            for (int y=1; y<Y-2; y++){
-            	Random r = new Random();
-            	int valeur = r.nextInt(3);
-            	if (valeur ==0) {
-            	}
-            	else if (valeur == 1) {
-                    this.listeBloc.add(new Bloc(x, y, true));
-            	}
-            	else {
-                    this.listeBloc.add(new Bloc(x, y, false));
-            	}
-            }
-        }
-    }
     
-    public Map(int forme, Connection connexion){// forme = 0 : carte simple
+    public Map(int forme, Connection connexion){
         this.connexion = connexion;
-    	this.nbCase_X = 20;
-    	this.nbCase_Y = 13;
     	this.listeBloc = new ArrayList<>();
         this.listeBonus = new ArrayList<>();
-        if (forme==0 || forme ==1){ // Carte carré sans objets à l'intérieur = carte simple
-            for(int x=0; x<this.nbCase_X; x++) {//on ajoute des cases sur les cotés
+        if (forme==0 || forme ==1){//Contour incassable pour toutes les cartes
+            for(int x=0; x<this.nbCase_X; x++) {
                 this.listeBloc.add(new Bloc(x, 0, false));
                 this.listeBloc.add(new Bloc(x, this.nbCase_Y - 1, false));
             }
@@ -65,7 +34,7 @@ public class Map {
                 this.listeBloc.add(new Bloc(this.nbCase_X-1, y, false));
             }
         }
-        if (forme==1){ // on rajoute des blocs cassables
+        if (forme==1){//Carte du product owner
             for(int i = 2; i<17; i=i+2){
                 for(int j = 1; j<12; j=j+2){
                 this.listeBloc.add(new Bloc(i, j, false));
@@ -187,16 +156,16 @@ public class Map {
             int x = this.listeBloc.get(i).getX(); // on récupère les coordonnées de chaque bloc
             int y = this.listeBloc.get(i).getY();
             if (this.listeBloc.get(i).getCassable()){
-                carte[y][x]="o";
+                carte[y][x]="o";//si bloc cassable
             }
             else{
-                carte[x][y]="x";
+                carte[y][x]="x";//si bloc non cassable
             }
         }
-        String s = "";
-        for (int y=0; y<this.nbCase_Y; y++){
-            for (int x=0; x<this.nbCase_X; x++){
-                s+=carte[x][y]+" ";
+        String s = "";//on stock le tout dans une chaine de caractère
+        for (int x=0; x<this.nbCase_X; x++){
+            for (int y=0; y<this.nbCase_Y; y++){
+                s+=carte[y][y]+" ";
             }
             s+="\n";
         }
@@ -212,7 +181,6 @@ public class Map {
             }
         }
     }
-    
     public void addBloc(Bloc b) {
         this.listeBloc.add(b);
     }
