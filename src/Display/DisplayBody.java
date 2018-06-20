@@ -222,10 +222,11 @@ public class DisplayBody extends JPanel{
         int mapWidth = blockXNumber*blockLength;
         draw.setSize(mapWidth, mapHeight);
         draw.setLocation((int)(panelWidth-mapWidth)/2, Math.max((int)(panelHeight-mapHeight)/2,0));
-        this.add(draw, -1);
+        
         CountdownDisplay countdownDisplay = new CountdownDisplay(frame,4);
         countdownDisplay.setBounds((int)panelWidth/2-150, 100, panelWidth, panelHeight);
         this.add(countdownDisplay, 0);//adds countdown timer
+        this.add(draw, 1);
     }
     
         public void display_end_game(){

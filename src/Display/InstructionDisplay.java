@@ -14,7 +14,7 @@ public class InstructionDisplay extends JPanel{
         JLabel labelInstruction = new JLabel("INSTRUCTIONS");
         labelInstruction.setFont(new Font("Arial Bold", Font.ITALIC, 40));
         int x = labelInstruction.getHeight();System.out.println(x);
-        labelInstruction.setBounds(0,0, 1000, 1000);
+        labelInstruction.setBounds(0,0, 5000, 1000);
         add(labelInstruction);
         setLayout(null);
         setVisible(true);
