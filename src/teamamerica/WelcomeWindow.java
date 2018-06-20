@@ -16,7 +16,7 @@ public class WelcomeWindow extends JFrame{
     private DisplayBody centralPanel;
     private DisplayHeader displayHeader;  
     private FrameKeyListener frameKeyListener = new FrameKeyListener();
-    private SoundEffect soundEffect = new SoundEffect();
+    public SoundEffect soundEffect = new SoundEffect();
     private boolean movePlayer = false;
 
     WelcomeWindow() {

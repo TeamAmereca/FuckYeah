@@ -38,6 +38,7 @@ public class Paint extends JComponent {
     private Image terroriste;
     
     private boolean afficheImageDeMort = true;
+    private boolean afficheImageDeVictoire = true;
 
     public Paint(WelcomeWindow welcomeWindow, Write_Read database, Timer timer, int blockLength){
         try {
@@ -101,6 +102,7 @@ public class Paint extends JComponent {
     public void paintPlayers(Graphics g) {
         //Paint every players
         ArrayList<Joueur> players = database.getPlayers();
+        int compteur = 1;
         for(int i=0;i<players.size();i++){ 
             if(players.get(i).getPv()>0){
                 //the player is still alive, so we repaint the player
@@ -109,8 +111,16 @@ public class Paint extends JComponent {
                 //the player is dead, we don't repaint the player
                 if(i==0 && afficheImageDeMort){
                     this.welcomeWindow.setMovePlayer(false);//remove the player's ability to move
-                    this.welcomeWindow.getCentralPanel().display_end_game(); //display the ending picture
+                    this.welcomeWindow.getCentralPanel().display_end_game(afficheImageDeMort,false); //display the ending picture
                     afficheImageDeMort = false;
+                }
+                else{
+                    compteur ++;;
+                    if(players.size()==compteur && afficheImageDeVictoire){
+                        this.welcomeWindow.setMovePlayer(false);//remove the player's ability to move
+                        this.welcomeWindow.getCentralPanel().display_end_game(false,afficheImageDeVictoire);// display the ending picture
+                        afficheImageDeVictoire = false;
+                    }
                 }
             }
         }

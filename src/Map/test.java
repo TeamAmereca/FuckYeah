@@ -27,7 +27,7 @@ public class test {
             //Map yo = new Map(0,connexion);
             //yo.nouvelleMap();
             //yo.miseAJourMap();
-            Map yo = new Map(1,connexion);
+            Map yo = new Map(0,connexion);
             //System.out.println(yo);
             System.out.println(yo);
         } catch (SQLException ex) {

@@ -229,17 +229,31 @@ public class DisplayBody extends JPanel{
         this.add(draw, 1);
     }
     
-        public void display_end_game(){
-        this.removeAll();
-        this.revalidate();
-        this.repaint();
-        ImageIcon icon2 = new ImageIcon(getClass().getResource("/gif/Explosion_mort_final.gif"));
-        label_end = new JLabel(icon2);
-        int labelWidth = icon2.getIconWidth(),
-            labelHeight = icon2.getIconHeight();
-        label_end.setBounds((int)(panelWidth-labelWidth)/2,(int)(panelHeight-labelHeight)/2,labelWidth,labelHeight);
-        this.add(label_end);
-        frame.getSoundEffect().play("explosion perso pour gif");
+        public void display_end_game(boolean estMort, boolean aGagne){
+            this.removeAll();
+            this.revalidate();
+            this.repaint();
+            if(estMort){
+                ImageIcon icon2 = new ImageIcon(getClass().getResource("/gif/Explosion_mort_final.gif"));
+                label_end = new JLabel(icon2);
+                int labelWidth = icon2.getIconWidth(),
+                labelHeight = icon2.getIconHeight();
+                label_end.setBounds((int)(panelWidth-labelWidth)/2,(int)(panelHeight-labelHeight)/2,labelWidth,labelHeight);
+                this.add(label_end);
+                frame.getSoundEffect().stop();
+                frame.getSoundEffect().play("explosion perso pour gif");
+            }
+            else if(aGagne){
+                ImageIcon icon3 = new ImageIcon(getClass().getResource("/gif/tenor.gif"));
+                label_end = new JLabel(icon3);
+                int labelWidth = icon3.getIconWidth(),
+                labelHeight = icon3.getIconHeight();
+                label_end.setBounds((int)(panelWidth-labelWidth)/2,(int)(panelHeight-labelHeight)/2,labelWidth,labelHeight);
+                this.add(label_end);
+                frame.getSoundEffect().stop();
+                frame.getSoundEffect().play("victory_yeah");
+            }
+            
     }
 
     public Write_Read getDatabase() {
